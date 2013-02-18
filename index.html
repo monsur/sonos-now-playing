@@ -6,12 +6,16 @@
 <body>
   <div ng-controller="NowPlayingCtrl">
     {{currentTrack.title}}
-    <img ng-src="{{albumArt}}">
+    <img ng-src="{{currentTrack.albumArt}}">
+    <li ng-repeat="track in history">
+      {{track.title}}
+    </li>
   </div>
 
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
+  var HISTORY_SIZE = 5;
 
   var createCORSRequest = function(method, url) {
     var xhr = new XMLHttpRequest();
@@ -105,28 +109,35 @@
 
     function NowPlayingCtrl($scope) {
       $scope.currentTrack = null;
-      $scope.albumArt = null;
+      $scope.history = [];
+
       var socket = io.connect();
 
       socket.on('newTrack', function(data) {
         if (trackEquals($scope.currentTrack, data)) {
           return;
         }
-        $scope.currentTrack = data;
 
         if (('artist' in data) && ('album' in data)) {
-          albumArtCache.get(data['artist'], data['album'], function(data) {
-            $scope.albumArt = data['album']['image'][0]['#text'];
-            $scope.$apply();
+          albumArtCache.get(data['artist'], data['album'], function(resp) {
+            updateData(data, resp['album']['image'][0]['#text']);
           })
+        } else {
+          updateData(data);
+        }
+      });
+
+      var updateData = function(data, albumArt) {
+        $scope.history.unshift($scope.currentTrack);
+        while ($scope.history.length > HISTORY_SIZE) {
+          $scope.history.pop();
         }
 
-        $scope.$apply();
-      });
-    }
+        data['albumArt'] = albumArt;
+        $scope.currentTrack = data;
 
-    function HistoryCtrl($scope) {
-      $scope.trackHistory = [];
+        $scope.$apply();
+      }
     }
 
     // Compares two track objects.
