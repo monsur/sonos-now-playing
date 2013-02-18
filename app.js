@@ -146,7 +146,6 @@ var getCurrentTrackFromSonos = function(callback) {
     });
     res.on('end', function() {
       parser.close();
-      console.log(data);
     });
   });
 
