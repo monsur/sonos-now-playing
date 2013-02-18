@@ -1,7 +1,42 @@
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:8080');
-  socket.on('newTrack', function(data) {
-    console.log(data);
-  });
-</script>
+<!doctype html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var ioUrl = 'http://localhost:8080';
+    var currentTrack = null;
+    var trackHistory = [];
+
+    // Compares two track objects.
+    var trackEquals = function(track1, track2) {
+      if (!track1 || !track2) {
+        return false;
+      }
+      return track1.title === track2.title &&
+          track1.artist === track2.artist &&
+          track1.album === track2.album;
+    };
+
+    var updateTrack = function(data) {
+      if (trackEquals(currentTrack, data)) {
+        return;
+      }
+      trackHistory.unshift(currentTrack);
+      currentTrack = data;
+      //refreshUi();
+    };
+
+
+    $( document ).ready( function() {
+      var socket = io.connect(ioUrl);
+      socket.on('newTrack', function(data) {
+        updateTrack(data);
+      });
+    });
+  </script>
+</body>
+</html>

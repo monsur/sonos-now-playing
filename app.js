@@ -163,11 +163,12 @@ var getCurrentTrackFromSonos = function(callback) {
 // Create the HTTP server.
 var createHttpServer = function() {
   return http.createServer(function(req, res) {
-    fs.readFile(__dirname + '/index.html',
+    var url = req.url;
+    fs.readFile(__dirname + url,
     function(err, data) {
       if (err) {
         res.writeHead(500);
-        return res.end('Error loading index.html');
+        return res.end('Error loading ' + url);
       }
 
       res.writeHead(200);
