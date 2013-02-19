@@ -15,5 +15,5 @@ Some more technical details:
 * Code consists of two parts: A node.js backend and HTMl/JS/CSS frontend.
 * Backend uses Sonos SOAP API to poll for the currently playing track (Thanks to Rahim's SoCo project for the details: https://github.com/rahims/SoCo)
 * If the currently playing track changes, the new track information is broadcast to any connected clients using the WebSockets API.
-* The frontend using Angular.js to display and update the UI.
-* High-quality album art is from the Last.fm API.
+* The frontend uses Angular.js to display and update the UI.
+* High-quality album art courtesy of the Last.fm API.
