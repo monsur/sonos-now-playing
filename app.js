@@ -4,11 +4,236 @@ var http = require('http')
   , sax = require("./sax");
 
 
+var NotificationParser = function() {
+  this.parser = this.createParser();
+};
+
+NotificationParser.prototype.createParser = function() {
+  var that = this;
+  var parser = sax.parser(true);
+
+  parser.ontext = function(t) {
+    if (parser.tag.name === 'LastChange') {
+      var parser2 = sax.parser(true);
+
+      parser2.onopentag = function(node) {
+        if (node.name === 'CurrentTrackMetaData' &&
+            'val' in node.attributes) {
+          var val = node.attributes['val'];
+          var parser3 = sax.parser(true);
+          var title = null;
+          var artist = null;
+          var album = null;
+          var streamTitle = null;
+
+          parser3.ontext = function(t) {
+            var name = parser3.tag.name;
+            if (name === 'dc:title') {
+              title = t;
+            } else if (name === 'dc:creator') {
+              artist = t;
+            } else if (name === 'upnp:album') {
+              album = t;
+            } else if (name === 'r:streamContent') {
+              streamTitle = t;
+            }
+          };
+
+          parser3.onend = function() {
+            if (title === 'stream') {
+              // If this is a radio stream, title is the stream title.
+              // There is no other data associated with streams.
+              title = streamTitle;
+            }
+            var data = null;
+            if (title) {
+              data = {};
+              data['title'] = title;
+              data['artist'] = artist;
+              data['album'] = album;
+            }
+            emit(data);
+          };
+
+          parser3.write(val).close();
+        }
+      }
+
+      parser2.write(t).close();
+    }
+  };
+
+  return parser;
+};
+
+NotificationParser.prototype.addChunk = function(data) {
+  this.parser.write(data);
+}
+
+NotificationParser.prototype.end = function() {
+  this.parser.close();
+};
+
+
+var UpnpPublisher = function(ip) {
+  this.ip = ip;
+  this.sid = null;
+  this.timeout = UpnpPublisher.DEFAULT_TIMEOUT;
+  this.notification = new NotificationParser();
+};
+
+UpnpPublisher.DEFAULT_TIMEOUT = 86400;
+UpnpPublisher.TIMEOUT_PREFIX = 'Second-';
+
+UpnpPublisher.prototype.handleError = function(callback, msg, fields) {
+  fields = fields || {};
+  fields.error = msg;
+  callback(fields);
+};
+
+UpnpPublisher.prototype.handleHttpError = function(callback, status, headers) {
+  var error = null;
+  if (status === 400) {
+    error = 'Incompatible header fields';
+  } else if (status === 412) {
+    error = 'Precondition failed';
+  } else if (status >= 500) {
+    error = 'Unable to accept renewal';
+  }
+  if (error) {
+    this.handleError(callback, error, {
+      'statusCode': status,
+      'headers': headers
+    });
+    return true;
+  }
+  return false;
+};
+
+UpnpPublisher.prototype.getRequestOptions = function(method, headers) {
+  return {
+    method: method,
+    hostname: this.ip,
+    port: 1400,
+    path: '/MediaRenderer/AVTransport/Event',
+    headers: headers
+  }
+};
+
+UpnpPublisher.prototype.subscribe = function(callbackUrl, callback) {
+  callbackUrl = callbackUrl || null;
+  callback = callback || function() {};
+
+  if (this.sid) {
+    return this.handleError(callback, 'Already subscribed with SID "' + this.sid + '".');
+  }
+  if (!callbackUrl) {
+    return this.handleError(callback, 'callbackUrl is required.');
+  }
+
+  this.subscribeInternal({
+      'CALLBACK': '<' + callbackUrl + '>',
+      'NT': 'upnp:event'
+    }, callback);
+};
+
+UpnpPublisher.prototype.notify = function(data) {
+  this.notification.addChunk(data);
+};
+
+UpnpPublisher.prototype.notifyEnd = function() {
+  this.notification.end();
+};
+
+UpnpPublisher.prototype.scheduleRenew = function() {
+  var that = this;
+  setTimeout(function() {
+    that.renew();
+  }, this.timeout);
+};
+
+UpnpPublisher.prototype.renew = function(callback) {
+  callback = callback || function() {};
+
+  if (!this.sid) {
+    return this.handleError(callback, 'No subscription.');
+  }
+
+  this.subscribeInternal({
+      'SID': this.sid,
+      'TIMEOUT': UpnpPublisher.TIMEOUT_PREFIX + (this.timeout || UpnpPublisher.DEFAULT_TIMEOUT)
+    }, callback);
+};
+
+UpnpPublisher.prototype.subscribeInternal = function(headers, callback) {
+  var that = this;
+
+  var options = this.getRequestOptions('SUBSCRIBE', headers);
+  var req = http.request(options, function(res) {
+    var headers = res.headers;
+    var status = res.statusCode;
+    if (that.handleHttpError(callback, status, headers)) {
+      return;
+    }
+
+    if ('sid' in headers) {
+      that.sid = headers['sid'];
+    }
+    if ('timeout' in headers) {
+      that.timeout = parseInt(headers['timeout'].substr(UpnpPublisher.TIMEOUT_PREFIX.length));
+    }
+
+    callback({
+      'sid': that.sid,
+      'timeout': that.timeout
+    });
+
+    that.scheduleRenew();
+  });
+
+  req.on('error', function(e) {
+    console.log(e.message);
+  });
+
+  req.end();
+};
+
+UpnpPublisher.prototype.unsubscribe = function(callback) {
+  var that = this;
+  callback = callback || function() {};
+
+  if (!this.sid) {
+    return this.handleError(callback, 'No subscription.');
+  }
+
+  var options = this.getRequestOptions('UNSUBSCRIBE', {
+      'SID': this.sid
+    });
+  var req = http.request(options, function(res) {
+    var headers = res.headers;
+    var status = res.statusCode;
+    if (that.handleHttpError(callback, status, headers)) {
+      return;
+    }
+
+    this.sid = null;
+    callback({});
+  });
+
+  req.on('error', function(e) {
+    console.log(e.message);
+  });
+
+  req.end();
+};
+
+
 // Container for any variables that can be specified by the user.
 var OPTIONS = {
   port: 8080,
   speakerIp: '192.168.1.128',
-  timeout: 1000
+  timeout: 1000,
+  callback: '/upnp/notify'
 };
 
 
@@ -32,180 +257,6 @@ var trackEquals = function(track1, track2) {
 };
 
 
-// Polls Sonos for the current track.
-// Only runs if there are socket.io clients connected.
-var pollCurrentTrack = function() {
-  // If there are no conneted clients, don't do anything.
-  if (GLOBALS.connections === 0) {
-    return;
-  }
-
-  // Callback to call after loading the track.
-  // Emits the current track to the client (if it is a different track).
-  // Calls the pollCurrentTrack() method after a specified interval.
-  var callback = function(data) {
-    if (data) {
-      GLOBALS.currentTrack = data;
-      emitCurrentTrack();
-    }
-    GLOBALS.timeoutId = setTimeout(pollCurrentTrack, OPTIONS.timeout);
-  };
-
-  // Ping Sonos for current track.
-  getCurrentTrackFromSonos(function(data) {
-    if (!data ||
-        trackEquals(GLOBALS.currentTrack, data)) {
-      return callback();
-    }
-    return callback(data);
-  });
-};
-
-
-// Emit the current track on the given socket.
-// If socket isn't specified, emits to all clients.
-var emitCurrentTrack = function(opt_socket) {
-  if (!GLOBALS.currentTrack) {
-    return;
-  }
-  var socket = opt_socket || io.sockets;
-  socket.emit('newTrack', GLOBALS.currentTrack);
-};
-
-
-// Creates a SAX parser to parse the SOAP response.
-var createParser = function(callback) {
-  // Stores the track information.
-  var data = {};
-  var title = null;
-  var streamTitle = null;
-
-  var parser = sax.parser(true);
-
-  parser.ontext = function(t) {
-    if (parser.tag.name === 'TrackMetaData') {
-      var parser2 = sax.parser(true);
-      parser2.ontext = function(t) {
-        var name = parser2.tag.name;
-        if (name === 'dc:title') {
-          title = t;
-        } else if (name === 'dc:creator') {
-          data['artist'] = t;
-        } else if (name === 'upnp:album') {
-          data['album'] = t;
-        } else if (name === 'r:streamContent') {
-          streamTitle = t;
-        }
-      };
-      parser2.write(t).close();
-    }
-  };
-
-  parser.onend = function() {
-    if (title === 'stream') {
-      // If this is a radio stream, title is the stream title.
-      // There is no other data associated with streams.
-      title = streamTitle;
-    }
-    data['title'] = title;
-
-    // No title means no data. Set data to null.
-    if (title === null) {
-      data = null;
-    }
-
-    callback.call(null, data);
-  };
-
-  return parser;
-};
-
-
-// Sends a SOAP request to the SONOS to retrieve the current track.
-var getCurrentTrackFromSonos = function(callback) {
-  var parser = createParser(callback);
-
-  var body = '<?xml version="1.0" encoding="UTF-8"?><env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://www.sonos.com/Services/1.1" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body><wsdl:GetPositionInfo><u:GetPositionInfo xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:GetPositionInfo></wsdl:GetPositionInfo></env:Body></env:Envelope>';
-
-  var req = http.request({
-    method: 'POST',
-    hostname: OPTIONS.speakerIp,
-    port: 1400,
-    path: '/MediaRenderer/AVTransport/Control',
-    headers: {
-      'Content-Type': 'text/xml',
-      'Content-Length': body.length,
-      'SOAPACTION': '"urn:schemas-upnp-org:service:AVTransport:1#GetPositionInfo"'
-    }
-  }, function(res) {
-    res.setEncoding('utf8');
-    var data = '';
-    res.on('data', function(chunk) {
-      parser.write(chunk);
-      data += chunk;
-    });
-    res.on('end', function() {
-      parser.close();
-    });
-  });
-
-  req.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });
-
-  req.write(body);
-
-  req.end();
-};
-
-
-// Create the HTTP server.
-var createHttpServer = function() {
-  return http.createServer(function(req, res) {
-    var url = req.url;
-    fs.readFile(__dirname + url,
-    function(err, data) {
-      if (err) {
-        res.writeHead(500);
-        return res.end('Error loading ' + url);
-      }
-
-      res.writeHead(200);
-      res.end(data);
-    });
-  });
-};
-
-
-// Create/Configure sockets.io
-var createSocketIo = function(app) {
-  var io = socketio.listen(app);
-  io.sockets.on('connection', function(socket) {
-    GLOBALS.connections++;
-    // Send the current track to the new client immediately.
-    emitCurrentTrack(socket);
-    if (GLOBALS.connections === 1) {
-      // If this is the first client, begin polling.
-      pollCurrentTrack();
-    }
-
-    socket.on('disconnect', function() {
-      GLOBALS.connections--;
-      if (GLOBALS.connections === 0) {
-        // If there are no more clients, clear out the current track so it
-        // doesn't go stale.
-        // Stop polling.
-        GLOBALS.currentTrack = null;
-        if (GLOBALS.timeoutId) {
-          clearTimeout(GLOBALS.timeoutId);
-        }
-      }
-    });
-  });
-  return io;
-};
-
-
 var parseCommandLine = function() {
   var args = process.argv;
   for (var i = 0; i < args.length; i++) {
@@ -220,10 +271,66 @@ var parseCommandLine = function() {
     var val = OPTIONS[key];
     console.log(key + ': ' + val);
   }
-}
+};
+
+
+var subscribe = function(callback) {
+  upnp.subscribe('http://192.168.1.197:' + OPTIONS.port + OPTIONS.callback, callback);
+};
+
+var unsubscribe = function(callback) {
+  upnp.unsubscribe(callback);
+};
+
 
 // Start the server.
 parseCommandLine();
-var app = createHttpServer();
-var io = createSocketIo(app);
+
+var upnp = new UpnpPublisher(OPTIONS.speakerIp);
+
+var app = http.createServer(function(req, res) {
+  req.setEncoding('utf8');
+  var url = req.url;
+  if (url === OPTIONS.callback) {
+    console.log('REQUEST START: ' + new Date());
+    req.on('data', function(chunk) {
+      upnp.notify(chunk);
+    });
+    req.on('end', function(chunk) {
+      upnp.notifyEnd();
+    });
+    return;
+  }
+
+  fs.readFile(__dirname + url, function(err, data) {
+    if (err) {
+      res.writeHead(500);
+      return res.end('Error loading ' + url);
+    }
+
+    res.writeHead(200);
+    res.end(data);
+  });
+});
+
+var io = socketio.listen(app);
+io.sockets.on('connection', function(socket) {
+  GLOBALS.connections++;
+  if (GLOBALS.connections === 1) {
+    subscribe();
+  }
+
+  socket.on('disconnect', function() {
+    GLOBALS.connections--;
+    if (GLOBALS.connections === 0) {
+      unsubscribe();
+    }
+  });
+});
+
+var emit = function(data) {
+  console.log('REQUEST END: ' + new Date());
+  io.sockets.emit('newTrack', data);
+};
+
 app.listen(OPTIONS.port);
