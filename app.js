@@ -40,9 +40,8 @@ NotificationParser.prototype.createParser = function() {
           };
 
           parser3.onend = function() {
+            // TODO: Fix stream parsing (title not loaded properly)
             if (title === 'stream') {
-              // If this is a radio stream, title is the stream title.
-              // There is no other data associated with streams.
               title = streamTitle;
             }
             var data = null;
@@ -275,6 +274,7 @@ var parseCommandLine = function() {
 
 
 var subscribe = function(callback) {
+  // TODO: Dynamically load local IP.
   upnp.subscribe('http://192.168.1.197:' + OPTIONS.port + OPTIONS.callback, callback);
 };
 
@@ -292,8 +292,8 @@ var app = http.createServer(function(req, res) {
   req.setEncoding('utf8');
   var url = req.url;
   if (url === OPTIONS.callback) {
-    console.log('REQUEST START: ' + new Date());
     req.on('data', function(chunk) {
+      // TODO: Create/Call NotificationParser directly.
       upnp.notify(chunk);
     });
     req.on('end', function(chunk) {
@@ -329,7 +329,6 @@ io.sockets.on('connection', function(socket) {
 });
 
 var emit = function(data) {
-  console.log('REQUEST END: ' + new Date());
   io.sockets.emit('newTrack', data);
 };
 
