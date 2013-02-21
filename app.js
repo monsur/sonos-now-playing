@@ -49,7 +49,6 @@ NotificationParser.prototype.createParser = function() {
           var title = null;
           var artist = null;
           var album = null;
-          var streamTitle = null;
 
           parser3.ontext = function(t) {
             printTag(parser3.tag.name, t);
@@ -60,16 +59,11 @@ NotificationParser.prototype.createParser = function() {
               artist = t;
             } else if (name === 'upnp:album') {
               album = t;
-            } else if (name === 'r:streamContent') {
-              streamTitle = t;
             }
           };
 
           parser3.onend = function() {
-            // TODO: Fix stream parsing (title not loaded properly)
-            if (title === 'stream') {
-              title = streamTitle;
-            }
+            // TODO: Fix radio stream parsing (schemas are vastly different).
             var data = null;
             if (title) {
               data = {};
