@@ -3,6 +3,20 @@ var http = require('http')
   , fs = require('fs')
   , sax = require("./sax");
 
+var getIpAddress = function() {
+  var os = require('os');
+  var interfaces = os.networkInterfaces();
+  for (k in interfaces) {
+    for (k2 in interfaces[k]) {
+      var address = interfaces[k][k2];
+      if (address.family == 'IPv4' && !address.internal) {
+        return address.address;
+      }
+    }
+  }
+  return null;
+};
+
 
 var NotificationParser = function() {
 };
@@ -237,7 +251,8 @@ var OPTIONS = {
 var GLOBALS = {
   connections: 0,
   currentTrack: null,
-  timeoutId: null
+  timeoutId: null,
+  networkIp: getIpAddress()
 };
 
 
@@ -268,10 +283,12 @@ var parseCommandLine = function() {
   }
 };
 
+var getNotifyUrl = function() {
+  return 'http://' + GLOBALS.networkIp + ':' + OPTIONS.port + OPTIONS.callback;
+};
 
 var subscribe = function(callback) {
-  // TODO: Dynamically load local IP.
-  upnp.subscribe('http://192.168.1.197:' + OPTIONS.port + OPTIONS.callback, callback);
+  upnp.subscribe(getNotifyUrl(), callback);
 };
 
 var unsubscribe = function(callback) {
