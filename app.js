@@ -298,6 +298,8 @@ var app = http.createServer(function(req, res) {
     });
     req.on('end', function(chunk) {
       upnp.notifyEnd();
+      res.writeHead(200);
+      res.end();
     });
     return;
   }
