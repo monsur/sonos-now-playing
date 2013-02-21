@@ -30,11 +30,18 @@ NotificationParser.prototype.createParser = function() {
   var that = this;
   var parser = sax.parser(true);
 
+  function printTag(name, contents) {
+    if (OPTIONS.debug) {
+      console.log(name + ' - ' + contents + '\n');
+    }
+  }
+
   parser.ontext = function(t) {
     if (parser.tag.name === 'LastChange') {
       var parser2 = sax.parser(true);
 
       parser2.onopentag = function(node) {
+        printTag(node.name, JSON.stringify(node.attributes));
         if (node.name === 'CurrentTrackMetaData' &&
             'val' in node.attributes) {
           var val = node.attributes['val'];
@@ -45,6 +52,7 @@ NotificationParser.prototype.createParser = function() {
           var streamTitle = null;
 
           parser3.ontext = function(t) {
+            printTag(parser3.tag.name, t);
             var name = parser3.tag.name;
             if (name === 'dc:title') {
               title = t;
@@ -242,7 +250,8 @@ var OPTIONS = {
   port: 8080,
   speakerIp: '192.168.1.128',
   timeout: 1000,
-  callback: '/upnp/notify'
+  callback: '/upnp/notify',
+  debug: false
 };
 
 
@@ -312,7 +321,7 @@ var app = http.createServer(function(req, res) {
     req.on('data', function(chunk) {
       parser.write(chunk);
     });
-    req.on('end', function(chunk) {
+    req.on('end', function() {
       parser.close();
       res.writeHead(200);
       res.end();
