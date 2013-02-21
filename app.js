@@ -5,8 +5,12 @@ var http = require('http')
 
 
 var NotificationParser = function() {
-  this.parser = this.createParser();
 };
+
+NotificationParser.prototype.open = function(callback) {
+  this.parser = this.createParser();
+  this.callback = callback;
+}
 
 NotificationParser.prototype.createParser = function() {
   var that = this;
@@ -51,7 +55,7 @@ NotificationParser.prototype.createParser = function() {
               data['artist'] = artist;
               data['album'] = album;
             }
-            emit(data);
+            that.callback(data);
           };
 
           parser3.write(val).close();
@@ -65,11 +69,11 @@ NotificationParser.prototype.createParser = function() {
   return parser;
 };
 
-NotificationParser.prototype.addChunk = function(data) {
+NotificationParser.prototype.write = function(data) {
   this.parser.write(data);
 }
 
-NotificationParser.prototype.end = function() {
+NotificationParser.prototype.close = function() {
   this.parser.close();
 };
 
@@ -134,14 +138,6 @@ UpnpPublisher.prototype.subscribe = function(callbackUrl, callback) {
       'CALLBACK': '<' + callbackUrl + '>',
       'NT': 'upnp:event'
     }, callback);
-};
-
-UpnpPublisher.prototype.notify = function(data) {
-  this.notification.addChunk(data);
-};
-
-UpnpPublisher.prototype.notifyEnd = function() {
-  this.notification.end();
 };
 
 UpnpPublisher.prototype.scheduleRenew = function() {
@@ -292,12 +288,15 @@ var app = http.createServer(function(req, res) {
   req.setEncoding('utf8');
   var url = req.url;
   if (url === OPTIONS.callback) {
+    var parser = new NotificationParser();
+    parser.open(function(data) {
+      io.sockets.emit('newTrack', data);
+    });
     req.on('data', function(chunk) {
-      // TODO: Create/Call NotificationParser directly.
-      upnp.notify(chunk);
+      parser.write(chunk);
     });
     req.on('end', function(chunk) {
-      upnp.notifyEnd();
+      parser.close();
       res.writeHead(200);
       res.end();
     });
@@ -329,9 +328,5 @@ io.sockets.on('connection', function(socket) {
     }
   });
 });
-
-var emit = function(data) {
-  io.sockets.emit('newTrack', data);
-};
 
 app.listen(OPTIONS.port);
