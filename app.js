@@ -1,7 +1,9 @@
 var http = require('http')
   , socketio = require('socket.io')
   , fs = require('fs')
+  , logger = require('./little-logger')
   , sax = require("./sax");
+
 
 var getIpAddress = function() {
   var os = require('os');
@@ -30,18 +32,11 @@ NotificationParser.prototype.createParser = function() {
   var that = this;
   var parser = sax.parser(true);
 
-  function printTag(name, contents) {
-    if (OPTIONS.debug) {
-      console.log(name + ' - ' + contents + '\n');
-    }
-  }
-
   parser.ontext = function(t) {
     if (parser.tag.name === 'LastChange') {
       var parser2 = sax.parser(true);
 
       parser2.onopentag = function(node) {
-        printTag(node.name, JSON.stringify(node.attributes));
         if (node.name === 'CurrentTrackMetaData' &&
             'val' in node.attributes) {
           var val = node.attributes['val'];
@@ -51,7 +46,6 @@ NotificationParser.prototype.createParser = function() {
           var album = null;
 
           parser3.ontext = function(t) {
-            printTag(parser3.tag.name, t);
             var name = parser3.tag.name;
             if (name === 'dc:title') {
               title = t;
@@ -245,7 +239,7 @@ var OPTIONS = {
   speakerIp: '192.168.1.128',
   timeout: 1000,
   callback: '/upnp/notify',
-  debug: false
+  loglevel: 'info'
 };
 
 
@@ -282,7 +276,6 @@ var parseCommandLine = function() {
   }
   for (key in OPTIONS) {
     var val = OPTIONS[key];
-    console.log(key + ': ' + val);
   }
 };
 
@@ -301,6 +294,8 @@ var unsubscribe = function(callback) {
 
 // Start the server.
 parseCommandLine();
+
+var logger = new logger.Logger(OPTIONS.loglevel);
 
 var upnp = new UpnpPublisher(OPTIONS.speakerIp);
 
@@ -350,3 +345,4 @@ io.sockets.on('connection', function(socket) {
 });
 
 app.listen(OPTIONS.port);
+logger.info('Starting server on port ' + OPTIONS.port);
