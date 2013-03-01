@@ -1,51 +1,50 @@
 var pad = function(p, v) {
-  p--;
-  while (p > 0) {
-    if (v < (10^p)) {
-      v = '0' + v;
-    }
-    p--;
-  }
-  return v + '';
+  v = v + '';
+  var padLength = p - v.length;
+  return padLength > -1 ? Array(padLength + 1).join('0') + v : v;
 };
 
-var getDateFunctions = function(utc) {
-
+var getFormatFunctions = function(utc) {
   var getf = function(name, padding) {
     return function(d) {
-      var val = d[name].call(d);
-      if (padding) {
-        val = pad(padding, val);
-      }
-      return val;
-    }
+      var val = d[name]();
+      return padding ? pad(padding, val) : val;
+    };
   };
-
   var utcStr = utc ? 'UTC' : '';
-
   return {
     '%D': getf('to' + utcStr + 'String'),
     '%Y': getf('get' + utcStr + 'FullYear'),
-    '%m': function(d) { return pad(2, d.getMonth() + 1); },
+    '%m': function(d) { return pad(2, d['get' + utcStr + 'Month']() + 1); },
     '%d': getf('get' + utcStr + 'Date', 2),
     '%H': getf('get' + utcStr + 'Hours', 2),
     '%M': getf('get' + utcStr + 'Minutes', 2),
     '%S': getf('get' + utcStr + 'Seconds', 2),
     '%f': getf('get' + utcStr + 'Milliseconds', 3),
-  }
+    '%%': function() { return '%'; },
+    '%l': function(d, l, a) { return l; },
+    '%a': function(d, l, a) { return a; }
+  };
+};
+
+var getArgumentsAsArray = function(args) {
+  return [].splice.call(args, 0);
+};
+
+var getBooleanValue = function(val, default_val) {
+  return (val === true || val === false) ? val : default_val;
 };
 
 var Logger = exports.Logger = function(level, options) {
   this.level(level || 'info');
-
   options = options || {};
-  options.color = 'color' in options ? options.color : true;
-  options.utc = 'utc' in options ? options.utc : false;
+  options.enabled = getBooleanValue(options.enabled, true);
+  options.color = getBooleanValue(options.color, true);
+  options.utc = getBooleanValue(options.utc, false);
   options.format = options.format || '%Y-%m-%d %H:%M:%S.%f %l: %a';
   options.writer = options.writer || console.log;
   this.options = options;
-
-  this.dateFunctions = getDateFunctions(this.options.utc);
+  this.formatFunctions = getFormatFunctions(this.options.utc);
 };
 
 Logger.LOG_LEVELS = {
@@ -55,44 +54,52 @@ Logger.LOG_LEVELS = {
   'ERROR': {value: 40, color: '\033[31m'}
 };
 
+Logger.prototype.enable = function() {
+    this.options.enabled = true;
+    return this;
+  };
+
+Logger.prototype.disable = function() {
+  this.options.enabled = false;
+  return this;
+};
+
 Logger.prototype.level = function(opt_level) {
-  if (opt_level) {
-    this.level_key = opt_level.toUpperCase();
-  }
+  if (opt_level) this.level_key = opt_level.toUpperCase();
   return this.level_key;
 };
 
 Logger.prototype.log = function(level, msg) {
+  if (!this.options.enabled) return this;
   var msg_val = Logger.LOG_LEVELS[level.toUpperCase()];
   var log_val = Logger.LOG_LEVELS[this.level_key.toUpperCase()];
   var date = new Date();
-  var msg_ = this.options.format;
-  for (var format in this.dateFunctions) {
-    if (msg_.indexOf(format) > -1) {
-      var result = this.dateFunctions[format].call({}, date);
-      msg_ = msg_.replace(format, result);
+  var formattedMsg = this.options.format;
+  // http://jsperf.com/multiple-string-replace/2
+  for (var format in this.formatFunctions) {
+    if (formattedMsg.indexOf(format) > -1) {
+      formattedMsg = formattedMsg.replace(format,
+          this.formatFunctions[format].call({}, date, level, msg));
     }
   }
-  msg_ = msg_.replace('%l', level).replace('%a', msg);
   if (this.options.color && msg_val.color) {
-    msg_ = msg_val.color + msg_ + '\033[0m';
+    formattedMsg = msg_val.color + formattedMsg + '\033[0m';
   }
   if (msg_val.value >= log_val.value) {
-    var writer = msg_val['writer'] || this.options.writer;
-    writer(msg_);
+    var writer = msg_val.writer || this.options.writer;
+    var args = getArgumentsAsArray(arguments).splice(2);
+    args.unshift(formattedMsg);
+    writer.apply(this, args);
   }
-  return {
-    date: date,
-    level: level,
-    message: msg,
-    formattedMessage: msg_
-  };
+  return this;
 };
 
 for (var level in Logger.LOG_LEVELS) {
   (function(level) {
     Logger.prototype[level.toLowerCase()] = function(msg) {
-      return this.log(level, msg);
+      var args = getArgumentsAsArray(arguments);
+      args.unshift(level);
+      return this.log.apply(this, args);
     };
   })(level);
 }
