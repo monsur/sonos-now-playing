@@ -101,6 +101,7 @@ UpnpPublisher.TIMEOUT_PREFIX = 'Second-';
 UpnpPublisher.prototype.handleError = function(callback, msg, fields) {
   fields = fields || {};
   fields.error = msg;
+  logger.error(msg);
   callback(fields);
 };
 
@@ -188,6 +189,8 @@ UpnpPublisher.prototype.subscribeInternal = function(headers, callback) {
       that.timeout = parseInt(headers['timeout'].substr(UpnpPublisher.TIMEOUT_PREFIX.length));
     }
 
+    logger.info('Subscribed with to speaker %s with SID %s',
+        OPTIONS.speakerIp, that.sid);
     callback({
       'sid': that.sid,
       'timeout': that.timeout
@@ -197,7 +200,7 @@ UpnpPublisher.prototype.subscribeInternal = function(headers, callback) {
   });
 
   req.on('error', function(e) {
-    console.log(e.message);
+    logger.error(e.message);
   });
 
   req.end();
@@ -221,12 +224,14 @@ UpnpPublisher.prototype.unsubscribe = function(callback) {
       return;
     }
 
-    this.sid = null;
+    logger.info('Unsubscribed from speaker %s with SID %s',
+        OPTIONS.speakerIp, that.sid);
+    that.sid = null;
     callback({});
   });
 
   req.on('error', function(e) {
-    console.log(e.message);
+    logger.error(e.message);
   });
 
   req.end();
@@ -295,7 +300,9 @@ var unsubscribe = function(callback) {
 // Start the server.
 parseCommandLine();
 
-var logger = new logger.Logger(OPTIONS.loglevel);
+var logger = new logger.Logger(OPTIONS.loglevel, {
+    format: '   %l  - %a'
+});
 
 var upnp = new UpnpPublisher(OPTIONS.speakerIp);
 
@@ -303,6 +310,7 @@ var app = http.createServer(function(req, res) {
   req.setEncoding('utf8');
   var url = req.url;
   if (url === OPTIONS.callback) {
+    logger.info('Received notification from %s', req.connection.remoteAddress);
     var parser = new NotificationParser();
     parser.open(function(data) {
       io.sockets.emit('newTrack', data);
@@ -345,4 +353,4 @@ io.sockets.on('connection', function(socket) {
 });
 
 app.listen(OPTIONS.port);
-logger.info('Starting server on port ' + OPTIONS.port);
+logger.info('Starting server on %s:%d', GLOBALS.networkIp, OPTIONS.port);
