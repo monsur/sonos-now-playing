@@ -17,3 +17,7 @@ Some more technical details:
 * If the currently playing track changes, the new track information is broadcast to any connected clients using the WebSockets API.
 * The frontend uses Angular.js to display and update the UI.
 * High-quality album art courtesy of the Last.fm API.
+
+Screenshot:
+
+![ScreenShot](https://raw.github.com/monsur/sonos-now-playing-nodejs/master/screenshot.png)
