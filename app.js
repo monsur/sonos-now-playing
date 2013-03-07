@@ -93,6 +93,7 @@ var UpnpPublisher = function(ip) {
   this.sid = null;
   this.timeout = UpnpPublisher.DEFAULT_TIMEOUT;
   this.notification = new NotificationParser();
+  this.renewalId = null;
 };
 
 UpnpPublisher.DEFAULT_TIMEOUT = 43200000;
@@ -153,7 +154,7 @@ UpnpPublisher.prototype.subscribe = function(callbackUrl, callback) {
 
 UpnpPublisher.prototype.scheduleRenew = function() {
   var that = this;
-  setTimeout(function() {
+  this.renewalId = setTimeout(function() {
     that.renew();
   }, this.timeout);
 };
@@ -210,6 +211,10 @@ UpnpPublisher.prototype.unsubscribe = function(callback) {
   var that = this;
   callback = callback || function() {};
 
+  if (this.renewalId) {
+    clearTimeout(this.renewalId);
+    this.renewalId = null;
+  }
   if (!this.sid) {
     return this.handleError(callback, 'No subscription.');
   }
