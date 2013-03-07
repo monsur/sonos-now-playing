@@ -95,7 +95,7 @@ var UpnpPublisher = function(ip) {
   this.notification = new NotificationParser();
 };
 
-UpnpPublisher.DEFAULT_TIMEOUT = 86400;
+UpnpPublisher.DEFAULT_TIMEOUT = 43200000;
 UpnpPublisher.TIMEOUT_PREFIX = 'Second-';
 
 UpnpPublisher.prototype.handleError = function(callback, msg, fields) {
