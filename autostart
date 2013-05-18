@@ -1,3 +1,5 @@
+# Copy contents of this file to:
+# /etc/xdg/lxsession/LXDE/autostart
 @lxpanel --profile LXDE
 @pcmanfm --desktop --profile LXDE
 @xset s off
