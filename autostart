@@ -1,0 +1,6 @@
+@lxpanel --profile LXDE
+@pcmanfm --desktop --profile LXDE
+@xset s off
+@xset -dpms
+@xset s noblank
+@/home/pi/projects/sonos-now-playing-nodejs/run.sh
