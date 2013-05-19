@@ -21,3 +21,7 @@ Some more technical details:
 Screenshot:
 
 ![ScreenShot](https://raw.github.com/monsur/sonos-now-playing-nodejs/master/screenshot.png)
+
+Installation:
+1) Install helper apps on Raspbian: sudo apt-get install chromium x11-xserver-utils unclutter
+2) Copy contents of autostart over to /etc/xdg/lxsession/LXDE/autostart (and fix the path to the run.sh file).
