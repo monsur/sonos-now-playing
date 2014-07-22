@@ -190,7 +190,7 @@ UpnpPublisher.prototype.subscribeInternal = function(headers, callback) {
       that.timeout = parseInt(headers['timeout'].substr(UpnpPublisher.TIMEOUT_PREFIX.length));
     }
 
-    logger.info('Subscribed with to speaker %s with SID %s',
+    logger.info('Subscribed to speaker %s with SID %s',
         OPTIONS.speakerIp, that.sid);
     callback({
       'sid': that.sid,
@@ -246,7 +246,7 @@ UpnpPublisher.prototype.unsubscribe = function(callback) {
 // Container for any variables that can be specified by the user.
 var OPTIONS = {
   port: 8080,
-  speakerIp: '192.168.1.128',
+  speakerIp: '10.0.1.19',
   timeout: 1000,
   callback: '/upnp/notify',
   loglevel: 'info'
