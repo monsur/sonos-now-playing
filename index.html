@@ -150,8 +150,8 @@ body {
 
       var setSizes = function() {
         var multiplier = .6;
-        var dh = document.height;
-        var dw = document.width;
+        var dh = window.innerHeight
+        var dw = window.innerWidth;
         var size = Math.min(dh, dw)*multiplier;
         var album = document.getElementById('albumImgId');
         album.height = size;
