@@ -2,49 +2,65 @@
 <html ng-app>
 <head>
   <title></title>
-<style>
-body {
-  background-color: #000;
-  font-family: Helvetica, sans-serif;
-  font-size: 48px;
-  color: #ddd;
-}
+  <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+ <style>
+    body {
+      background-size: 100% auto;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      margin: 0;
+      padding: 0;
+    }
 
-.main {
-  -webkit-perspective: 550px;
-  margin-left: 200px;
-  margin-top: 50px;
-  padding: 0;
-}
+    #content {
+      background-color: #333;
+      opacity: 0.9;
+      float: right;
+      margin: 30% 0 0 0;
+    }
 
-.albumDiv {
-  -webkit-transform: rotateY(35deg) scale(1);
-  float: left;
-}
+    #left {
+      position: relative;
+      float: left;
+      color: #ddd;
+      padding-left: 20px;
+      padding-right: 10px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
 
-.albumImg {
-  background-color: #eee;
-  -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.5, transparent), to(rgba(50,50,50,0.7)));
-}
+    #title {
+      color: #fff;
+      font-size: 30px;
+    }
 
-.textInfo {
-  margin-left: 75px;
-  float: left;
-}
+    #right {
+      position: relative;
+      float: right;
+      padding-left: 30px;
+      padding-right: 10px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    #right img {
+      height: 100px;
+      width: 100px;
+    }
 </style>
 </head>
 <body>
   <div ng-controller="NowPlayingCtrl">
-    <div class="main">
-      <div class="albumDiv">
-        <img ng-src="{{currentTrack.albumArt}}" class="albumImg" id="albumImgId">
+    <div id="content">
+      <div id="left">
+        <div id="title">{{currentTrack.title}}</div>
+        <div id="artist">{{currentTrack.artist}}</div>
+        <div id="album">{{currentTrack.album}}</div>
       </div>
-      <div class="textInfo">
-        <p>
-          {{currentTrack.title}}<br>
-          {{currentTrack.album}}<br>
-          {{currentTrack.artist}}<br>
-        </p>
+      <div id="right">
+        <img src="{{currentTrack.albumArt}}" id="albumImgId">
       </div>
     </div>
   </div>
@@ -183,6 +199,9 @@ body {
         }
 
         data['albumArt'] = albumArt;
+        // HACK! This is not Angular
+        document.body.style.background = 'url(' + albumArt + ') no-repeat center center fixed';
+        document.body.style.backgroundSize = 'cover';
         $scope.currentTrack = data;
 
         $scope.$apply();
