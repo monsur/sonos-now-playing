@@ -185,7 +185,14 @@
         if (('artist' in data) && ('album' in data)) {
           albumArtCache.get(data['artist'], data['album'], function(resp) {
             var images = resp['album']['image'];
-            updateData(data, images[images.length-1]['#text']);
+            var image = null;
+            for (var i = 0; i < images.length; i++) {
+              if (images[i]['size'] != 'mega') {
+                // Skip the mega image, since its way to big (multiple MB in size).
+                image = images[i]['#text'];
+              }
+            }
+            updateData(data, image);
           })
         } else {
           updateData(data);
