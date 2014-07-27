@@ -1,0 +1,15 @@
+{
+  "name": "sonos-now-playing-nodejs",
+  "description": "Display the currently playing track from Sonos.",
+  "author": "Monsur Hossain <monsur@gmail.com> (http://monsur.hossa.in/)",
+  "version": "0.3.0",
+  "main": "src/app.js",
+  "license": "BSD",
+  "repository": "https://github.com/monsur/sonos-now-playing-nodejs.git",
+  "dependencies": {
+    "express": "4.7.0",
+    "little-logger": "0.1.4",
+    "sax": "0.6.0",
+    "socket.io": "1.0"
+  }
+}
