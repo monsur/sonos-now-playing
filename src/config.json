@@ -1,4 +1,5 @@
 {
   "logLevel": "debug",
-  "speakerIp": "10.0.1.19"
+  "speakerIp": "10.0.1.19",
+  "lastFmApiKey": "e83f749f1a6d33bd385c86914d012c67"
 }

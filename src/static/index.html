@@ -1,230 +1,24 @@
 <!doctype html>
-<html ng-app>
+<html>
 <head>
   <title></title>
-  <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
- <style>
-    body {
-      background-size: 100% auto;
-      font-family: 'Roboto', sans-serif;
-      font-size: 16px;
-      margin: 0;
-      padding: 0;
-    }
-
-    #content {
-      background-color: #333;
-      opacity: 0.9;
-      float: right;
-      margin: 30% 0 0 0;
-    }
-
-    #left {
-      position: relative;
-      float: left;
-      color: #ddd;
-      padding-left: 20px;
-      padding-right: 10px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    #title {
-      color: #fff;
-      font-size: 30px;
-    }
-
-    #right {
-      position: relative;
-      float: right;
-      padding-left: 30px;
-      padding-right: 10px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
-
-    #right img {
-      height: 100px;
-      width: 100px;
-    }
-</style>
+  <link href="http://fonts.googleapis.com/css?family=Roboto:300" rel='stylesheet' type='text/css'>
+  <link href="index.css" rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <div ng-controller="NowPlayingCtrl">
-    <div id="content">
-      <div id="left">
-        <div id="title">{{currentTrack.title}}</div>
-        <div id="artist">{{currentTrack.artist}}</div>
-        <div id="album">{{currentTrack.album}}</div>
-      </div>
-      <div id="right">
-        <img src="{{currentTrack.albumArt}}" id="albumImgId">
-      </div>
+  <div id="content">
+    <div id="left">
+      <div id="title"></div>
+      <div id="artist"></div>
+      <div id="album"></div>
+    </div>
+    <div id="right">
+      <img id="albumArt">
     </div>
   </div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-  var HISTORY_SIZE = 5;
-
-  var createCORSRequest = function(method, url) {
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-
-      // Check if the XMLHttpRequest object has a "withCredentials" property.
-      // "withCredentials" only exists on XMLHTTPRequest2 objects.
-      xhr.open(method, url, true);
-
-    } else if (typeof XDomainRequest != "undefined") {
-
-      // Otherwise, check if XDomainRequest.
-      // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-      xhr = new XDomainRequest();
-      xhr.open(method, url);
-
-    } else {
-
-      // Otherwise, CORS is not supported by the browser.
-      xhr = null;
-
-    }
-    return xhr;
-  }
-
-    var AlbumArt = function() {
-      this.cache = {};
-    };
-
-    AlbumArt.prototype.add = function(artist, album, data) {
-      if (!(artist in this.cache)) {
-        this.cache[artist] = {}
-      }
-      this.cache[artist][album] = data;
-    };
-
-    AlbumArt.prototype.lookup = function(artist, album) {
-      if (artist in this.cache) {
-        var cache = this.cache[artist];
-        if (album in cache) {
-          return cache[album];
-        }
-      }
-      return null;
-    };
-
-    AlbumArt.prototype.createUrl = function(artist, album) {
-      var url = 'http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=e83f749f1a6d33bd385c86914d012c67&format=json';
-      url += '&artist=' + encodeURIComponent(artist);
-      url += '&album=' + encodeURIComponent(album);
-      return url;
-    };
-
-    AlbumArt.prototype.get = function(artist, album, callback) {
-      var that = this;
-      var data = this.lookup(artist, album);
-      if (data) {
-        callback(data);
-        return;
-      }
-
-      var url = this.createUrl(artist, album);
-      var xhr = createCORSRequest('GET', url);
-
-      xhr.onerror = function() {
-        console.log('There was an error!');
-      };
-
-      xhr.onload = function() {
-        var data = null;
-        try {
-          data = JSON.parse(xhr.responseText);
-        } catch(e) {
-          console.log(e);
-          return callback();
-        }
-        if ('error' in data) {
-          console.log(data);
-          return callback();
-        }
-
-        that.add(artist, album, data);
-        return callback(data);
-      };
-
-      xhr.send();
-    };
-
-    var albumArtCache = new AlbumArt();
-
-
-    function NowPlayingCtrl($scope) {
-      $scope.currentTrack = null;
-      $scope.history = [];
-
-      var setSizes = function() {
-        var multiplier = .6;
-        var dh = window.innerHeight
-        var dw = window.innerWidth;
-        var size = Math.min(dh, dw)*multiplier;
-        var album = document.getElementById('albumImgId');
-        album.height = size;
-        album.width = size;
-      };
-      setSizes();
-
-      var socket = io.connect();
-
-      socket.on('newTrack', function(data) {
-        if (trackEquals($scope.currentTrack, data)) {
-          return;
-        }
-
-        if (('artist' in data) && ('album' in data)) {
-          albumArtCache.get(data['artist'], data['album'], function(resp) {
-            var images = resp['album']['image'];
-            var image = null;
-            for (var i = 0; i < images.length; i++) {
-              if (images[i]['size'] != 'mega') {
-                // Skip the mega image, since its way to big (multiple MB in size).
-                image = images[i]['#text'];
-              }
-            }
-            updateData(data, image);
-          })
-        } else {
-          updateData(data);
-        }
-      });
-
-      var updateData = function(data, albumArt) {
-        $scope.history.unshift($scope.currentTrack);
-        while ($scope.history.length > HISTORY_SIZE) {
-          $scope.history.pop();
-        }
-
-        data['albumArt'] = albumArt;
-        // HACK! This is not Angular
-        document.body.style.background = 'url(' + albumArt + ') no-repeat center center fixed';
-        document.body.style.backgroundSize = 'cover';
-        $scope.currentTrack = data;
-
-        $scope.$apply();
-      }
-    }
-
-    // Compares two track objects.
-    var trackEquals = function(track1, track2) {
-      if (!track1 || !track2) {
-        return false;
-      }
-      return track1.title === track2.title &&
-          track1.artist === track2.artist &&
-          track1.album === track2.album;
-    };
-
-  </script>
+  <script src="config.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>

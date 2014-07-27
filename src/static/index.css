@@ -1,0 +1,45 @@
+body {
+  background-size: 100% auto;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+#content {
+  background-color: #333;
+  opacity: 0.9;
+  float: right;
+  margin: 30% 0 0 0;
+}
+
+#left {
+  position: relative;
+  float: left;
+  color: #ddd;
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#title {
+  color: #fff;
+  font-size: 30px;
+}
+
+#right {
+  position: relative;
+  float: right;
+  padding-left: 30px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#right img {
+  height: 100px;
+  width: 100px;
+}

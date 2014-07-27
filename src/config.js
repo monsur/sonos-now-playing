@@ -33,4 +33,13 @@ var getOptions = function(filename, options) {
   return options;
 };
 
+var getHandler = function(options) {
+  return function(req, res, next) {
+    var o = {};
+    o['lastFmApiKey'] = options['lastFmApiKey'];
+    res.send('var options = ' + JSON.stringify(o) + ';');
+  }
+};
+
 module.exports.getOptions = getOptions;
+module.exports.getHandler = getHandler;
