@@ -1,4 +1,4 @@
-sonos-now-playing-nodejs
+sonos-now-playing
 ========================
 
 Hacking around with the Sonos and Node.js. The grand plan is to build something to display the currently playing track from the Sonos. The steps to acheive this are:
