@@ -93,6 +93,10 @@ socket.on('newTrack', function(data) {
 
   if (('artist' in data) && ('album' in data)) {
     albumArtCache.get(data['artist'], data['album'], function(resp) {
+      if (!resp || !resp.album || !resp.album.image) {
+        updateData(data);
+        return;
+      }
       var images = resp['album']['image'];
       var image = null;
       for (var i = 0; i < images.length; i++) {
@@ -101,7 +105,9 @@ socket.on('newTrack', function(data) {
           image = images[i]['#text'];
         }
       }
-      data['albumArt'] = image
+      if (image) {
+        data['albumArt'] = image;
+      }
       updateData(data);
     })
   } else {
@@ -110,14 +116,13 @@ socket.on('newTrack', function(data) {
 });
 
 var updateData = function(data) {
+  var albumArt = 'default-album-art.png';
   if ('albumArt' in data) {
-    var albumArt = data.albumArt;
-    document.body.style.background = 'url(' + albumArt + ') no-repeat center center fixed';
-    document.body.style.backgroundSize = 'cover';
-    document.getElementById('albumArt').src = albumArt;
-  } else {
-    // TODO: Put a blank image here.
+    albumArt = data.albumArt;
   }
+  document.body.style.background = 'url(' + albumArt + ') no-repeat center center fixed';
+  document.body.style.backgroundSize = 'cover';
+  document.getElementById('albumArt').src = albumArt;
   document.getElementById('title').innerHTML = data.title;
   document.getElementById('artist').innerHTML = data.artist;
   document.getElementById('album').innerHTML = data.album;
