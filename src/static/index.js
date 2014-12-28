@@ -125,6 +125,7 @@ var updateData = function(data) {
   document.getElementById('title').innerHTML = data.title;
   document.getElementById('artist').innerHTML = data.artist;
   document.getElementById('album').innerHTML = data.album;
+  document.getElementById('content').style.display = 'block';
 
   previousTracks.unshift(currentTrack);
   currentTrack = data;
@@ -138,4 +139,9 @@ var trackEquals = function(track1, track2) {
   return track1.title === track2.title &&
       track1.artist === track2.artist &&
       track1.album === track2.album;
+};
+
+var sleep = function() {
+  document.getElementById('content').style.display = 'none';
+  document.body.style.backgroundImage = 'none';
 };
