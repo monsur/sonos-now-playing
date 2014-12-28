@@ -100,10 +100,11 @@ socket.on('newTrack', function(data) {
       var images = resp['album']['image'];
       var image = null;
       for (var i = 0; i < images.length; i++) {
-        if (images[i]['size'] != 'mega') {
+        if (images[i]['size'] == 'mega') {
           // Skip the mega image, since its way to big (multiple MB in size).
-          image = images[i]['#text'];
+          continue;
         }
+        image = images[i]['#text'];
       }
       if (image) {
         data['albumArt'] = image;
