@@ -120,8 +120,7 @@ var updateData = function(data) {
   if ('albumArt' in data) {
     albumArt = data.albumArt;
   }
-  document.body.style.background = 'url(' + albumArt + ') no-repeat center center fixed';
-  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundImage = 'url(' + albumArt + ')';
   document.getElementById('albumArt').src = albumArt;
   document.getElementById('title').innerHTML = data.title;
   document.getElementById('artist').innerHTML = data.artist;
