@@ -1,3 +1,4 @@
+var DEFAULT_ALBUM_ART = 'default-album-art.png';
 var currentTrack = null;
 var previousTracks = [];
 
@@ -140,10 +141,8 @@ socket.on('newTrack', function(data) {
 });
 
 var updateData = function(data) {
-  var albumArt = data['albumArt'];
-  if (!albumArt) {
-    albumArt = 'default-album-art.png';
-  }
+  var albumArt = data['albumArt'] || DEFAULT_ALBUM_ART;
+
   document.body.style.backgroundImage = 'url(' + albumArt + ')';
   document.getElementById('albumArt').src = albumArt;
   document.getElementById('title').innerHTML = data.title;
