@@ -32,6 +32,9 @@ io.sockets.on('connection', function(socket) {
   connections++;
   if (connections === 1) {
     subscriptionHandler.subscribe();
+  } else if (connections > 1) {
+    // Give it the current track.
+    socket.emit('newTrack', notificationHandler.getCurrentTrack());
   }
 
   socket.on('disconnect', function() {
@@ -40,6 +43,4 @@ io.sockets.on('connection', function(socket) {
       subscriptionHandler.unsubscribe();
     }
   });
-
-  socket.emit('newTrack', notificationHandler.getCurrentTrack());
 });
