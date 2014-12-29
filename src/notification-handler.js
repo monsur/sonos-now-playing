@@ -34,4 +34,8 @@ NotificationHandler.prototype.processTrack = function(data) {
   this.callback(data);
 }
 
+NotificationHandler.prototype.getCurrentTrack = function() {
+  return this.currentTrack;
+};
+
 module.exports = NotificationHandler;

@@ -40,4 +40,6 @@ io.sockets.on('connection', function(socket) {
       subscriptionHandler.unsubscribe();
     }
   });
+
+  socket.emit('newTrack', notificationHandler.getCurrentTrack());
 });
