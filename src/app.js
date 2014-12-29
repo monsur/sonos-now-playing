@@ -1,8 +1,8 @@
 var http = require('http')
   , express = require('express')
+  , logger = require('little-logger')
   , socketio = require('socket.io')
   , config = require('./config')
-  , logger = require('./little-logger')
   , NotificationHandler = require('./notification-handler')
   , SubscriptionHandler = require('./subscription-handler');
 
