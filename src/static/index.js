@@ -96,7 +96,29 @@ AlbumArtCache.prototype.get = function(artist, album, callback) {
 };
 
 
+var Screensaver = function() {
+  this.timeout = 900000;
+  this.currentId = null;
+};
+
+Screensaver.sleep = function() {
+  document.getElementById('content').style.display = 'none';
+  document.body.style.backgroundImage = 'none';
+};
+
+Screensaver.prototype.start = function() {
+  if (this.currentId) {
+    clearTimeout(this.currentId);
+    this.currentId = null;
+  }
+  this.currentId = setTimeout(function() {
+    Screensaver.sleep();
+  }, this.timeout);
+};
+
+
 var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options['lastFmApiKey']));
+var screensaver = new Screensaver();
 
 var socket = io.connect();
 socket.on('newTrack', function(data) {
@@ -131,6 +153,7 @@ var updateData = function(data) {
 
   previousTracks.unshift(currentTrack);
   currentTrack = data;
+  screensaver.start();
 }
 
 // Compares two track objects.
@@ -143,7 +166,3 @@ var trackEquals = function(track1, track2) {
       track1.album === track2.album;
 };
 
-var sleep = function() {
-  document.getElementById('content').style.display = 'none';
-  document.body.style.backgroundImage = 'none';
-};
