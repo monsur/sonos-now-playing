@@ -96,8 +96,8 @@ AlbumArtCache.prototype.get = function(artist, album, callback) {
 };
 
 
-var Screensaver = function() {
-  this.timeout = 900000;
+var Screensaver = function(timeout) {
+  this.timeout = timeout || 900000;
   this.currentId = null;
 };
 
@@ -118,7 +118,7 @@ Screensaver.prototype.start = function() {
 
 
 var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options['lastFmApiKey']));
-var screensaver = new Screensaver();
+var screensaver = new Screensaver(options.sleepTimeout);
 
 var socket = io.connect();
 socket.on('newTrack', function(data) {
