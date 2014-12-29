@@ -29,12 +29,13 @@ var server = app.listen(options.port);
 
 var io = socketio.listen(server);
 io.sockets.on('connection', function(socket) {
+  if (notificationHandler.hasCurrentTrack()) {
+    socket.emit('newTrack', notificationHandler.getCurrentTrack());
+  }
+
   connections++;
   if (connections === 1) {
     subscriptionHandler.subscribe();
-  } else if (connections > 1) {
-    // Give it the current track.
-    socket.emit('newTrack', notificationHandler.getCurrentTrack());
   }
 
   socket.on('disconnect', function() {
