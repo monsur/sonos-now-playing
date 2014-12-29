@@ -3,8 +3,8 @@ var fs = require('fs');
 var getIpAddress = function() {
   var os = require('os');
   var interfaces = os.networkInterfaces();
-  for (k in interfaces) {
-    for (k2 in interfaces[k]) {
+  for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
       var address = interfaces[k][k2];
       if (address.family == 'IPv4' && !address.internal) {
         return address.address;
@@ -36,9 +36,9 @@ var getOptions = function(filename, options) {
 var getHandler = function(options) {
   return function(req, res, next) {
     var o = {};
-    o['lastFmApiKey'] = options['lastFmApiKey'];
+    o.lastFmApiKey = options.lastFmApiKey;
     res.send('var options = ' + JSON.stringify(o) + ';');
-  }
+  };
 };
 
 module.exports.getOptions = getOptions;
