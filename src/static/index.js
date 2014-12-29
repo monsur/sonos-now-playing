@@ -123,21 +123,19 @@ var screensaver = new Screensaver(options.sleepTimeout);
 
 var socket = io.connect();
 socket.on('newTrack', function(data) {
-  if (trackEquals(currentTrack, data)) {
+  if (!data || trackEquals(currentTrack, data)) {
     return;
   }
 
-  if (('artist' in data) && ('album' in data)) {
-    albumArtCache.get(data['artist'], data['album'], function(err, resp) {
-      if (err) {
-        // TODO: Log error server-side.
-        console.log(err);
-      } else {
-        data['albumArt'] = resp['albumArt'];
-      }
-      updateData(data);
-    });
-  }
+  albumArtCache.get(data['artist'], data['album'], function(err, resp) {
+    if (err) {
+      // TODO: Log error server-side.
+      console.log(err);
+    } else {
+      data['albumArt'] = resp['albumArt'];
+    }
+    updateData(data);
+  });
 });
 
 var updateData = function(data) {
