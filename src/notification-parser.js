@@ -6,7 +6,7 @@ var NotificationParser = function() {
 NotificationParser.prototype.open = function(callback) {
   this.parser = this.createParser();
   this.callback = callback;
-}
+};
 
 NotificationParser.prototype.createParser = function() {
   var that = this;
@@ -19,7 +19,7 @@ NotificationParser.prototype.createParser = function() {
       parser2.onopentag = function(node) {
         if (node.name === 'CurrentTrackMetaData' &&
             'val' in node.attributes) {
-          var val = node.attributes['val'];
+          var val = node.attributes.val;
           var parser3 = sax.parser(true);
           var title = null;
           var artist = null;
@@ -41,16 +41,16 @@ NotificationParser.prototype.createParser = function() {
             var data = null;
             if (title) {
               data = {};
-              data['title'] = title;
-              data['artist'] = artist;
-              data['album'] = album;
+              data.title = title;
+              data.artist = artist;
+              data.album = album;
             }
             that.callback(data);
           };
 
           parser3.write(val).close();
         }
-      }
+      };
 
       parser2.write(t).close();
     }
@@ -61,7 +61,7 @@ NotificationParser.prototype.createParser = function() {
 
 NotificationParser.prototype.write = function(data) {
   this.parser.write(data);
-}
+};
 
 NotificationParser.prototype.close = function() {
   this.parser.close();
