@@ -1,10 +1,10 @@
-var http = require('http')
-  , express = require('express')
-  , logger = require('little-logger')
-  , socketio = require('socket.io')
-  , config = require('./config')
-  , NotificationHandler = require('./notification-handler')
-  , SubscriptionHandler = require('./subscription-handler');
+var http = require('http'),
+  express = require('express'),
+  logger = require('little-logger'),
+  socketio = require('socket.io'),
+  config = require('./config'),
+  NotificationHandler = require('./notification-handler'),
+  SubscriptionHandler = require('./subscription-handler');
 
 // The number of connected clients.
 var connections = 0;
