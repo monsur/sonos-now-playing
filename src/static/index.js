@@ -15,18 +15,18 @@ LastFmAlbumArt.prototype.createUrl = function(artist, album) {
 };
 
 LastFmAlbumArt.getData = function(resp) {
-  if (resp && resp['album'] && resp['album']['image']) {
-    var images = resp['album']['image'];
+  if (resp && resp.album && resp.album.image) {
+    var images = resp.album.image;
     var image = null;
     for (var i = 0; i < images.length; i++) {
-      if (images[i]['size'] == 'mega') {
+      if (images[i].size == 'mega') {
         // Skip the mega image, since its way to big (multiple MB in size).
         continue;
       }
       image = images[i]['#text'];
     }
     var data = {};
-    data['albumArt'] = image;
+    data.albumArt = image;
     return data;
   }
   return null;
@@ -73,7 +73,7 @@ var AlbumArtCache = function(proxyCache) {
 
 AlbumArtCache.prototype.add = function(artist, album, data) {
   if (!(artist in this.cache)) {
-    this.cache[artist] = {}
+    this.cache[artist] = {};
   }
   this.cache[artist][album] = data;
 };
@@ -124,7 +124,7 @@ Screensaver.prototype.start = function() {
 };
 
 
-var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options['lastFmApiKey']));
+var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options.lastFmApiKey));
 var screensaver = new Screensaver(options.sleepTimeout);
 
 var socket = io.connect();
@@ -133,19 +133,19 @@ socket.on('newTrack', function(data) {
     return;
   }
 
-  albumArtCache.get(data['artist'], data['album'], function(err, resp) {
+  albumArtCache.get(data.artist, data.album, function(err, resp) {
     if (err) {
       // TODO: Log error server-side.
       console.log(err);
     } else {
-      data['albumArt'] = resp['albumArt'];
+      data.albumArt = resp.albumArt;
     }
     updateData(data);
   });
 });
 
 var updateData = function(data) {
-  var albumArt = data['albumArt'] || DEFAULT_ALBUM_ART;
+  var albumArt = data.albumArt || DEFAULT_ALBUM_ART;
 
   document.body.style.backgroundImage = 'url(' + albumArt + ')';
   document.getElementById('albumArt').src = albumArt;
@@ -157,7 +157,7 @@ var updateData = function(data) {
   previousTracks.unshift(currentTrack);
   currentTrack = data;
   screensaver.start();
-}
+};
 
 // Compares two track objects.
 var trackEquals = function(track1, track2) {
