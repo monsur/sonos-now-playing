@@ -103,8 +103,9 @@ AlbumArtCache.prototype.get = function(artist, album, callback) {
 };
 
 
-var Screensaver = function(timeout) {
+var Screensaver = function(timeout, callback) {
   this.timeout = timeout || 900000;
+  this.callback = callback || function() {};
   this.currentId = null;
 };
 
@@ -118,14 +119,34 @@ Screensaver.prototype.start = function() {
     clearTimeout(this.currentId);
     this.currentId = null;
   }
+  var that = this;
   this.currentId = setTimeout(function() {
-    Screensaver.sleep();
+    that.callback();
   }, this.timeout);
 };
 
 
+var UIController = function() {
+};
+
+UIController.updateTrack = function(data) {
+  var albumArt = data.albumArt || DEFAULT_ALBUM_ART;
+  document.body.style.backgroundImage = 'url(' + albumArt + ')';
+  document.getElementById('albumArt').src = albumArt;
+  document.getElementById('title').innerHTML = data.title;
+  document.getElementById('artist').innerHTML = data.artist;
+  document.getElementById('album').innerHTML = data.album;
+  document.getElementById('content').style.display = 'block';
+};
+
+UIController.sleep = function() {
+  document.getElementById('content').style.display = 'none';
+  document.body.style.backgroundImage = 'none';
+};
+
+
 var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options.lastFmApiKey));
-var screensaver = new Screensaver(options.sleepTimeout);
+var screensaver = new Screensaver(options.sleepTimeout, UIController.sleep);
 
 var socket = io.connect();
 socket.on('newTrack', function(data) {
@@ -140,24 +161,12 @@ socket.on('newTrack', function(data) {
     } else {
       data.albumArt = resp.albumArt;
     }
-    updateData(data);
+    UIController.updateTrack(data);
+    previousTracks.unshift(currentTrack);
+    currentTrack = data;
+    screensaver.start();
   });
 });
-
-var updateData = function(data) {
-  var albumArt = data.albumArt || DEFAULT_ALBUM_ART;
-
-  document.body.style.backgroundImage = 'url(' + albumArt + ')';
-  document.getElementById('albumArt').src = albumArt;
-  document.getElementById('title').innerHTML = data.title;
-  document.getElementById('artist').innerHTML = data.artist;
-  document.getElementById('album').innerHTML = data.album;
-  document.getElementById('content').style.display = 'block';
-
-  previousTracks.unshift(currentTrack);
-  currentTrack = data;
-  screensaver.start();
-};
 
 // Compares two track objects.
 var trackEquals = function(track1, track2) {
