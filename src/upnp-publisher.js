@@ -44,7 +44,7 @@ UpnpPublisher.prototype.getRequestOptions = function(method, headers) {
     port: 1400,
     path: '/MediaRenderer/AVTransport/Event',
     headers: headers
-  }
+  };
 };
 
 UpnpPublisher.prototype.subscribe = function(callbackUrl, callback) {
@@ -96,10 +96,10 @@ UpnpPublisher.prototype.subscribeInternal = function(headers, callback) {
     }
 
     if ('sid' in headers) {
-      that.sid = headers['sid'];
+      that.sid = headers.sid;
     }
     if ('timeout' in headers) {
-      that.timeout = parseInt(headers['timeout'].substr(UpnpPublisher.TIMEOUT_PREFIX.length));
+      that.timeout = parseInt(headers.timeout.substr(UpnpPublisher.TIMEOUT_PREFIX.length));
     }
 
     that.logger.info('Subscribed to speaker %s with SID %s',
