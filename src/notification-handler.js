@@ -25,6 +25,9 @@ NotificationHandler.prototype.handle = function(req, res, next) {
 };
 
 NotificationHandler.prototype.processTrack = function(data) {
+  if (!data) {
+    return;
+  }
   if (this.currentTrack['title'] === data['title'] &&
       this.currentTrack['album'] === data['album'] &&
       this.currentTrack['artist'] === data['artist']) {
