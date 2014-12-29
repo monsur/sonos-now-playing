@@ -16,9 +16,12 @@ NotificationParser.prototype.createParser = function() {
     if (parser.tag.name === 'LastChange') {
       var parser2 = sax.parser(true);
 
+      var transportState = '';
       parser2.onopentag = function(node) {
-        if (node.name === 'CurrentTrackMetaData' &&
-            'val' in node.attributes) {
+        if (node.name === 'TransportState') {
+          // TODO: figure out how to short-circuit here.
+          transportState = node.attributes['val'];
+        } else if (node.name === 'CurrentTrackMetaData') {
           var val = node.attributes['val'];
           var parser3 = sax.parser(true);
           var title = null;
@@ -45,7 +48,9 @@ NotificationParser.prototype.createParser = function() {
               data['artist'] = artist;
               data['album'] = album;
             }
-            that.callback(data);
+            if (transportState == 'PLAYING') {
+              that.callback(data);
+            }
           };
 
           parser3.write(val).close();
