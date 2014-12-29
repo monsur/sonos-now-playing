@@ -1,72 +1,102 @@
 var currentTrack = null;
 var previousTracks = [];
 
-var AlbumArt = function() {
-  this.cache = {};
+var LastFmAlbumArt = function(apiKey) {
+  this.apiKey = apiKey;
 };
 
-AlbumArt.prototype.add = function(artist, album, data) {
+LastFmAlbumArt.prototype.createUrl = function(artist, album) {
+  var url = 'http://ws.audioscrobbler.com/2.0/?method=album.getinfo&format=json';
+  url += '&api_key=' + encodeURIComponent(this.apiKey);
+  url += '&artist=' + encodeURIComponent(artist);
+  url += '&album=' + encodeURIComponent(album);
+  return url;
+};
+
+LastFmAlbumArt.getData = function(resp) {
+  if (resp && resp['album'] && resp['album']['image']) {
+    var images = resp['album']['image'];
+    var image = null;
+    for (var i = 0; i < images.length; i++) {
+      if (images[i]['size'] == 'mega') {
+        // Skip the mega image, since its way to big (multiple MB in size).
+        continue;
+      }
+      image = images[i]['#text'];
+    }
+    var data = {};
+    data['albumArt'] = image;
+    return data;
+  }
+  return null;
+};
+
+LastFmAlbumArt.prototype.get = function(artist, album, callback) {
+  var url = this.createUrl(artist, album);
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+
+  xhr.onerror = function() {
+    return callback({'msg': 'last.fm error'}, null);
+  };
+
+  xhr.onload = function() {
+    var resp = null;
+    try {
+      resp = JSON.parse(xhr.responseText);
+    } catch(e) {
+      return callback(e, null);
+    }
+    var data = LastFmAlbumArt.getData(resp);
+    if (data) {
+      return callback(null, data);
+    } else {
+      return callback(resp, null);
+    }
+  };
+
+  xhr.send();
+};
+
+
+var AlbumArtCache = function(proxyCache) {
+  this.cache = {};
+  this.proxyCache = proxyCache;
+};
+
+AlbumArtCache.prototype.add = function(artist, album, data) {
   if (!(artist in this.cache)) {
     this.cache[artist] = {}
   }
   this.cache[artist][album] = data;
 };
 
-AlbumArt.prototype.lookup = function(artist, album) {
-  if (artist in this.cache) {
-    var cache = this.cache[artist];
-    if (album in cache) {
-      return cache[album];
-    }
+AlbumArtCache.prototype.lookup = function(artist, album) {
+  if (this.cache[artist]) {
+    return this.cache[artist][album];
   }
-  return null;
+  return undefined;
 };
 
-AlbumArt.prototype.createUrl = function(artist, album) {
-  var url = 'http://ws.audioscrobbler.com/2.0/?method=album.getinfo&format=json';
-  url += '&api_key=' + encodeURIComponent(options.lastFmApiKey);
-  url += '&artist=' + encodeURIComponent(artist);
-  url += '&album=' + encodeURIComponent(album);
-  return url;
-};
-
-AlbumArt.prototype.get = function(artist, album, callback) {
+AlbumArtCache.prototype.get = function(artist, album, callback) {
   var that = this;
+
   var data = this.lookup(artist, album);
   if (data) {
-    callback(data);
-    return;
+    return callback(null, data);
   }
 
-  var url = this.createUrl(artist, album);
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-
-  xhr.onerror = function() {
-    console.log('There was an error!');
-  };
-
-  xhr.onload = function() {
-    var data = null;
-    try {
-      data = JSON.parse(xhr.responseText);
-    } catch(e) {
-      console.log(e);
-      return callback();
+  this.proxyCache.get(artist, album, function(err, data) {
+    if (err) {
+      return callback(err, null);
     }
-    if ('error' in data) {
-      console.log(data);
-      return callback();
-    }
-
     that.add(artist, album, data);
-    return callback(data);
-  };
-
-  xhr.send();
+    return callback(null, data);
+  });
 };
 
-var albumArtCache = new AlbumArt();
+
+var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options['lastFmApiKey']));
 
 var socket = io.connect();
 socket.on('newTrack', function(data) {
@@ -75,34 +105,22 @@ socket.on('newTrack', function(data) {
   }
 
   if (('artist' in data) && ('album' in data)) {
-    albumArtCache.get(data['artist'], data['album'], function(resp) {
-      if (!resp || !resp.album || !resp.album.image) {
-        updateData(data);
-        return;
-      }
-      var images = resp['album']['image'];
-      var image = null;
-      for (var i = 0; i < images.length; i++) {
-        if (images[i]['size'] == 'mega') {
-          // Skip the mega image, since its way to big (multiple MB in size).
-          continue;
-        }
-        image = images[i]['#text'];
-      }
-      if (image) {
-        data['albumArt'] = image;
+    albumArtCache.get(data['artist'], data['album'], function(err, resp) {
+      if (err) {
+        // TODO: Log error server-side.
+        console.log(err);
+      } else {
+        data['albumArt'] = resp['albumArt'];
       }
       updateData(data);
-    })
-  } else {
-    updateData(data);
+    });
   }
 });
 
 var updateData = function(data) {
-  var albumArt = 'default-album-art.png';
-  if ('albumArt' in data) {
-    albumArt = data.albumArt;
+  var albumArt = data['albumArt'];
+  if (!albumArt) {
+    albumArt = 'default-album-art.png';
   }
   document.body.style.backgroundImage = 'url(' + albumArt + ')';
   document.getElementById('albumArt').src = albumArt;
