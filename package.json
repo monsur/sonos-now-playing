@@ -3,7 +3,10 @@
   "description": "Display the currently playing track from Sonos.",
   "author": "Monsur Hossain <monsur@gmail.com> (http://monsur.hossa.in/)",
   "homepage": "https://github.com/monsur/sonos-now-playing",
-  "keywords": ["sonos", "music"],
+  "keywords": [
+    "sonos",
+    "music"
+  ],
   "version": "0.3.0",
   "main": "src/app.js",
   "license": "BSD",
@@ -16,5 +19,9 @@
     "little-logger": "0.1.4",
     "sax": "0.6.1",
     "socket.io": "1.2.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0"
   }
 }
