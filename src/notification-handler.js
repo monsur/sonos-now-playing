@@ -28,14 +28,14 @@ NotificationHandler.prototype.processTrack = function(data) {
   if (!data) {
     return;
   }
-  if (this.currentTrack['title'] === data['title'] &&
-      this.currentTrack['album'] === data['album'] &&
-      this.currentTrack['artist'] === data['artist']) {
+  if (this.currentTrack.title === data.title &&
+      this.currentTrack.album === data.album &&
+      this.currentTrack.artist === data.artist) {
     return;
   }
   this.currentTrack = data;
   this.callback(data);
-}
+};
 
 NotificationHandler.prototype.getCurrentTrack = function() {
   return this.currentTrack;
