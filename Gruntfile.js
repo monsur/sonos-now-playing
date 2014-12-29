@@ -7,6 +7,7 @@ module.exports = function(grunt) {
     copy: {
       main: {
         files: [
+          {expand: true, cwd: 'src/', src: ['config.json'], dest: 'dest/', flatten: true},
           {expand: true, cwd: 'src/server/', src: ['*.js'], dest: 'dest/', flatten: true},
           {expand: true, cwd: 'src/client/', src: ['**'], dest: 'dest/static'}
         ]

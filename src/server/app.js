@@ -24,7 +24,7 @@ app.use(express.static('static'));
 app.notify(options.notificationPath, function(req, res, next) {
   notificationHandler.handle(req, res, next);
 });
-app.get('/config.js', config.getHandler(options));
+app.get('/js/config.js', config.getHandler(options));
 var server = app.listen(options.port);
 
 var io = socketio.listen(server);

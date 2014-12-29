@@ -1,4 +1,4 @@
-var DEFAULT_ALBUM_ART = 'default-album-art.png';
+var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
 var currentTrack = null;
 var previousTracks = [];
 
