@@ -39,5 +39,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  grunt.registerTask('default', ['jshint:beforeconcat', 'concat', 'jshint:afterconcat', 'copy']);
+  grunt.registerTask('default', [
+    'jshint:beforeconcat',
+    'concat',
+    'jshint:afterconcat',
+    'copy'
+  ]);
 };
