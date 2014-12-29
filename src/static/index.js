@@ -32,6 +32,23 @@ LastFmAlbumArt.getData = function(resp) {
   return null;
 };
 
+LastFmAlbumArt.processResponse = function(responseText, callback) {
+  var resp = null;
+
+  try {
+    resp = JSON.parse(responseText);
+  } catch(e) {
+    return callback(e, null);
+  }
+
+  var data = LastFmAlbumArt.getData(resp);
+  if (data) {
+    return callback(null, data);
+  } else {
+    return callback(resp, null);
+  }
+};
+
 LastFmAlbumArt.prototype.get = function(artist, album, callback) {
   var url = this.createUrl(artist, album);
   var xhr = new XMLHttpRequest();
@@ -42,18 +59,7 @@ LastFmAlbumArt.prototype.get = function(artist, album, callback) {
   };
 
   xhr.onload = function() {
-    var resp = null;
-    try {
-      resp = JSON.parse(xhr.responseText);
-    } catch(e) {
-      return callback(e, null);
-    }
-    var data = LastFmAlbumArt.getData(resp);
-    if (data) {
-      return callback(null, data);
-    } else {
-      return callback(resp, null);
-    }
+    LastFmAlbumArt.processResponse(xhr.responseText, callback);
   };
 
   xhr.send();
