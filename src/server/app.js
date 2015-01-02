@@ -38,6 +38,14 @@ io.sockets.on('connection', function(socket) {
     subscriptionHandler.subscribe();
   }
 
+  socket.on('play', function(data) {
+    console.log('received PLAY');
+  });
+
+  socket.on('next', function(data) {
+    console.log('received NEXT');
+  });
+
   socket.on('disconnect', function() {
     connections--;
     if (connections === 0) {

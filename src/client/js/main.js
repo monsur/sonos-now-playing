@@ -36,8 +36,10 @@ socket.on('newTrack', function(data) {
 
 document.getElementById('play').addEventListener('click', function(evt) {
   console.log('play');
+  socket.emit('play');
 });
 
 document.getElementById('next').addEventListener('click', function(evt) {
   console.log('next');
+  socket.emit('next');
 });
