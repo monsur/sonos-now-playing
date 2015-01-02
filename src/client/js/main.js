@@ -16,22 +16,26 @@ var trackEquals = function(track1, track2) {
 };
 
 socket.on('newTrack', function(data) {
-  if (!data || trackEquals(currentTrack, data)) {
+  if (!data) {
+    // TODO: Log this server side
+    console.log('ERROR: Recieved empty data from server');
     return;
   }
 
-  albumArtCache.get(data.artist, data.album, function(err, resp) {
-    if (err) {
-      // TODO: Log error server-side.
-      console.log(err);
-    } else {
-      data.albumArt = resp.albumArt;
-    }
-    UIController.updateTrack(data);
-    previousTracks.unshift(currentTrack);
-    currentTrack = data;
-    screensaver.start();
-  });
+  if (!trackEquals(currentTrack, data)) {
+    albumArtCache.get(data.artist, data.album, function(err, resp) {
+      if (err) {
+        // TODO: Log error server-side.
+        console.log(err);
+      } else {
+        data.albumArt = resp.albumArt;
+      }
+      UIController.updateTrack(data);
+      previousTracks.unshift(currentTrack);
+      currentTrack = data;
+      screensaver.start();
+    });
+  }
 });
 
 document.getElementById('play').addEventListener('click', function(evt) {
