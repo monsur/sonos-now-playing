@@ -9,14 +9,12 @@ body {
   margin: 0;
   padding: 0;
 }
-
 #content {
   background-color: #333;
   opacity: 0.9;
   float: right;
   margin: 30% 0 0 0;
 }
-
 #left {
   position: relative;
   float: left;
@@ -28,12 +26,10 @@ body {
   white-space: nowrap;
   overflow: hidden;
 }
-
 #title {
   color: #fff;
   font-size: 30px;
 }
-
 #right {
   position: relative;
   float: right;
@@ -42,8 +38,25 @@ body {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-
 #right img {
   height: 100px;
   width: 100px;
 }
+#touch {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#play {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+#next {
+  width: 50%;
+  height: 100%;
+  float: right;
+}
+
