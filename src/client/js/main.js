@@ -34,3 +34,10 @@ socket.on('newTrack', function(data) {
   });
 });
 
+document.getElementById('play').addEventListener('click', function(evt) {
+  console.log('play');
+});
+
+document.getElementById('next').addEventListener('click', function(evt) {
+  console.log('next');
+});
