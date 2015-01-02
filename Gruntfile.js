@@ -39,12 +39,17 @@ module.exports = function(grunt) {
           {expand: true, cwd: 'src/client/', src: ['**', '!**/js/**'], dest: 'dest/static'}
         ]
       }
+    },
+    watch: {
+      files: ['src/client/**'],
+      tasks: ['client']
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', [
     'jshint:server',
