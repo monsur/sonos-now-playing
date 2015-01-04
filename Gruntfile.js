@@ -3,7 +3,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
       server: [
-        'src/server/**/*.js'
+        'src/server/**/*.js',
+        'tests/server/**/*.js'
       ],
       client: [
         'Gruntfile.js',
@@ -12,6 +13,14 @@ module.exports = function(grunt) {
         '!src/client/js/outro.js'
       ],
       clientconcat: ['dest/static/js/index.js']
+    },
+    mochaTest: {
+      server: {
+        options: {
+          reporter: 'spec',
+        },
+        src: ['tests/server/**/*.test.js']
+      }
     },
     concat: {
       dist: {
@@ -50,8 +59,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
   grunt.registerTask('default', [
+    'mochaTest',
     'jshint:server',
     'jshint:client',
     'concat',
@@ -60,6 +71,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('server', [
+    'mochaTest:server',
     'jshint:server',
     'copy:server'
   ]);
