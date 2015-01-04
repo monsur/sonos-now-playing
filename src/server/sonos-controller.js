@@ -41,9 +41,11 @@ var SonosController = function(speakerIp, logger, request) {
 SonosController.prototype.subscribe = function(callbackUrl, callback) {
   this.logger.info('Subscribing to speaker ' + this.speakerIp + ' with ' +
       'callback URL ' + callbackUrl);
+
   if (!callbackUrl) {
     throw new Error('Must specify a callback URL.');
   }
+
   var options = {};
   options.method = 'SUBSCRIBE';
   options.path = '/MediaRenderer/AVTransport/Event';
@@ -51,6 +53,7 @@ SonosController.prototype.subscribe = function(callbackUrl, callback) {
     'CALLBACK': '<' + callbackUrl + '>',
     'NT': 'upnp:event'
   };
+
   this.makeRequest(options, function(error, res) {
     if (error) {
       callback(error, null);
