@@ -79,3 +79,16 @@ describe('subscribe', function() {
     });
   });
 });
+
+describe('makeRequest', function() {
+  it('Checks the request options', function() {
+    var s = new SonosController('1.2.3.4', null,
+      function(options, callback) {
+        assert.equal('1.2.3.4', options.hostname);
+        assert.equal('1400', options.port);
+        assert.equal('bar', options.foo);
+      }
+    );
+    s.makeRequest({'foo': 'bar'}, function(res) {});
+  });
+});
