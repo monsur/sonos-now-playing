@@ -1,6 +1,7 @@
 var http = require('http');
 
 var port = 1400;
+var timeoutPrefix = 'Second-';
 
 var getError = function(res) {
   var statusCode = res.statusCode;
@@ -28,8 +29,7 @@ var getError = function(res) {
 };
 
 var parseTimeout = function(val) {
-  var prefix = 'Second-';
-  return parseInt(val.substr(prefix.length));
+  return parseInt(val.substr(timeoutPrefix.length));
 };
 
 var SonosController = function(speakerIp, logger) {
@@ -66,7 +66,19 @@ SonosController.prototype.subscribe = function(callbackUrl, callback) {
   });
 };
 
-SonosController.prototype.renew = function(callback) {
+SonosController.prototype.renew = function(sid, timeout, callback) {
+  if (!sid) {
+    throw new Error('Must specify a SID.');
+  }
+  if (arguments.length === 2) {
+    callback = timeout;
+    timeout = null;
+  } else if (typeof timeout !== 'number') {
+    throw new Error('Timeout must be a number.');
+  }
+  if (typeof callback !== 'function') {
+    throw new Error('Callback must be a function');
+  }
 };
 
 SonosController.prototype.unsubscribe = function(callback) {
@@ -84,7 +96,6 @@ SonosController.prototype.next = function(callback) {
 SonosController.prototype.makeRequest = function(options, callback) {
   options.hostname = this.speakerIp;
   options.port = port;
-
   http.request(options, function(res) {
     var error = getError(res);
     if (error) {
