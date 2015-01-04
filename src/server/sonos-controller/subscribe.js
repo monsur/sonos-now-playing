@@ -1,4 +1,4 @@
-module.exports.get = function(options) {
+module.exports.makeRequest = function(options) {
   options.foo = 'bar';
   return options;
 };
