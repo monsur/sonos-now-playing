@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     jshint: {
       server: [
         'src/server/**/*.js',
-        'tests/server/**/*.js'
+        'test/server/**/*.js'
       ],
       client: [
         'Gruntfile.js',
@@ -18,8 +18,17 @@ module.exports = function(grunt) {
       server: {
         options: {
           reporter: 'spec',
+          require: 'coverage/blanket'
         },
-        src: ['tests/server/**/*.test.js']
+        src: ['test/server/**/*.test.js']
+      },
+      coverage: {
+        options: {
+          reporter: 'html-cov',
+          quiet: true,
+          captureFile: 'coverage.html'
+        },
+        src: '<%= mochaTest.server.src %>'
       }
     },
     concat: {
