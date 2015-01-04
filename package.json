@@ -17,6 +17,7 @@
   "dependencies": {
     "express": "4.10.6",
     "little-logger": "0.1.4",
+    "nock": "^0.53.0",
     "sax": "0.6.1",
     "socket.io": "1.2.1"
   },
