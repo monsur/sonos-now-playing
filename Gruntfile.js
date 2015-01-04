@@ -15,12 +15,12 @@ module.exports = function(grunt) {
       clientconcat: ['dest/static/js/index.js']
     },
     mochaTest: {
-      server: {
+      test: {
         options: {
           reporter: 'spec',
           require: 'coverage/blanket'
         },
-        src: ['test/server/**/*.test.js']
+        src: ['test/**/*.test.js']
       },
       coverage: {
         options: {
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
           quiet: true,
           captureFile: 'coverage.html'
         },
-        src: '<%= mochaTest.server.src %>'
+        src: '<%= mochaTest.test.src %>'
       }
     },
     concat: {
@@ -80,7 +80,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('server', [
-    'mochaTest:server',
+    'mochaTest',
     'jshint:server',
     'copy:server'
   ]);
