@@ -1,6 +1,6 @@
 var SonosController = require('../../src/server/sonos-controller');
 
-describe('test subscribe', function() {
+describe('subscribe', function() {
   it('Throws an error if there is no callback url', function() {
     var s = new SonosController();
     try {
