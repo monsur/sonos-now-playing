@@ -91,4 +91,19 @@ describe('makeRequest', function() {
     );
     s.makeRequest({'foo': 'bar'}, function(res) {});
   });
+
+    it('Sends a valid response', function() {
+    var s = new SonosController('1.2.3.4', null,
+      function(options, callback) {
+        callback({
+          statusCode: 200,
+          foo: 'bar'
+        });
+      }
+    );
+    s.makeRequest({}, function(error, res) {
+      assert.ok(!error);
+      assert.equal('bar', res.foo);
+    });
+  });
 });
