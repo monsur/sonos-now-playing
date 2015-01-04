@@ -2,6 +2,31 @@ var http = require('http');
 
 var port = 1400;
 
+var getError = function(res) {
+  var statusCode = res.statusCode;
+  if (statusCode === 200) {
+    return null;
+  }
+
+  var msg = null;
+  if (statusCode === 400) {
+    msg = 'Incompatible header fields';
+  } else if (statusCode === 412) {
+    msg = 'Precondition failed';
+  } else if (statusCode >= 500) {
+    msg = 'Unable to accept renewal';
+  }
+
+  var error = {
+    'statusCode': statusCode,
+    'headers': res.headers
+  };
+  if (msg) {
+    error.msg = msg;
+  }
+  return error;
+};
+
 var parseTimeout = function(val) {
   var prefix = 'Second-';
   return parseInt(val.substr(prefix.length));
@@ -59,6 +84,15 @@ SonosController.prototype.next = function(callback) {
 SonosController.prototype.makeRequest = function(options, callback) {
   options.hostname = this.speakerIp;
   options.port = port;
+
+  http.request(options, function(res) {
+    var error = getError(res);
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    callback(null, res);
+  });
 };
 
 module.exports = SonosController;
