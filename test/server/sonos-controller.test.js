@@ -30,4 +30,52 @@ describe('subscribe', function() {
       assert.equal('ERROR', error.msg);
     });
   });
+
+  it('Returns a valid response', function() {
+    var s = new SonosController();
+    s.makeRequest = function(options, callback) {
+      callback(null, {
+        headers: {
+          sid: '123',
+          timeout: 'Second-456'
+        }
+      });
+    };
+    s.subscribe('foo', function(error, res) {
+      assert.equal(res.sid, '123');
+      assert.equal(res.timeout, '456');
+    });
+  });
+
+  it('Returns a valid response with NaN timeout', function() {
+    var s = new SonosController();
+    s.makeRequest = function(options, callback) {
+      callback(null, {
+        headers: {
+          sid: '123',
+          timeout: 'foo'
+        }
+      });
+    };
+    s.subscribe('foo', function(error, res) {
+      assert.equal(res.sid, '123');
+      assert.ok(!('timeout' in res));
+    });
+  });
+
+  it('Returns a valid response with empty timeout', function() {
+    var s = new SonosController();
+    s.makeRequest = function(options, callback) {
+      callback(null, {
+        headers: {
+          sid: '123',
+          timeout: ''
+        }
+      });
+    };
+    s.subscribe('foo', function(error, res) {
+      assert.equal(res.sid, '123');
+      assert.ok(!('timeout' in res));
+    });
+  });
 });

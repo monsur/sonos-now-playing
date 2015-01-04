@@ -1,4 +1,4 @@
-var http = require('http');
+var Logger = require('little-logger').Logger;
 
 var port = 1400;
 var timeoutPrefix = 'Second-';
@@ -32,9 +32,10 @@ var parseTimeout = function(val) {
   return parseInt(val.substr(timeoutPrefix.length));
 };
 
-var SonosController = function(speakerIp, logger) {
+var SonosController = function(speakerIp, logger, request) {
   this.speakerIp = speakerIp;
-  this.logger = logger;
+  this.logger = logger || new Logger(null, {enabled: false});
+  this.request = request || require('http').request;
 };
 
 SonosController.prototype.subscribe = function(callbackUrl, callback) {
@@ -60,7 +61,10 @@ SonosController.prototype.subscribe = function(callbackUrl, callback) {
       data.sid = headers.sid;
     }
     if ('timeout' in headers) {
-      data.timeout = parseTimeout(headers.timeout);
+      var timeout = parseTimeout(headers.timeout);
+      if (!isNaN(timeout)) {
+        data.timeout = timeout;
+      }
     }
     callback(null, data);
   });
@@ -96,7 +100,7 @@ SonosController.prototype.next = function(callback) {
 SonosController.prototype.makeRequest = function(options, callback) {
   options.hostname = this.speakerIp;
   options.port = port;
-  http.request(options, function(res) {
+  this.request(options, function(res) {
     var error = getError(res);
     if (error) {
       callback(error, null);
