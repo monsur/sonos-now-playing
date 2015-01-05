@@ -92,7 +92,7 @@ describe('makeRequest', function() {
     s.makeRequest({'foo': 'bar'}, function(res) {});
   });
 
-    it('Sends a valid response', function() {
+  it('Sends a valid response', function() {
     var s = new SonosController('1.2.3.4', null,
       function(options, callback) {
         callback({
@@ -106,4 +106,62 @@ describe('makeRequest', function() {
       assert.equal('bar', res.foo);
     });
   });
+
+  it('Sends a 501 response', function() {
+    var s = new SonosController('1.2.3.4', null,
+      function(options, callback) {
+        callback({
+          statusCode: 501,
+          headers: {
+            'foo': 'bar'
+          }
+        });
+      }
+    );
+    s.makeRequest({}, function(error, res) {
+      assert.ok(!res);
+      assert.equal(501, error.statusCode);
+      assert.equal('Unable to accept renewal', error.msg);
+      assert.equal('bar', error.headers.foo);
+    });
+  });
+
+  it('Sends a 400 response', function() {
+    var s = new SonosController('1.2.3.4', null,
+      function(options, callback) {
+        callback({
+          statusCode: 400,
+          headers: {
+            'foo': 'bar'
+          }
+        });
+      }
+    );
+    s.makeRequest({}, function(error, res) {
+      assert.ok(!res);
+      assert.equal(400, error.statusCode);
+      assert.equal('Incompatible header fields', error.msg);
+      assert.equal('bar', error.headers.foo);
+    });
+  });
+
+  it('Sends a 401 response', function() {
+    var s = new SonosController('1.2.3.4', null,
+      function(options, callback) {
+        callback({
+          statusCode: 401,
+          headers: {
+            'foo': 'bar'
+          }
+        });
+      }
+    );
+    s.makeRequest({}, function(error, res) {
+      assert.ok(!res);
+      assert.ok(!error.msg);
+      assert.equal(401, error.statusCode);
+      assert.equal('bar', error.headers.foo);
+    });
+  });
+
 });

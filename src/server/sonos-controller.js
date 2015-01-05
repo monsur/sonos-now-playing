@@ -3,6 +3,12 @@ var Logger = require('little-logger').Logger;
 var port = 1400;
 var timeoutPrefix = 'Second-';
 
+var statusCodeMessages = {
+  400: 'Incompatible header fields',
+  412: 'Precondition failed',
+  500: 'Unable to accept renewal'
+};
+
 var getError = function(res) {
   var statusCode = res.statusCode;
   if (statusCode === 200) {
@@ -10,12 +16,10 @@ var getError = function(res) {
   }
 
   var msg = null;
-  if (statusCode === 400) {
-    msg = 'Incompatible header fields';
-  } else if (statusCode === 412) {
-    msg = 'Precondition failed';
+  if (statusCode in statusCodeMessages) {
+    msg = statusCodeMessages[statusCode];
   } else if (statusCode >= 500) {
-    msg = 'Unable to accept renewal';
+    msg = statusCodeMessages[500];
   }
 
   var error = {
