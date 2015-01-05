@@ -9,26 +9,32 @@ var statusCodeMessages = {
   500: 'Unable to accept renewal'
 };
 
-var getError = function(res) {
-  var statusCode = res.statusCode;
-  if (statusCode === 200) {
-    return null;
-  }
-
+var getErrorMessage = function(statusCode) {
   var msg = null;
   if (statusCode in statusCodeMessages) {
     msg = statusCodeMessages[statusCode];
   } else if (statusCode >= 500) {
     msg = statusCodeMessages[500];
   }
+  return msg;
+};
+
+var getError = function(res) {
+  var statusCode = res.statusCode;
+  if (statusCode === 200) {
+    return null;
+  }
 
   var error = {
     'statusCode': statusCode,
     'headers': res.headers
   };
+
+  var msg = getErrorMessage(statusCode);
   if (msg) {
     error.msg = msg;
   }
+
   return error;
 };
 
