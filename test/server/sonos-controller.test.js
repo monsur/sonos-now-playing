@@ -82,6 +82,9 @@ describe('subscribeInternal', function() {
   });
 });
 
+describe('renew', function() {
+});
+
 describe('makeRequest', function() {
   it('Checks the request options', function() {
     var s = new SonosController('1.2.3.4', null,
@@ -122,9 +125,9 @@ describe('makeRequest', function() {
     );
     s.makeRequest({}, function(error, res) {
       assert.ok(!res);
-      assert.equal(501, error.statusCode);
-      assert.equal('Unable to accept renewal', error.msg);
-      assert.equal('bar', error.headers.foo);
+      assert.equal('Unable to accept renewal', error.message);
+      assert.equal(501, error.details.statusCode);
+      assert.equal('bar', error.details.headers.foo);
     });
   });
 
@@ -141,9 +144,9 @@ describe('makeRequest', function() {
     );
     s.makeRequest({}, function(error, res) {
       assert.ok(!res);
-      assert.equal(400, error.statusCode);
-      assert.equal('Incompatible header fields', error.msg);
-      assert.equal('bar', error.headers.foo);
+      assert.equal('Incompatible header fields', error.message);
+      assert.equal(400, error.details.statusCode);
+      assert.equal('bar', error.details.headers.foo);
     });
   });
 
@@ -160,9 +163,9 @@ describe('makeRequest', function() {
     );
     s.makeRequest({}, function(error, res) {
       assert.ok(!res);
-      assert.ok(!error.msg);
-      assert.equal(401, error.statusCode);
-      assert.equal('bar', error.headers.foo);
+      assert.equal('HTTP status code 401', error.message);
+      assert.equal(401, error.details.statusCode);
+      assert.equal('bar', error.details.headers.foo);
     });
   });
 

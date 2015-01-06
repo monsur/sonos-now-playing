@@ -11,12 +11,6 @@ var statusCodeMessages = {
 };
 
 var getErrorMessage = function(statusCode) {
-  var msg = null;
-  if (statusCode in statusCodeMessages) {
-    msg = statusCodeMessages[statusCode];
-  } else if (statusCode >= 500) {
-    msg = statusCodeMessages[500];
-  }
   return msg;
 };
 
@@ -26,15 +20,20 @@ var getError = function(res) {
     return null;
   }
 
-  var error = {
+  var msg = null;
+  if (statusCode in statusCodeMessages) {
+    msg = statusCodeMessages[statusCode];
+  } else if (statusCode >= 500) {
+    msg = statusCodeMessages[500];
+  } else {
+    msg = 'HTTP status code ' + statusCode;
+  }
+
+  var error = new Error(msg);
+  error.details = {
     'statusCode': statusCode,
     'headers': res.headers
   };
-
-  var msg = getErrorMessage(statusCode);
-  if (msg) {
-    error.msg = msg;
-  }
 
   return error;
 };
@@ -51,7 +50,7 @@ var SonosController = function(speakerIp, logger, request) {
 
 SonosController.prototype.subscribe = function(callbackUrl, callback) {
   if (!callbackUrl) {
-    throw new Error('Must specify a callback URL.');
+    return callback(new Error('Must specify a callback URL.'), null);
   }
 
   this.logger.info('Subscribing to speaker ' + this.speakerIp + ' with ' +
@@ -65,16 +64,16 @@ SonosController.prototype.subscribe = function(callbackUrl, callback) {
 
 SonosController.prototype.renew = function(sid, timeout, callback) {
   if (!sid) {
-    throw new Error('Must specify a SID.');
+    return callback(new Error('Must specify a SID.'), null);
   }
   if (arguments.length === 2) {
     callback = timeout;
     timeout = null;
   } else if (typeof timeout !== 'number') {
-    throw new Error('Timeout must be a number.');
+    return callback(new Error('Timeout must be a number.'), null);
   }
   if (typeof callback !== 'function') {
-    throw new Error('Callback must be a function');
+    return callback(new Error('Callback must be a function'), null);
   }
   timeout = timeout || defaultTimeout;
 
@@ -132,8 +131,7 @@ SonosController.prototype.makeRequest = function(options, callback) {
   this.request(options, function(res) {
     var error = getError(res);
     if (error) {
-      callback(error, null);
-      return;
+      return callback(error, null);
     }
     callback(null, res);
   });
