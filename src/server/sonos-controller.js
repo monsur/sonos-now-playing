@@ -143,12 +143,15 @@ SonosController.prototype.next = function(callback) {
 SonosController.prototype.makeRequest = function(options, callback) {
   options.hostname = this.speakerIp;
   options.port = port;
-  this.request(options, function(res) {
+  var req = this.request(options, function(res) {
     var error = getError(res);
     if (error) {
       return callback(error, null);
     }
     callback(null, res);
+  });
+  req.on('error', function(e) {
+    console.log(e);
   });
 };
 
