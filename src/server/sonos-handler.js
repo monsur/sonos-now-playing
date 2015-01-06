@@ -33,7 +33,7 @@ SonosHandler.prototype.scheduleRenew = function(data) {
     this.sid = data.sid;
   }
   if ('timeout' in data) {
-    this.timeout = timeout;
+    this.timeout = data.timeout;
   }
   this.renewalId = setTimeout(function() {
     that.renew();
