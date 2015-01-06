@@ -2,6 +2,7 @@ var Logger = require('little-logger').Logger;
 
 var port = 1400;
 var timeoutPrefix = 'Second-';
+var eventPath = '/MediaRenderer/AVTransport/Event';
 var defaultTimeout = 43200000;
 var defaultCallback = function() {};
 
@@ -88,7 +89,7 @@ SonosController.prototype.renew = function(sid, timeout, callback) {
 SonosController.prototype.subscribeInternal = function(headers, callback) {
   var options = {};
   options.method = 'SUBSCRIBE';
-  options.path = '/MediaRenderer/AVTransport/Event';
+  options.path = eventPath;
   options.headers = headers;
 
   this.makeRequest(options, function(error, res) {
@@ -112,7 +113,22 @@ SonosController.prototype.subscribeInternal = function(headers, callback) {
   });
 };
 
-SonosController.prototype.unsubscribe = function(callback) {
+SonosController.prototype.unsubscribe = function(sid, callback) {
+  callback = callback || defaultCallback
+  if (!sid) {
+    return callback(new Error('Must specify a SID.'), null);
+  }
+
+  this.logger.info('Unsubscribing speaker ' + this.speakerIp + ' with ' +
+      'SID ' + sid);
+
+  this.makeRequest({
+    method: 'UNSUBSCRIBE',
+    path: eventPath,
+    headers: {
+      'SID': sid
+    }
+  }, callback);
 };
 
 SonosController.prototype.play = function(callback) {
