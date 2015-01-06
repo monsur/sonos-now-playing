@@ -62,7 +62,7 @@ SonosController.prototype.subscribe = function(callbackUrl, callback) {
 };
 
 SonosController.prototype.renew = function(sid, timeout, callback) {
-  callback = callback || defaultCallback
+  callback = callback || defaultCallback;
   if (!sid) {
     return callback(new Error('Must specify a SID.'), null);
   }
@@ -114,7 +114,7 @@ SonosController.prototype.subscribeInternal = function(headers, callback) {
 };
 
 SonosController.prototype.unsubscribe = function(sid, callback) {
-  callback = callback || defaultCallback
+  callback = callback || defaultCallback;
   if (!sid) {
     return callback(new Error('Must specify a SID.'), null);
   }

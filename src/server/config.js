@@ -18,7 +18,7 @@ var CONFIG_FILENAME = 'config.json';
 var CONFIG_OPTIONS = {
   port: 8080,
   ip: getIpAddress(),
-  notificationPath: '/notify'
+  callbackPath: '/notify'
 };
 
 var getOptions = function(filename, options) {
