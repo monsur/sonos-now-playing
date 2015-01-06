@@ -3,14 +3,11 @@ var SonosController = require('../../src/server/sonos-controller');
 
 describe('subscribe', function() {
   it('Throws an error if there is no callback url', function() {
-    var s = new SonosController();
-    try {
-      s.subscribe();
-    } catch (e) {
-      // expected
-      return;
-    }
-    throw new Error('Expected an error.');
+    var s = new SonosController('1.2.3.4');
+    s.subscribe('foo', function(error, data) {
+      assert.ok(error);
+      assert.ok(!data);
+    });
   });
 
   it('Verifies the correct callback header', function() {
@@ -83,6 +80,9 @@ describe('subscribeInternal', function() {
 });
 
 describe('renew', function() {
+  it('No SID', function() {
+    var s = new SonosController('1.2.3.4');
+  });
 });
 
 describe('makeRequest', function() {

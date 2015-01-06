@@ -3,15 +3,12 @@ var Logger = require('little-logger').Logger;
 var port = 1400;
 var timeoutPrefix = 'Second-';
 var defaultTimeout = 43200000;
+var defaultCallback = function() {};
 
 var statusCodeMessages = {
   400: 'Incompatible header fields',
   412: 'Precondition failed',
   500: 'Unable to accept renewal'
-};
-
-var getErrorMessage = function(statusCode) {
-  return msg;
 };
 
 var getError = function(res) {
@@ -49,6 +46,7 @@ var SonosController = function(speakerIp, logger, request) {
 };
 
 SonosController.prototype.subscribe = function(callbackUrl, callback) {
+  callback = callback || defaultCallback;
   if (!callbackUrl) {
     return callback(new Error('Must specify a callback URL.'), null);
   }
@@ -63,6 +61,7 @@ SonosController.prototype.subscribe = function(callbackUrl, callback) {
 };
 
 SonosController.prototype.renew = function(sid, timeout, callback) {
+  callback = callback || defaultCallback
   if (!sid) {
     return callback(new Error('Must specify a SID.'), null);
   }
