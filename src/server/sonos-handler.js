@@ -1,5 +1,5 @@
 var Logger = require('little-logger').Logger;
-var SonosController = require('./sonos-controller').SonosController;
+var SonosController = require('./sonos-controller');
 
 var getCallbackUrl = function(ip, port, callbackPath) {
   return 'http://' + ip + ':' + port + callbackPath;
