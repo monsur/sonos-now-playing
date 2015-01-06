@@ -67,12 +67,12 @@ SonosController.prototype.renew = function(sid, timeout, callback) {
   }
   if (arguments.length === 2) {
     callback = timeout;
+    if (typeof callback !== 'function') {
+      callback = defaultCallback;
+    }
     timeout = null;
   } else if (typeof timeout !== 'number') {
     return callback(new Error('Timeout must be a number.'), null);
-  }
-  if (typeof callback !== 'function') {
-    return callback(new Error('Callback must be a function'), null);
   }
   timeout = timeout || defaultTimeout;
 

@@ -4,7 +4,7 @@ var SonosController = require('../../src/server/sonos-controller');
 describe('subscribe', function() {
   it('Throws an error if there is no callback url', function() {
     var s = new SonosController('1.2.3.4');
-    s.subscribe('foo', function(error, data) {
+    s.subscribe(null, function(error, data) {
       assert.ok(error);
       assert.ok(!data);
     });
@@ -82,6 +82,29 @@ describe('subscribeInternal', function() {
 describe('renew', function() {
   it('No SID', function() {
     var s = new SonosController('1.2.3.4');
+    s.renew(null, null, function(error, data) {
+      assert.ok(error);
+      assert.ok(!data);
+    });
+  });
+
+  it('Timeout is not a number', function() {
+    var s = new SonosController('1.2.3.4');
+    s.renew('1', 'foo', function(error, data) {
+      assert.ok(error);
+      assert.ok(!data);
+    });
+  });
+
+  it('No timeout specified', function() {
+    var s = new SonosController('1.2.3.4');
+    s.subscribeInternal = function(headers, callback) {
+      assert.equal('Second-43200000', headers.TIMEOUT);
+      callback('ok');
+    };
+    s.renew('1', function(ok) {
+      //assert.equal(ok === 'ok');
+    });
   });
 });
 
