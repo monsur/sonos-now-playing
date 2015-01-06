@@ -15,12 +15,14 @@ describe('subscribe', function() {
 
   it('Verifies the correct callback header', function() {
     var s = new SonosController();
-    s.makeRequest = function(options, callback) {
-      assert.equal('<foo>', options.headers.CALLBACK);
+    s.subscribeInternal = function(headers, callback) {
+      assert.equal('<foo>', headers.CALLBACK);
     };
     s.subscribe('foo');
   });
+});
 
+describe('subscribeInternal', function() {
   it('Processes an error', function() {
     var s = new SonosController();
     s.makeRequest = function(options, callback) {
