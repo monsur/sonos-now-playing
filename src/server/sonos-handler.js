@@ -14,7 +14,7 @@ var SonosHandler = function(options, logger, controller) {
   this.sid = null;
   this.timeout = null;
   this.renewalId = null;
-  // TODO: Add an error handler.
+  // TODO: Add an error handler to catch renew errors.
 };
 
 SonosHandler.prototype.subscribe = function(callback) {
@@ -51,7 +51,13 @@ SonosHandler.prototype.renew = function() {
 };
 
 SonosHandler.prototype.unsubscribe = function(callback) {
-  this.controller.unsubscribe(callback);
+  if (this.renewalId) {
+    clearTimeout(this.renewalId);
+    this.renewalId = null;
+  }
+  if (this.sid) {
+    this.controller.unsubscribe(this.sid, callback);
+  }
 };
 
 module.exports = SonosHandler;
