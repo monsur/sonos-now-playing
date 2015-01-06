@@ -2,6 +2,7 @@ var Logger = require('little-logger').Logger;
 
 var port = 1400;
 var timeoutPrefix = 'Second-';
+var defaultTimeout = 43200000;
 
 var statusCodeMessages = {
   400: 'Incompatible header fields',
@@ -49,20 +50,48 @@ var SonosController = function(speakerIp, logger, request) {
 };
 
 SonosController.prototype.subscribe = function(callbackUrl, callback) {
-  this.logger.info('Subscribing to speaker ' + this.speakerIp + ' with ' +
-      'callback URL ' + callbackUrl);
-
   if (!callbackUrl) {
     throw new Error('Must specify a callback URL.');
   }
 
+  this.logger.info('Subscribing to speaker ' + this.speakerIp + ' with ' +
+      'callback URL ' + callbackUrl);
+
+  this.subscribeInternal({
+    'CALLBACK': '<' + callbackUrl + '>',
+    'NT': 'upnp:event'
+  }, callback);
+};
+
+SonosController.prototype.renew = function(sid, timeout, callback) {
+  if (!sid) {
+    throw new Error('Must specify a SID.');
+  }
+  if (arguments.length === 2) {
+    callback = timeout;
+    timeout = null;
+  } else if (typeof timeout !== 'number') {
+    throw new Error('Timeout must be a number.');
+  }
+  if (typeof callback !== 'function') {
+    throw new Error('Callback must be a function');
+  }
+  timeout = timeout || defaultTimeout;
+
+  this.logger.info('Renewing speaker ' + this.speakerIp + ' with ' +
+      'SID ' + sid + ' and timeout ' + timeout);
+
+  this.subscribeInternal({
+    'SID': sid,
+    'TIMEOUT': timeoutPrefix + defaultTimeout
+  }, callback);
+};
+
+SonosController.prototype.subscribeInternal = function(headers, callback) {
   var options = {};
   options.method = 'SUBSCRIBE';
   options.path = '/MediaRenderer/AVTransport/Event';
-  options.headers = {
-    'CALLBACK': '<' + callbackUrl + '>',
-    'NT': 'upnp:event'
-  };
+  options.headers = headers;
 
   this.makeRequest(options, function(error, res) {
     if (error) {
@@ -83,21 +112,6 @@ SonosController.prototype.subscribe = function(callbackUrl, callback) {
     }
     callback(null, data);
   });
-};
-
-SonosController.prototype.renew = function(sid, timeout, callback) {
-  if (!sid) {
-    throw new Error('Must specify a SID.');
-  }
-  if (arguments.length === 2) {
-    callback = timeout;
-    timeout = null;
-  } else if (typeof timeout !== 'number') {
-    throw new Error('Timeout must be a number.');
-  }
-  if (typeof callback !== 'function') {
-    throw new Error('Callback must be a function');
-  }
 };
 
 SonosController.prototype.unsubscribe = function(callback) {
