@@ -1,161 +1,64 @@
 var Logger = require('little-logger').Logger;
+var SubscriptionController = require('./subscription-controller');
+var ActionController = require('./action-controller');
 
-var port = 1400;
-var timeoutPrefix = 'Second-';
-var eventPath = '/MediaRenderer/AVTransport/Event';
-var defaultTimeout = 43200000;
-var defaultCallback = function() {};
-
-var statusCodeMessages = {
-  400: 'Incompatible header fields',
-  412: 'Precondition failed',
-  500: 'Unable to accept renewal'
+var getCallbackUrl = function(ip, port, callbackPath) {
+  return 'http://' + ip + ':' + port + callbackPath;
 };
 
-var getError = function(res) {
-  var statusCode = res.statusCode;
-  if (statusCode === 200) {
-    return null;
-  }
-
-  var msg = null;
-  if (statusCode in statusCodeMessages) {
-    msg = statusCodeMessages[statusCode];
-  } else if (statusCode >= 500) {
-    msg = statusCodeMessages[500];
-  } else {
-    msg = 'HTTP status code ' + statusCode;
-  }
-
-  var error = new Error(msg);
-  error.details = {
-    'statusCode': statusCode,
-    'headers': res.headers
-  };
-
-  return error;
-};
-
-var parseTimeout = function(val) {
-  return parseInt(val.substr(timeoutPrefix.length));
-};
-
-var SonosController = function(speakerIp, logger, request) {
-  this.speakerIp = speakerIp;
+var SonosController = function(options, logger, controller) {
+  this.callbackUrl = getCallbackUrl(options.ip, options.port,
+      options.callbackPath);
   this.logger = logger || new Logger(null, {enabled: false});
-  this.request = request || require('http').request;
+  this.controller = controller ||
+      new SonosController(options.speakerIp, logger);
+  this.sid = null;
+  this.timeout = null;
+  this.renewalId = null;
+  // TODO: Add an error handler to catch renew errors.
 };
 
-SonosController.prototype.subscribe = function(callbackUrl, callback) {
-  callback = callback || defaultCallback;
-  if (!callbackUrl) {
-    return callback(new Error('Must specify a callback URL.'), null);
-  }
-
-  this.logger.info('Subscribing to speaker ' + this.speakerIp + ' with ' +
-      'callback URL ' + callbackUrl);
-
-  this.subscribeInternal({
-    'CALLBACK': '<' + callbackUrl + '>',
-    'NT': 'upnp:event'
-  }, callback);
-};
-
-SonosController.prototype.renew = function(sid, timeout, callback) {
-  callback = callback || defaultCallback;
-  if (!sid) {
-    return callback(new Error('Must specify a SID.'), null);
-  }
-  if (arguments.length === 2) {
-    callback = timeout;
-    if (typeof callback !== 'function') {
-      callback = defaultCallback;
-    }
-    timeout = null;
-  } else if (typeof timeout !== 'number') {
-    return callback(new Error('Timeout must be a number.'), null);
-  }
-  timeout = timeout || defaultTimeout;
-
-  this.logger.info('Renewing speaker ' + this.speakerIp + ' with ' +
-      'SID ' + sid + ' and timeout ' + timeout);
-
-  this.subscribeInternal({
-    'SID': sid,
-    'TIMEOUT': timeoutPrefix + defaultTimeout
-  }, callback);
-};
-
-SonosController.prototype.subscribeInternal = function(headers, callback) {
-  var options = {};
-  options.method = 'SUBSCRIBE';
-  options.path = eventPath;
-  options.headers = headers;
-
-  this.makeRequest(options, function(error, res) {
-    if (error) {
-      callback(error, null);
-      return;
-    }
-
-    var headers = res.headers;
-    var data = {};
-    if ('sid' in headers) {
-      data.sid = headers.sid;
-    }
-    if ('timeout' in headers) {
-      var timeout = parseTimeout(headers.timeout);
-      if (!isNaN(timeout)) {
-        data.timeout = timeout;
-      }
-    }
-    callback(null, data);
-  });
-};
-
-SonosController.prototype.unsubscribe = function(sid, callback) {
-  callback = callback || defaultCallback;
-  if (!sid) {
-    return callback(new Error('Must specify a SID.'), null);
-  }
-
-  this.logger.info('Unsubscribing speaker ' + this.speakerIp + ' with ' +
-      'SID ' + sid);
-
-  this.makeRequest({
-    method: 'UNSUBSCRIBE',
-    path: eventPath,
-    headers: {
-      'SID': sid
-    }
-  }, callback);
-};
-
-SonosController.prototype.play = function(callback) {
-};
-
-SonosController.prototype.pause = function(callback) {
-};
-
-SonosController.prototype.next = function(callback) {
-};
-
-SonosController.prototype.makeRequest = function(options, callback) {
+SonosController.prototype.subscribe = function(callback) {
   var that = this;
-  options.hostname = this.speakerIp;
-  options.port = port;
-  var req = this.request(options, function(res) {
-    var error = getError(res);
+  this.controller.subscribe(this.callbackUrl, function(error, data) {
     if (error) {
       return callback(error, null);
     }
-    callback(null, res);
+    that.scheduleRenew(data);
   });
-  req.on('error', function(e) {
-    that.logger.error(e.message);
+};
+
+SonosController.prototype.scheduleRenew = function(data) {
+  var that = this;
+  if ('sid' in data) {
+    this.sid = data.sid;
+  }
+  if ('timeout' in data) {
+    this.timeout = data.timeout;
+  }
+  this.renewalId = setTimeout(function() {
+    that.renew();
+  }, this.timeout);
+};
+
+SonosController.prototype.renew = function() {
+  var that = this;
+  this.controller.renew(this.sid, this.timeout, function(error, data) {
+    if (error) {
+      return that.logger.error(error.message);
+    }
+    that.scheduleRenew(data);
   });
-  req.end();
+};
+
+SonosController.prototype.unsubscribe = function(callback) {
+  if (this.renewalId) {
+    clearTimeout(this.renewalId);
+    this.renewalId = null;
+  }
+  if (this.sid) {
+    this.controller.unsubscribe(this.sid, callback);
+  }
 };
 
 module.exports = SonosController;
-

@@ -1,3 +1,4 @@
+/*
 var assert = require('assert');
 var SonosController = require('../../src/server/sonos-controller');
 
@@ -108,7 +109,6 @@ describe('renew', function() {
   });
 });
 
-/*
 describe('makeRequest', function() {
   it('Checks the request options', function() {
     var s = new SonosController('1.2.3.4', null,

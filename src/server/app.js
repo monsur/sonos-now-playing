@@ -4,7 +4,7 @@ var http = require('http'),
   socketio = require('socket.io'),
   config = require('./config'),
   NotificationHandler = require('./notification-handler'),
-  SonosHandler = require('./sonos-handler');
+  SonosController = require('./sonos-controller');
 
 // The number of connected clients.
 var connections = 0;
@@ -14,7 +14,7 @@ var options = config.getOptions();
 var logger = new logger.Logger(options.loglevel, {
     format: '   %l  - %a'
 });
-var sonosHandler = new SonosHandler(options, logger);
+var sonos = new SonosController(options, logger);
 var notificationHandler = new NotificationHandler(logger, function(data) {
   io.sockets.emit('newTrack', data);
 });
@@ -32,7 +32,7 @@ io.sockets.on('connection', function(socket) {
 
   connections++;
   if (connections === 1) {
-    sonosHandler.subscribe();
+    sonos.subscribe();
   }
 
   socket.on('play', function(data) {
@@ -46,7 +46,7 @@ io.sockets.on('connection', function(socket) {
   socket.on('disconnect', function() {
     connections--;
     if (connections === 0) {
-      sonosHandler.unsubscribe();
+      sonos.unsubscribe();
     }
   });
 });
