@@ -65,7 +65,12 @@ SonosController.prototype.unsubscribe = function(callback) {
   }
 };
 
-SonosController.prototype.play = function(callback) {
+SonosController.prototype.togglePlay = function(callback) {
+  // TODO
+};
+
+SonosController.prototype.next = function(callback) {
+  // TODO
 };
 
 module.exports = SonosController;

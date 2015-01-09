@@ -70,14 +70,17 @@ ActionController.prototype.send = function(data, callback) {
 };
 
 ActionController.prototype.play = function(callback) {
+  logger.info(PLAY);
   this.send(this.requests[PLAY], callback);
 };
 
 ActionController.prototype.pause = function(callback) {
+  logger.info(PAUSE);
   this.send(this.requests[PAUSE], callback);
 };
 
 ActionController.prototype.next = function(callback) {
+  logger.info(NEXT);
   this.send(this.requests[NEXT], callback);
 };
 
