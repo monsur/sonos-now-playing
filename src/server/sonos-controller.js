@@ -11,7 +11,7 @@ var SonosController = function(options, logger, controller) {
       options.callbackPath);
   this.logger = logger || new Logger(null, {enabled: false});
   this.controller = controller ||
-      new SonosController(options.speakerIp, logger);
+      new SubscriptionController(options.speakerIp, logger);
   this.sid = null;
   this.timeout = null;
   this.renewalId = null;

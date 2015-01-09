@@ -14,6 +14,7 @@ var options = config.getOptions();
 var logger = new logger.Logger(options.loglevel, {
     format: '   %l  - %a'
 });
+
 var sonos = new SonosController(options, logger);
 var notificationHandler = new NotificationHandler(logger, function(data) {
   io.sockets.emit('newTrack', data);
