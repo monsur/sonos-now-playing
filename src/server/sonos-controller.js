@@ -2,16 +2,20 @@ var Logger = require('little-logger').Logger;
 var SubscriptionController = require('./subscription-controller');
 var ActionController = require('./action-controller');
 
+var port = 1400;
+
 var getCallbackUrl = function(ip, port, callbackPath) {
   return 'http://' + ip + ':' + port + callbackPath;
 };
 
-var SonosController = function(options, logger, controller) {
+var SonosController = function(options, logger, controller, action) {
   this.callbackUrl = getCallbackUrl(options.ip, options.port,
       options.callbackPath);
   this.logger = logger || new Logger(null, {enabled: false});
   this.controller = controller ||
-      new SubscriptionController(options.speakerIp, logger);
+      new SubscriptionController(options.speakerIp, port, logger);
+  this.action = action ||
+      new ActionController(options.speakerIp, port, logger);
   this.sid = null;
   this.timeout = null;
   this.renewalId = null;
@@ -59,6 +63,9 @@ SonosController.prototype.unsubscribe = function(callback) {
   if (this.sid) {
     this.controller.unsubscribe(this.sid, callback);
   }
+};
+
+SonosController.prototype.play = function(callback) {
 };
 
 module.exports = SonosController;

@@ -1,6 +1,5 @@
 var Logger = require('little-logger').Logger;
 
-var port = 1400;
 var timeoutPrefix = 'Second-';
 var eventPath = '/MediaRenderer/AVTransport/Event';
 var defaultTimeout = 43200000;
@@ -40,8 +39,9 @@ var parseTimeout = function(val) {
   return parseInt(val.substr(timeoutPrefix.length));
 };
 
-var SubscriptionController = function(speakerIp, logger, request) {
+var SubscriptionController = function(speakerIp, port, logger, request) {
   this.speakerIp = speakerIp;
+  this.port = port;
   this.logger = logger || new Logger(null, {enabled: false});
   this.request = request || require('http').request;
 };
@@ -134,7 +134,7 @@ SubscriptionController.prototype.unsubscribe = function(sid, callback) {
 SubscriptionController.prototype.makeRequest = function(options, callback) {
   var that = this;
   options.hostname = this.speakerIp;
-  options.port = port;
+  options.port = this.port;
   var req = this.request(options, function(res) {
     var error = getError(res);
     if (error) {
