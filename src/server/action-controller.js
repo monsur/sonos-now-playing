@@ -3,7 +3,7 @@ var http = require('http');
 
 var PLAY = 'Play',
     PAUSE = 'Pause',
-    Next = 'Next';
+    NEXT = 'Next';
 
 var createBody = function(action) {
   return '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
@@ -48,8 +48,8 @@ ActionController.prototype.createRequest = function(action) {
   this.response = createResponse(action);
   return {
     request: request,
-    body: body,
-    response: response
+    body: this.body,
+    response: this.response
   };
 };
 
