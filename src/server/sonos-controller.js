@@ -65,8 +65,12 @@ SonosController.prototype.unsubscribe = function(callback) {
   }
 };
 
-SonosController.prototype.togglePlay = function(callback) {
-  // TODO
+SonosController.prototype.togglePlay = function(state, callback) {
+  if (state) {
+    this.action.play(callback);
+  } else {
+    this.action.pause(callback);
+  }
 };
 
 SonosController.prototype.next = function(callback) {

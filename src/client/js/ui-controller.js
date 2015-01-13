@@ -11,11 +11,8 @@ UIController.updateTrack = function(data) {
   document.getElementById('content').style.display = 'block';
 };
 
-UIController.updateState = function(data) {
-  if (!('isPlaying' in data)) {
-    return;
-  }
-  if (data.isPlaying) {
+UIController.updateState = function(isPlaying) {
+  if (isPlaying) {
     document.getElementById('playbutton').style.display = 'none';
   } else {
     document.getElementById('playbutton').style.display = 'block';

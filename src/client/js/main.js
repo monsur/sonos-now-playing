@@ -4,6 +4,7 @@ var previousTracks = [];
 var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options.lastFmApiKey));
 var screensaver = new Screensaver(options.sleepTimeout, UIController.sleep);
 var socket = io.connect();
+var isPlaying = false;
 
 // Compares two track objects.
 var trackEquals = function(track1, track2) {
@@ -37,11 +38,14 @@ socket.on('newTrack', function(data) {
     });
   }
 
-  UIController.updateState(data);
+  if ('isPlaying' in data) {
+    isPlaying = data.isPlaying;
+    UIController.updateState(data.isPlaying);
+  }
 });
 
 document.getElementById('play').addEventListener('click', function(evt) {
-  socket.emit('play');
+  socket.emit('play', {state: !isPlaying});
 });
 
 document.getElementById('next').addEventListener('click', function(evt) {

@@ -37,7 +37,7 @@ io.sockets.on('connection', function(socket) {
   }
 
   socket.on('play', function(data) {
-    console.log('received PLAY');
+    sonos.togglePlay(data.state);
   });
 
   socket.on('next', function(data) {
