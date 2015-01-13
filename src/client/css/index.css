@@ -59,4 +59,8 @@ body {
   height: 100%;
   float: right;
 }
-
+#playbutton {
+  display: none;
+  opacity: 0.3;
+  background-color:#000;
+}

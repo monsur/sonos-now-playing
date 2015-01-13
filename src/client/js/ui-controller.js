@@ -15,6 +15,11 @@ UIController.updateState = function(data) {
   if (!('isPlaying' in data)) {
     return;
   }
+  if (data.isPlaying) {
+    document.getElementById('playbutton').style.display = 'none';
+  } else {
+    document.getElementById('playbutton').style.display = 'block';
+  }
 };
 
 UIController.sleep = function() {
