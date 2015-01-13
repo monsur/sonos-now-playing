@@ -49,9 +49,13 @@ LastFmAlbumArt.prototype.get = function(artist, album, callback) {
   var url = this.createUrl(artist, album);
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
+  xhr.timeout = 5000;
 
   xhr.onerror = function() {
-    return callback({'msg': 'last.fm error'}, null);
+    return callback({
+        'msg': 'last.fm error',
+        'status': xhr.status,
+        'statusText': xhr.statusText}, null);
   };
 
   xhr.onload = function() {
