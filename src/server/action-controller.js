@@ -31,22 +31,26 @@ var ActionController = function(speakerIp, port, logger) {
   requests[PAUSE] = this.createRequest(PAUSE);
   requests[NEXT] = this.createRequest(NEXT);
   this.requests = requests;
+
+  this.logger = logger || new Logger(null, {enabled: false});
 };
 
 ActionController.prototype.createRequest = function(action) {
+  this.body = createBody(action);
+  this.response = createResponse(action);
   var request = {
     method: 'POST',
     hostname: this.speakerIp,
     port: this.port,
     path: '/MediaRenderer/AVTransport/Control',
     headers: {
-      'Content-Type': 'text/xml',
+      'Content-Type': 'text/xml; charset="utf-8"',
+      'Content-Length': this.body.length,
       'SOAPACTION': '"urn:schemas-upnp-org:service:AVTransport:1#' + action + '"'
     }
   };
-  this.body = createBody(action);
-  this.response = createResponse(action);
   return {
+    action: action,
     request: request,
     body: this.body,
     response: this.response
@@ -55,8 +59,11 @@ ActionController.prototype.createRequest = function(action) {
 
 ActionController.prototype.send = function(data, callback) {
   var that = this;
+  callback = callback || function() {};
+  this.logger.info('Sending ' + data.action + ' to speaker ' +
+      data.request.hostname);
   var req = http.request(data.request, function(res) {
-    var error = getError(res);
+    var error = null;
     if (error) {
       return callback(error, null);
     }
@@ -70,17 +77,14 @@ ActionController.prototype.send = function(data, callback) {
 };
 
 ActionController.prototype.play = function(callback) {
-  logger.info(PLAY);
   this.send(this.requests[PLAY], callback);
 };
 
 ActionController.prototype.pause = function(callback) {
-  logger.info(PAUSE);
   this.send(this.requests[PAUSE], callback);
 };
 
 ActionController.prototype.next = function(callback) {
-  logger.info(NEXT);
   this.send(this.requests[NEXT], callback);
 };
 

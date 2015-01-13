@@ -70,7 +70,7 @@ SonosController.prototype.togglePlay = function(callback) {
 };
 
 SonosController.prototype.next = function(callback) {
-  // TODO
+  this.action.next(callback);
 };
 
 module.exports = SonosController;
