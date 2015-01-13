@@ -63,11 +63,18 @@ ActionController.prototype.send = function(data, callback) {
   this.logger.info('Sending ' + data.action + ' to speaker ' +
       data.request.hostname);
   var req = http.request(data.request, function(res) {
-    var error = null;
-    if (error) {
-      return callback(error, null);
-    }
-    callback(null, true);
+    var body = '';
+
+    res.on('data', function(chunk) {
+      body += chunk;
+    });
+
+    res.on('end', function() {
+      if (body != data.response) {
+        return callback(body, null);
+      }
+      callback(null, true);
+    });
   });
   req.on('error', function(e) {
     that.logger.error(e.message);
