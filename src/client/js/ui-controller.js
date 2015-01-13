@@ -11,6 +11,12 @@ UIController.updateTrack = function(data) {
   document.getElementById('content').style.display = 'block';
 };
 
+UIController.updateState = function(data) {
+  if (!('isPlaying' in data)) {
+    return;
+  }
+};
+
 UIController.sleep = function() {
   document.getElementById('content').style.display = 'none';
   document.body.style.backgroundImage = 'none';

@@ -36,6 +36,8 @@ socket.on('newTrack', function(data) {
       screensaver.start();
     });
   }
+
+  UIController.updateState(data);
 });
 
 document.getElementById('play').addEventListener('click', function(evt) {
