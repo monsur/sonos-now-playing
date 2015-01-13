@@ -1,5 +1,14 @@
 var NotificationParser = require('./notification-parser');
 
+var getIsPlaying = function(state) {
+  if (state === 'STOPPED' || state === 'PAUSED_PLAYBACK') {
+    return false;
+  } else if (state === 'PLAYING') {
+    return true;
+  }
+  return null;
+};
+
 var NotificationHandler = function(logger, callback) {
   this.logger = logger;
   this.callback = callback;
@@ -12,6 +21,10 @@ NotificationHandler.prototype.handle = function(req, res, next) {
   parser.open(function(data) {
     if (!data) {
       return;
+    }
+    var isPlaying = getIsPlaying(data.transportState);
+    if (isPlaying !== null) {
+      data.isPlaying = isPlaying;
     }
     that.callback(data);
   });
