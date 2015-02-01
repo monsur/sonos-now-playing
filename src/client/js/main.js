@@ -16,6 +16,10 @@ var trackEquals = function(track1, track2) {
       track1.album === track2.album;
 };
 
+socket.on('refresh', function(data) {
+  location.reload(true);
+});
+
 socket.on('newTrack', function(data) {
   if (!data) {
     // TODO: Log this server side

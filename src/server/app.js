@@ -26,6 +26,11 @@ app.notify(options.callbackPath, function(req, res, next) {
   notificationHandler.handle(req, res, next);
 });
 app.get('/js/config.js', config.getHandler(options));
+app.get('/refresh', function(req, res, next) {
+  io.sockets.emit('refresh', {});
+  res.writeHead(200);
+  res.end();
+});
 var server = app.listen(options.port);
 
 var io = socketio.listen(server);
