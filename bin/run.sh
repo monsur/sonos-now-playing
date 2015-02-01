@@ -5,6 +5,5 @@ while [ $response -ne 200 ]
 do
   sleep 2
   response=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:8080/health)
-  echo $response
 done
 /usr/bin/chromium --kiosk --incognito http://localhost:8080/index.html &
