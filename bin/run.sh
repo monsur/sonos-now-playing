@@ -1,5 +1,5 @@
 #!/bin/sh
-nodemon dest/app.js &
+/opt/node/bin/nodemon /home/pi/Documents/sonos-now-playing/dest/app.js &
 response=0
 while [ $response -ne 200 ]
 do
