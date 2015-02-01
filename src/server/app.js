@@ -31,6 +31,10 @@ app.get('/refresh', function(req, res, next) {
   res.writeHead(200);
   res.end();
 });
+app.get('/health', function(req, res, next) {
+  res.writeHead(200);
+  res.end('OK');
+});
 var server = app.listen(options.port);
 
 var io = socketio.listen(server);
