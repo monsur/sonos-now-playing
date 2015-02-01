@@ -1,8 +1,8 @@
 # Copy contents of this file to:
-# /etc/xdg/lxsession/LXDE/autostart
-@lxpanel --profile LXDE
-@pcmanfm --desktop --profile LXDE
+# /etc/xdg/lxsession/LXDE-pi/autostart
+@lxpanel --profile LXDE-pi
+@pcmanfm --desktop --profile LXDE-pi
 @xset s off
 @xset -dpms
 @xset s noblank
-@/home/pi/projects/sonos-now-playing-nodejs/run.sh
+@/home/pi/Documents/sonos-now-playing/bin/run.sh
