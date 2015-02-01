@@ -14,7 +14,7 @@ var getIpAddress = function() {
   return null;
 };
 
-var CONFIG_FILENAME = 'config.json';
+var CONFIG_FILENAME = __dirname + '/config.json';
 var CONFIG_OPTIONS = {
   port: 8080,
   ip: getIpAddress(),

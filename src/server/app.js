@@ -21,7 +21,7 @@ var notificationHandler = new NotificationHandler(logger, function(data) {
 });
 
 var app = express();
-app.use(express.static('static'));
+app.use(express.static(__dirname + '/static'));
 app.notify(options.callbackPath, function(req, res, next) {
   notificationHandler.handle(req, res, next);
 });
