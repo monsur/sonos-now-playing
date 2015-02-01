@@ -1,3 +1,3 @@
-/usr/local/bin/node /home/pi/projects/sonos-now-playing-nodejs/app.js &
-# /usr/bin/midori -e Fullscreen -a http://localhost:8080/index.html &
+/opt/node/bin/node /home/pi/Documents/sonos-now-playing/dest/app.js &
+sleep 10
 /usr/bin/chromium --kiosk --incognito http://localhost:8080/index.html &
