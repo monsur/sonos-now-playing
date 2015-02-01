@@ -4,11 +4,6 @@ var Screensaver = function(timeout, callback) {
   this.currentId = null;
 };
 
-Screensaver.sleep = function() {
-  document.getElementById('content').style.display = 'none';
-  document.body.style.backgroundImage = 'none';
-};
-
 Screensaver.prototype.start = function() {
   if (this.currentId) {
     clearTimeout(this.currentId);
