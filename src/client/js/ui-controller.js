@@ -23,5 +23,8 @@ UIController.sleep = function() {
   document.getElementById('content').style.display = 'none';
   document.getElementById('playbutton').style.display = 'none';
   document.body.style.backgroundImage = 'none';
+  if (currentTrack) {
+    currentTrack = null;
+  }
 };
 
