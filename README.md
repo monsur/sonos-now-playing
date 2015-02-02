@@ -21,3 +21,5 @@ which I'll to try to hook up next.
 ## Installation
 
 Installation instructions can be found [here](https://github.com/monsur/sonos-now-playing/wiki/Software-Installation).
+
+Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http://python-soco.com/) library was the inspiration for all this.
