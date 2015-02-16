@@ -23,3 +23,8 @@ which I'll to try to hook up next.
 Installation instructions can be found [here](https://github.com/monsur/sonos-now-playing/wiki/Software-Installation).
 
 Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http://python-soco.com/) library was the inspiration for all this.
+
+## Gallery
+
+![Running in a browser](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/screenshot2.png)
+![Raw parts](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/screenshot3.jpg)
