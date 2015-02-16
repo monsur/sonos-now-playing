@@ -8,9 +8,8 @@ shows what's currently playing on Sonos. This GitHub repo
 houses the software that powers the frame. The software is
 written in JavaScript and runs on Node.js.
 
-Status 2014-02-01: The software is more or less ready to go.
-I bought an [LCD display](https://www.adafruit.com/products/2109) from Adafruit,
-which I'll to try to hook up next.
+Status 2014-02-16: The software is more or less ready to go.
+I purchased an [10" HDMI 4 Pi display](https://www.adafruit.com/products/2109) from Adafruit, and the entire setup works (see pic below). Next step is to frame the display. I have a few ideas on how to do this, stay tuned!
 
 ## Features
   * Shows the currently playing track on Sonos
