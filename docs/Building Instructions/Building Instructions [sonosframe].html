@@ -1,0 +1,948 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Lego Digital Designer</title>
+		
+		<style type="text/css">
+			
+			div
+			{
+			    font-family:arial,sans-serif; 
+			    font-size: 11px;
+			    color:#000000;
+			}
+			
+			.header 
+			{
+			    width:1024px;
+			    background-image:url('Building Instructions [sonosframe]-images/Images/Header.png');
+			    background-repeat:repeat-x;
+			    background-color: #000000;
+			    height:40px;
+			    padding-left:10px;
+			}
+            
+            .headerPrint
+			{
+			    display:none;
+			}
+			
+			.footer
+			{
+			    font-size:10px;
+			    text-align:center;
+			    width:1024px;
+			}
+			
+			.nav
+			{
+			    text-align:center;
+			    width:1024px;
+			}
+			
+			.step
+			{
+			    display:none;
+			}
+
+			.stepdisplay
+			{
+			    display:block;
+			    width:1024px;
+			    height:620px;
+			}
+			
+			.modelParts 
+			{ 
+			    list-style-type:none; 
+			    padding:4px 0px 0px 0px; 
+			    margin:0px; 
+			}
+			.modelParts ul 
+			{ 
+			    list-style-type:none; 
+			    float:left; 
+			    padding:5px 0px 0px 5px; 
+			    width:140px; 
+			    border:1px dotted gray; 
+			    margin:0px 
+			 }
+			.modelParts ul li 
+			{ 
+			    padding:0px; 
+			    margin:0px 
+			}
+			.modelParts ul li img 
+			{ 
+			    padding:0px; 
+			    height:64px; 
+			    width:64px; 
+			    margin-left:15px 
+			}
+			
+			.stepTextTop p 
+			{ 
+			    margin:0px; 
+			    padding:10px 0px 0px 0px;  
+			 }
+			.stepText p
+			{ 
+			    margin:0px; 
+			    width:30px; 
+			    padding:25px 0px 0px 10px;
+			}
+            
+            .biElement
+            {
+                float:left;
+                margin:20px;
+                width:280px;
+                
+            }
+            
+            .stepelements
+            {
+                width:1024px;
+			    height:620px;
+                overflow:auto;
+            }
+            
+			
+		</style>
+
+        <style type="text/css" media="print">
+            .nav
+			{
+			    display:none;
+			}
+			
+			.stepdisplay
+			{
+			    display:none;
+			}
+            
+            .stepelements
+			{
+			    display:none;
+			}
+            
+            .header
+			{
+			    display:none;
+			}
+            
+            .headerPrint
+			{
+			    display:block;
+			}
+			
+			.step
+			{
+			    display:block;
+			    width:1024px;
+			    height:620px;
+			    page-break-after:always;
+			}
+            
+            .biElement
+            {
+                width:280px;                
+            }
+            
+        </style>
+
+        <script language="javascript" type="text/javascript">
+            
+            var biCurStep=0;
+            
+            function returnTest(e) {
+                var keynum = 0;
+                if (window.event) {
+                    keynum = e.keyCode
+                }
+                else if (e.which) {
+                    keynum = e.which
+                }
+                if (keynum == 13) 
+                {
+                    try {
+                        biStep(parseInt(window.document.getElementById('stepNumber').value,10));
+                    } 
+                    catch(err) {
+                        biStep(0);
+                    }
+                }
+            }
+
+            function biStep(step) {
+
+                if (step>29+1) step=29+1;
+                if (step<0) step=0;
+
+                for (var i=0;i<29+2;i++) {
+                    var id='step_' + i.toString();
+                    var cn='stepdisplay';
+                    if (i==29+1) {
+                        cn='stepelements';
+                        id='step_elements';
+                    }
+                    
+                    if (i==step) {
+                        window.document.getElementById('step_display').innerHTML=window.document.getElementById(id).innerHTML;
+						   window.document.getElementById('step_display').className=cn;
+                    }
+                }
+                window.document.getElementById('stepNumber').value=step.toString();
+                biCurStep=step;
+            }
+        </script>
+	</head>
+	<body onload="biStep(0)">
+        <div class="header"><img src="Building Instructions [sonosframe]-images/Images/Logo.png" /></div>
+        <div class="headerPrint"><img src="Building Instructions [sonosframe]-images/Images/Header_print.png" /></div>
+		
+        <div class="stepdisplay" id="step_display"></div>
+
+        <div class="step" id="step_0">
+            <div style="float:left;width:150px"><p>Model Name:<br /><span style="font-weight:bold">sonosframe</span><br /><br />Number of Bricks: <span style="font-weight:bold">93</span></p></div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step29.png" /></div>
+            <div style="clear:both"></div>
+        </div>
+
+			
+        <div class="step" id="step_1">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 1 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick0.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step1.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_2">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 2 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick1.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step2.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_3">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 3 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick1.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick3.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step3.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_4">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 4 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick4.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick1.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick3.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step4.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_5">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 5 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick3.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step5.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_6">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 6 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick5.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick4.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick3.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step6.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_7">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 7 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick6.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick3.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step7.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_8">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 8 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick8.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick9.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick5.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick10.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step8.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_9">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 9 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick9.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick6.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step9.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_10">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 10 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick9.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick11.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick12.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step10.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_11">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 11 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick13.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick8.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step11.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_12">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 12 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick8.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step12.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_13">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 13 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>3 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step13.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_14">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 14 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick9.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick6.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step14.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_15">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 15 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick12.png" /></li>
+							<li class="stepText"><p>3 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step15.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_16">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 16 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick13.png" /></li>
+							<li class="stepText"><p>3 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step16.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_17">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 17 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick8.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick6.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step17.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_18">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 18 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick13.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step18.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_19">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 19 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>4 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step19.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_20">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 20 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick13.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick15.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step20.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_21">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 21 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick11.png" /></li>
+							<li class="stepText"><p>3 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step21.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_22">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 22 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick13.png" /></li>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step22.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_23">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 23 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>2 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick15.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step23.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_24">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 24 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick16.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick17.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick18.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick19.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step24.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_25">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 25 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step25.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_26">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 26 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick16.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step26.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_27">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 27 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick17.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick18.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick19.png" /></li>
+							<li class="stepText"><p>1 x</p></li>
+							<li><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick1.png" /></li>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step27.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_28">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 28 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step28.png" /></div>
+            <div style="clear:both"></div>
+        </div>			
+        <div class="step" id="step_29">
+            <div style="float:left">
+                <div class="stepTextTop"><p><span style="font-weight:bold">Step 29 of 29</span></p></div>
+				<div class="modelParts">
+					<ul>
+
+					</ul>
+				</div>
+            </div>
+            <div style="float:left"><img height="600" width="800" src="Building Instructions [sonosframe]-images/Step29.png" /></div>
+            <div style="clear:both"></div>
+        </div>
+
+        <div class="step" id="step_elements">
+            				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick16.png" /></td>
+					        <td>300326</td>
+					        <td>BRICK 2X2 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick17.png" /></td>
+					        <td>300226</td>
+					        <td>BRICK 2X3 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick18.png" /></td>
+					        <td>300126</td>
+					        <td>BRICK 2X4 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick19.png" /></td>
+					        <td>245626</td>
+					        <td>BRICK 2X6 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>8&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick13.png" /></td>
+					        <td>306926</td>
+					        <td>FLAT TILE 1X2 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick8.png" /></td>
+					        <td>302326</td>
+					        <td>PLATE 1X2 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick15.png" /></td>
+					        <td>306826</td>
+					        <td>FLAT TILE 2X2 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick9.png" /></td>
+					        <td>362326</td>
+					        <td>PLATE 1X3 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick11.png" /></td>
+					        <td>371026</td>
+					        <td>PLATE 1X4 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>20&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick14.png" /></td>
+					        <td>4560182</td>
+					        <td>FLAT TILE 2X4 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>8&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick2.png" /></td>
+					        <td>302126</td>
+					        <td>PLATE 2X3 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick6.png" /></td>
+					        <td>366626</td>
+					        <td>PLATE 1X6 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick5.png" /></td>
+					        <td>302026</td>
+					        <td>PLATE 2X4 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick12.png" /></td>
+					        <td>346026</td>
+					        <td>PLATE 1X8 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick0.png" /></td>
+					        <td>6097283</td>
+					        <td>PLATE 3X3, CROSS - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>12&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick7.png" /></td>
+					        <td>447726</td>
+					        <td>PLATE 1X10 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>2&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick4.png" /></td>
+					        <td>383226</td>
+					        <td>PLATE 2X10 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>1&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick10.png" /></td>
+					        <td>244526</td>
+					        <td>PLATE 2X12 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>4&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick1.png" /></td>
+					        <td>428226</td>
+					        <td>PLATE 2X16 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+				<div class="biElement">
+                    <table border="0">
+                        <tr style="vertical-align:middle">
+					        <td>7&nbsp;x</td>
+					        <td><img height="64" width="64" src="Building Instructions [sonosframe]-images/Brick3.png" /></td>
+					        <td>303626</td>
+					        <td>PLATE 6X8 - Black</td>
+				        </tr>
+                    </table>
+                </div>
+                
+
+            <div style="clear:both"></div>
+        </div>
+
+        <div id="nav"  class="nav">
+            <table style="margin:0 auto" border="0">
+                <tr>
+                    <td><a onclick="biStep(0);" href="#"><img border="0" alt="First" src="Building Instructions [sonosframe]-images/Images/Arrow_First.png" /></a></td>
+                    <td><a onclick="biStep(biCurStep-1);" href="#"><img border="0" alt="First" src="Building Instructions [sonosframe]-images/Images/Arrow_Backward.png" /></a></td>
+                    <td><input id="stepNumber" onkeydown="returnTest(window.event)" type="text" style="text-align:center;width:56px;height:28px;border:1px solid #cccccc;font-size:14px;font-weight:bold" /></td>
+                    <td><a onclick="biStep(biCurStep+1);" href="#"><img border="0" alt="First" src="Building Instructions [sonosframe]-images/Images/Arrow_Forward.png" /></a></td>
+                    <td><a onclick="biStep(29+1);" href="#"><img border="0" alt="First" src="Building Instructions [sonosframe]-images/Images/Arrow_Last.png" /></a></td>
+                    <td style="width:40px">&nbsp;</td>
+                    <td><a onclick="window.print();return false;" href="#"><img border="0" alt="Print" src="Building Instructions [sonosframe]-images/Images/PrintIcon.png" /></a></td>
+                </tr>
+            </table>
+        </div> 
+		<div style="clear:both;">&nbsp;</div>
+		<div class="footer">© 2012 The LEGO Group. All rights reserved.<br />
+Use of the LEGO Digital Designer html print tool, signifies your agreement to the terms of use.</div>
+	</body>
+</html>
