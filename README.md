@@ -27,5 +27,5 @@ Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http:
 
 ## Gallery
 
-![Running in a browser](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot2.png)
-![Raw parts](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot3.jpg)
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot2.png" hspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot3.jpg" hspace="10" align="top" width="180">
