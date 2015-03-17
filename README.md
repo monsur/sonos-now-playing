@@ -27,12 +27,12 @@ Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http:
 
 ## Gallery
 
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot2.png" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot3.jpg" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/SonosFrame-LegoDesigner.png" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building1.jpg" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building3.jpg" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building5.jpg" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building6.jpg" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building7.jpg" hspace="10" align="top" width="180">
-<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building9.jpg" hspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot2.png" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot3.jpg" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/SonosFrame-LegoDesigner.png" vspace="10" hspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building1.jpg" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building3.jpg" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building5.jpg" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building6.jpg" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building7.jpg" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building9.jpg" hspace="10" vspace="10" align="top" width="180">
