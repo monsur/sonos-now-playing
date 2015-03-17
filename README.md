@@ -23,6 +23,7 @@ Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http:
 
   * [Hardware Setup](https://github.com/monsur/sonos-now-playing/wiki/Hardware-Setup)
   * [Software Setup](https://github.com/monsur/sonos-now-playing/wiki/Software-Setup)
+  * [The Frame](https://github.com/monsur/sonos-now-playing/wiki/The-Frame)
 
 ## Gallery
 
