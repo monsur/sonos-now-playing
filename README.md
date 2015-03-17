@@ -1,7 +1,7 @@
 sonos-now-playing
 ========================
 
-![ScreenShot](https://raw.github.com/monsur/sonos-now-playing-nodejs/master/screenshot.png)
+![ScreenShot](https://raw.github.com/monsur/sonos-now-playing-nodejs/master/docs/images/screenshot.png)
 
 The goal of this project is to create a digital frame that
 shows what's currently playing on Sonos. This GitHub repo
@@ -26,5 +26,5 @@ Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http:
 
 ## Gallery
 
-![Running in a browser](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/screenshot2.png)
-![Raw parts](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/screenshot3.jpg)
+![Running in a browser](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot2.png)
+![Raw parts](https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/screenshot3.jpg)
