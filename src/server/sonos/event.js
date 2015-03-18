@@ -2,7 +2,6 @@ var http = require('http');
 var Logger = require('../utils/logger');
 
 var timeoutPrefix = 'Second-';
-var defaultTimeout = 43200;
 var defaultCallback = function() {};
 
 var statusCodeMessages = {
@@ -19,9 +18,11 @@ var statusCodeMessages = {
 var Event = function(opts) {
   this.getOptions(opts);
   this.sid = null;
-  this.timeout = defaultTimeout;
+  this.timeout = Event.DEFAULT_TIMEOUT;
   this.timeoutId = null;
 };
+
+Event.DEFAULT_TIMEOUT = 43200;
 
 Event.request = function(options, successCallback, errorCallback) {
   var req = http.request(options, successCallback);
@@ -54,13 +55,19 @@ Event.getError = function(res) {
 };
 
 /**
- * Parses a timeout value from the uPnP Timeout header.
+ * Parses a timeout value from the uPnP Timeout header. If the header cannot
+ * be parsed, or the value is less than one, returns the default timeout value
+ * of 43200 seconds (12 hours).
  * @param {string} val - The Timeout header value, in the form "Second-NNNN",
  *     where NNNN is the timeout time in seconds.
  * @returns The timeout value in seconds.
  */
 Event.parseTimeout = function(val) {
-  return parseInt(val.substr(timeoutPrefix.length));
+  var timeout = parseInt(val.substr(timeoutPrefix.length));
+  if (isNaN(timeout) || timeout < 1) {
+    return Event.DEFAULT_TIMEOUT;
+  }
+  return timeout;
 };
 
 Event.setTimeout = function(func, millis) {
@@ -180,14 +187,12 @@ Event.prototype.subscribeInternal = function(headers, callback) {
     if ('timeout' in headers) {
       // Parse the timeout value to ensure it is a number.
       var timeout = Event.parseTimeout(headers.timeout);
-      if (!isNaN(timeout)) {
-        data.timeout = that.timeout = timeout;
-        if (that.autoRenew) {
-          // Set a timeout to renew the subscription.
-          that.timeoutId = Event.setTimeout(function() {
-            that.renew();
-          }, that.timeout * 1000);
-        }
+      data.timeout = that.timeout = timeout;
+      if (that.autoRenew) {
+        // Set a timeout to renew the subscription.
+        that.timeoutId = Event.setTimeout(function() {
+          that.renew();
+        }, that.timeout * 1000);
       }
     }
     callback(null, data);

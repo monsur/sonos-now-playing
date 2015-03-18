@@ -1,7 +1,23 @@
-/*
-var assert = require('assert');
-var SonosController = require('../../src/server/sonos-controller');
+var Event = require('../../../src/server/sonos/event');
 
+describe('parse timeout header', function() {
+  it('parses a valid timeout header', function() {
+    var timeout = Event.parseTimeout('Second-1');
+    expect(timeout).toBe(1);
+  });
+
+  it('parses an invalid timeout number', function() {
+    var timeout = Event.parseTimeout('Timeout-1');
+    expect(timeout).toBe(Event.DEFAULT_TIMEOUT);
+  });
+
+  it('parses an invalid timeout header', function() {
+    var timeout = Event.parseTimeout('Timeout');
+    expect(timeout).toBe(Event.DEFAULT_TIMEOUT);
+  });
+});
+
+/*
 describe('subscribe', function() {
   it('Throws an error if there is no callback url', function() {
     var s = new SonosController('1.2.3.4');
