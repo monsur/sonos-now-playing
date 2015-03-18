@@ -1,19 +1,20 @@
+var assert = require('assert');
 var Event = require('../../../src/server/sonos/event');
 
 describe('parse timeout header', function() {
   it('parses a valid timeout header', function() {
     var timeout = Event.parseTimeout('Second-1');
-    expect(timeout).toBe(1);
+    assert.equal(timeout, 1);
   });
 
   it('parses an invalid timeout number', function() {
     var timeout = Event.parseTimeout('Timeout-1');
-    expect(timeout).toBe(Event.DEFAULT_TIMEOUT);
+    assert.equal(timeout, Event.DEFAULT_TIMEOUT);
   });
 
   it('parses an invalid timeout header', function() {
     var timeout = Event.parseTimeout('Timeout');
-    expect(timeout).toBe(Event.DEFAULT_TIMEOUT);
+    assert.equal(timeout, Event.DEFAULT_TIMEOUT);
   });
 });
 
