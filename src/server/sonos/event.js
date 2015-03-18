@@ -16,6 +16,7 @@ var statusCodeMessages = {
  * @constructor
  */
 var Event = function(opts) {
+  opts = opts || {};
   this.getOptions(opts);
   this.sid = null;
   this.timeout = Event.DEFAULT_TIMEOUT;
