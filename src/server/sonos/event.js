@@ -117,16 +117,15 @@ Event.prototype.getPath = function() {
  *     subscription is complete.
  */
 Event.prototype.subscribe = function(opts, handler, callback) {
-  getOptions(opts);
-  handler = handler || defaultCallback;
-  callback = callback || defaultCallback;
+  this.getOptions(opts);
 
   // A subscription requires a callback url.
   if (!this.callbackUrl) {
     throw new Error('Must specify a callback URL.');
   }
 
-  this.handler = handler;
+  this.handler = handler || defaultCallback;
+  callback = callback || defaultCallback;
 
   Logger.info('Subscribing to speaker ' + this.speakerIp + ' with ' + 'callback URL ' +
       this.callbackUrl);
