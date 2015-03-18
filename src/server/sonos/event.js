@@ -30,7 +30,7 @@ Event.request = function(options, successCallback, errorCallback) {
   req.end();
 };
 
-Event.getError = function(res) {
+Event.parseHttpError = function(res) {
   var statusCode = res.statusCode;
   if (statusCode === 200) {
     return null;
@@ -235,7 +235,7 @@ Event.prototype.request = function(options, callback) {
   options.path = this.path;
 
   var successCallback = function(res) {
-    var error = Event.getError(res);
+    var error = Event.parseHttpError(res);
     if (error) {
       return callback(error, null);
     }
