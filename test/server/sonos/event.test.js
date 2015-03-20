@@ -105,5 +105,19 @@ describe('Event request', function() {
       assert.ok(res !== null);
     });
   });
+
+  it('recieves an error', function() {
+    var event = new Event({
+        'speakerIp': '1.2.3.4',
+        'port': 80,
+        'path': '/foo/bar'});
+    Event.request = function(options, successCallback, errorCallback) {
+      errorCallback({});
+    };
+    event.request({}, function(error, res) {
+      assert.ok(error !== null);
+      assert.ok(res === null);
+    });
+  });
 });
 
