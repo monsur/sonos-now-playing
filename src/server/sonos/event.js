@@ -1,5 +1,6 @@
 var http = require('http');
 var Logger = require('../utils/logger');
+var Options = require('../utils/options');
 
 var timeoutPrefix = 'Second-';
 var defaultCallback = function() {};
@@ -10,20 +11,22 @@ var statusCodeMessages = {
   500: 'Unable to accept renewal'
 };
 
+var defaultOptions = {
+  'timeout': 43200,
+  'autoRenew': true
+};
+
 /**
  * The Event class handles the details of a single subscription event.
  * @param {Object} opts - Various options for this instance.
  * @constructor
  */
 var Event = function(opts) {
-  opts = opts || {};
-  this.getOptions(opts);
+  this.opts = new Options(opts, defaultOptions);
   this.sid = null;
   this.timeout = Event.DEFAULT_TIMEOUT;
   this.timeoutId = null;
 };
-
-Event.DEFAULT_TIMEOUT = 43200;
 
 Event.request = function(options, successCallback, errorCallback) {
   var req = http.request(options, successCallback);
@@ -79,24 +82,6 @@ Event.clearTimeout = function(id) {
   clearTimeout(id);
 };
 
-/**
- * @param {Object} opts - Various options for this instance.
- * @param {string} opts.speakerIp - The IP address of the Sonos speaker.
- * @param {number} opts.port - The port of the Sonos speaker. Defaults to 1440.
- * @param {string} opts.callbackUrl - The full url of where notifications
- *     should be sent.
- * @param {string} opts.path - The path for the subscription event.
- * @param {boolean} opts.autoRenew - Whether to automatically renew this
- *     subscription. Defaults to true.
- */
-Event.prototype.getOptions = function(opts) {
-  this.speakerIp = opts.speakerIp || this.speakerIp || '';
-  this.port = opts.port || this.port || 0;
-  this.callbackUrl = opts.callbackUrl || this.callbackUrl || '';
-  this.path = opts.path || this.path || '';
-  this.autoRenew = opts.autoRenew || this.autoRenew || true; // TODO: fix this.
-};
-
 Event.prototype.getHandler = function() {
   return this.handler;
 };
@@ -118,7 +103,7 @@ Event.prototype.getPath = function() {
  *     subscription is complete.
  */
 Event.prototype.subscribe = function(opts, handler, callback) {
-  this.getOptions(opts);
+  this.opts.set(opts);
 
   // A subscription requires a callback url.
   if (!this.callbackUrl) {
@@ -128,8 +113,8 @@ Event.prototype.subscribe = function(opts, handler, callback) {
   this.handler = handler || defaultCallback;
   callback = callback || defaultCallback;
 
-  Logger.info('Subscribing to speaker ' + this.speakerIp + ' with ' + 'callback URL ' +
-      this.callbackUrl);
+  Logger.info('Subscribing to speaker ' + this.opts.speakerIp + ' with ' +
+      'callback URL ' + this.callbackUrl);
 
   this.subscribeInternal({
     'CALLBACK': '<' + this.callbackUrl + '>',
@@ -149,8 +134,8 @@ Event.prototype.renew = function(callback) {
     throw new Error('Must specify a SID.');
   }
 
-  Logger.info('Renewing speaker ' + this.speakerIp + ' with ' + 'SID ' + this.sid +
-      ' and timeout ' + this.timeout);
+  Logger.info('Renewing speaker ' + this.opts.speakerIp + ' with SID ' +
+      this.sid + ' and timeout ' + this.timeout);
 
   this.subscribeInternal({
     'SID': this.sid,
@@ -206,7 +191,7 @@ Event.prototype.unsubscribe = function(callback) {
     throw new Error('Must specify a SID.');
   }
 
-  Logger.info('Unsubscribing speaker ' + this.speakerIp + ' with ' + 'SID ' +
+  Logger.info('Unsubscribing speaker ' + this.opts.speakerIp + ' with SID ' +
       this.sid);
 
   var that = this;
@@ -230,9 +215,9 @@ Event.prototype.unsubscribe = function(callback) {
 };
 
 Event.prototype.request = function(options, callback) {
-  options.hostname = this.speakerIp;
-  options.port = this.port;
-  options.path = this.path;
+  options.hostname = this.opts.speakerIp;
+  options.port = this.opts.port;
+  options.path = this.opts.path;
 
   var successCallback = function(res) {
     var error = Event.parseHttpError(res);
