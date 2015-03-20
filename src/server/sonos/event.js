@@ -24,7 +24,7 @@ var defaultOptions = {
 var Event = function(opts) {
   this.opts = new Options(opts, defaultOptions);
   this.sid = null;
-  this.timeout = Event.DEFAULT_TIMEOUT;
+  this.timeout = this.opts.timeout;
   this.timeoutId = null;
 };
 
@@ -91,7 +91,7 @@ Event.prototype.getSid = function() {
 };
 
 Event.prototype.getPath = function() {
-  return this.path;
+  return this.opts.path;
 };
 
 /**

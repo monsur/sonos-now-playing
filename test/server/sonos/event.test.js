@@ -59,7 +59,7 @@ describe('creating an Event', function() {
   it('creates a new empty Event', function() {
     var event = new Event();
     assert.equal(event.sid, null);
-    assert.equal(event.timeout, Event.DEFAULT_TIMEOUT);
+    assert.equal(event.timeout, 43200);
     assert.equal(event.timeoutId, null);
   });
 });
