@@ -64,3 +64,46 @@ describe('creating an Event', function() {
   });
 });
 
+describe('Event request', function() {
+  it('checks the speaker options', function() {
+    var event = new Event({
+        'speakerIp': '1.2.3.4',
+        'port': 80,
+        'path': '/foo/bar'});
+    Event.request = function(options, successCallback, errorCallback) {
+      assert.equal(options.hostname, '1.2.3.4');
+      assert.equal(options.port, 80);
+      assert.equal(options.path, '/foo/bar');
+    };
+    event.request();
+  });
+
+  it('recieves an error response', function() {
+    var event = new Event({
+        'speakerIp': '1.2.3.4',
+        'port': 80,
+        'path': '/foo/bar'});
+    Event.request = function(options, successCallback, errorCallback) {
+      successCallback({statusCode: 512});
+    };
+    event.request({}, function(error, res) {
+      assert.ok(error !== null);
+      assert.ok(res === null);
+    });
+  });
+
+  it('recieves a successful response', function() {
+    var event = new Event({
+        'speakerIp': '1.2.3.4',
+        'port': 80,
+        'path': '/foo/bar'});
+    Event.request = function(options, successCallback, errorCallback) {
+      successCallback({statusCode: 200});
+    };
+    event.request({}, function(error, res) {
+      assert.ok(error === null);
+      assert.ok(res !== null);
+    });
+  });
+});
+
