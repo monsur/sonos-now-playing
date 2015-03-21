@@ -202,7 +202,7 @@ Event.prototype.unsubscribe = function(callback) {
     }
   }, function(err, data) {
     if (err) {
-      callback(err, null);
+      return callback(err, null);
     }
     if (that.timeoutId) {
       Event.clearTimeout(that.timeoutId);

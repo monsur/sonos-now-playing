@@ -121,3 +121,39 @@ describe('Event request', function() {
   });
 });
 
+describe('Unsubscribe', function() {
+  it('has no SID', function() {
+    var event = new Event();
+    assert.throws(
+      function() { event.unsubscribe(); },
+      function(e) {
+        if (e.message === 'Must specify a SID.') {
+          return true;
+        }
+        return false;
+      });
+  });
+
+  it('has valid http values', function() {
+    var event = new Event();
+    event.sid = '123';
+    event.request = function(opts) {
+      assert.equal(opts.method, 'UNSUBSCRIBE');
+      assert.equal(opts.headers.SID, '123');
+    };
+    event.unsubscribe();
+  });
+
+  it('has an error when unsubscribing', function() {
+    var event = new Event();
+    event.sid = '123';
+    event.request = function(opts, callback) {
+      callback(new Error('Error'), null);
+    };
+    event.unsubscribe(function(err, data) {
+      assert.ok(err !== null);
+      assert.equal(err.message, 'Error');
+      assert.ok(data === null);
+    });
+  });
+});
