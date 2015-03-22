@@ -63,6 +63,17 @@ describe('creating an Event', function() {
     assert.equal(event.timeout, 43200);
     assert.equal(event.timeoutId, null);
   });
+
+  it('sets Event values', function() {
+    var event = new Event({
+      'handler': 'handlerValue',
+      'path': 'pathValue'
+    });
+    event.sid = 'sidValue';
+    assert.equal(event.getHandler(), 'handlerValue');
+    assert.equal(event.getSid(), 'sidValue');
+    assert.equal(event.getPath(), 'pathValue');
+  });
 });
 
 describe('Event request', function() {
@@ -280,5 +291,30 @@ describe('renew subscription', function() {
       assert.equal(headers.TIMEOUT, 'Second-456');
     };
     event.renew();
+  });
+});
+
+describe('subscribe', function() {
+  it('throws an error if there is no callback url', function() {
+    var event = new Event();
+    assert.throws(function() {
+      event.subscribe();
+    }, function(e) {
+      if (e.message === 'Must specify a callback URL.') {
+        return true;
+      }
+      return false;
+    });
+  });
+
+  it('subscribe calls subscribeInternal', function() {
+    var event = new Event();
+    event.subscribeInternal = function(headers, callback) {
+      assert.equal(headers.CALLBACK, '<http://1.2.3.4/callback>');
+      assert.equal(headers.NT, 'upnp:event');
+    };
+    event.subscribe({
+      'callbackUrl': 'http://1.2.3.4/callback'
+    });
   });
 });

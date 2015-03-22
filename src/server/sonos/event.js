@@ -67,7 +67,7 @@ Event.clearTimeout = function(id) {
 };
 
 Event.prototype.getHandler = function() {
-  return this.handler;
+  return this.opts.handler;
 };
 
 Event.prototype.getSid = function() {
@@ -102,22 +102,20 @@ Event.prototype.parseTimeout = function(val) {
  * @param {Function} callback - The function which fires after the
  *     subscription is complete.
  */
-Event.prototype.subscribe = function(opts, handler, callback) {
+Event.prototype.subscribe = function(opts, callback) {
+  callback = callback || defaultCallback;
   this.opts.set(opts);
 
   // A subscription requires a callback url.
-  if (!this.callbackUrl) {
+  if (!this.opts.callbackUrl) {
     throw new Error('Must specify a callback URL.');
   }
 
-  this.handler = handler || defaultCallback;
-  callback = callback || defaultCallback;
-
   Logger.info('Subscribing to speaker ' + this.opts.speakerIp + ' with ' +
-      'callback URL ' + this.callbackUrl);
+      'callback URL ' + this.opts.callbackUrl);
 
   this.subscribeInternal({
-    'CALLBACK': '<' + this.callbackUrl + '>',
+    'CALLBACK': '<' + this.opts.callbackUrl + '>',
     'NT': 'upnp:event'
   }, callback);
 };
