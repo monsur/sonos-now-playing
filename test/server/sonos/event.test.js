@@ -151,9 +151,28 @@ describe('Unsubscribe', function() {
       callback(new Error('Error'), null);
     };
     event.unsubscribe(function(err, data) {
-      assert.ok(err !== null);
       assert.equal(err.message, 'Error');
-      assert.ok(data === null);
+      assert.equal(data, null);
+    });
+  });
+
+  it('successful unsubscribe request', function() {
+    var event = new Event();
+    event.sid = '123';
+    event.timeoutId = '123tid';
+    event.timeout = '123t';
+    event.request = function(opts, callback) {
+      callback(null, 'data');
+    };
+    Event.clearTimeout = function(timeoutId) {
+      assert.equal(timeoutId, '123tid');
+    };
+    event.unsubscribe(function(err, data) {
+      assert.equal(err, null);
+      assert.equal(event.sid, null);
+      assert.equal(event.timeout, null);
+      assert.equal(event.timeoutId, null);
+      assert.equal(data, 'data');
     });
   });
 });
