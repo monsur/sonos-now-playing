@@ -8,12 +8,12 @@ describe('parse timeout header', function() {
     assert.equal(timeout, 1);
   });
 
-  it('is not a valid timeout number', function() {
+  it('invalid timeout number returns default', function() {
     var timeout = event.parseTimeout('Timeout-1');
     assert.equal(timeout, 43200);
   });
 
-  it('is not a valid timeout header', function() {
+  it('invalid timeout header returns default', function() {
     var timeout = event.parseTimeout('Timeout');
     assert.equal(timeout, 43200);
   });
@@ -255,5 +255,30 @@ describe('subscribe internal', function() {
       assert.equal(data.sid, '123');
       assert.equal(data.timeout, 43200);
     });
+  });
+});
+
+describe('renew subscription', function() {
+  it('no sid throws an error', function() {
+    var event = new Event();
+    assert.throws(event.renew,
+      function(e) {
+        if (e.message === 'Must specify a SID.') {
+          return true;
+        }
+        return false;
+      }
+    );
+  });
+
+  it('renew calls subscribeInternal', function() {
+    var event = new Event();
+    event.sid = '123';
+    event.timeout = 456;
+    event.subscribeInternal = function(headers, callback) {
+      assert.equal(headers.SID, '123');
+      assert.equal(headers.TIMEOUT, 'Second-456');
+    };
+    event.renew();
   });
 });
