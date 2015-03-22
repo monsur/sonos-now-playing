@@ -58,22 +58,6 @@ Event.parseHttpError = function(res) {
   return error;
 };
 
-/**
- * Parses a timeout value from the uPnP Timeout header. If the header cannot
- * be parsed, or the value is less than one, returns the default timeout value
- * of 43200 seconds (12 hours).
- * @param {string} val - The Timeout header value, in the form "Second-NNNN",
- *     where NNNN is the timeout time in seconds.
- * @returns The timeout value in seconds.
- */
-Event.parseTimeout = function(val) {
-  var timeout = parseInt(val.substr(timeoutPrefix.length));
-  if (isNaN(timeout) || timeout < 1) {
-    return Event.DEFAULT_TIMEOUT;
-  }
-  return timeout;
-};
-
 Event.setTimeout = function(func, millis) {
   setTimeout(func, millis);
 };
@@ -92,6 +76,22 @@ Event.prototype.getSid = function() {
 
 Event.prototype.getPath = function() {
   return this.opts.path;
+};
+
+/**
+ * Parses a timeout value from the uPnP Timeout header. If the header cannot
+ * be parsed, or the value is less than one, returns the default timeout value
+ * of 43200 seconds (12 hours).
+ * @param {string} val - The Timeout header value, in the form "Second-NNNN",
+ *     where NNNN is the timeout time in seconds.
+ * @returns The timeout value in seconds.
+ */
+Event.prototype.parseTimeout = function(val) {
+  var timeout = parseInt(val.substr(timeoutPrefix.length));
+  if (isNaN(timeout) || timeout < 1) {
+    return this.opts.timeout;
+  }
+  return timeout;
 };
 
 /**
@@ -159,8 +159,7 @@ Event.prototype.subscribeInternal = function(headers, callback) {
   var that = this;
   this.request(options, function(error, res) {
     if (error) {
-      callback(error, null);
-      return;
+      return callback(error, null);
     }
 
     // If the subscription is successful, store both the SID and timeout.
@@ -171,9 +170,9 @@ Event.prototype.subscribeInternal = function(headers, callback) {
     }
     if ('timeout' in headers) {
       // Parse the timeout value to ensure it is a number.
-      var timeout = Event.parseTimeout(headers.timeout);
+      var timeout = that.parseTimeout(headers.timeout);
       data.timeout = that.timeout = timeout;
-      if (that.autoRenew) {
+      if (that.opts.autoRenew) {
         // Set a timeout to renew the subscription.
         that.timeoutId = Event.setTimeout(function() {
           that.renew();

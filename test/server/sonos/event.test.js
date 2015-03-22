@@ -2,19 +2,20 @@ var assert = require('assert');
 var Event = require('../../../src/server/sonos/event');
 
 describe('parse timeout header', function() {
+  var event = new Event();
   it('is a valid timeout header', function() {
-    var timeout = Event.parseTimeout('Second-1');
+    var timeout = event.parseTimeout('Second-1');
     assert.equal(timeout, 1);
   });
 
   it('is not a valid timeout number', function() {
-    var timeout = Event.parseTimeout('Timeout-1');
-    assert.equal(timeout, Event.DEFAULT_TIMEOUT);
+    var timeout = event.parseTimeout('Timeout-1');
+    assert.equal(timeout, 43200);
   });
 
   it('is not a valid timeout header', function() {
-    var timeout = Event.parseTimeout('Timeout');
-    assert.equal(timeout, Event.DEFAULT_TIMEOUT);
+    var timeout = event.parseTimeout('Timeout');
+    assert.equal(timeout, 43200);
   });
 });
 
@@ -173,6 +174,86 @@ describe('Unsubscribe', function() {
       assert.equal(event.timeout, null);
       assert.equal(event.timeoutId, null);
       assert.equal(data, 'data');
+    });
+  });
+});
+
+describe('subscribe internal', function() {
+  it('validate http details', function() {
+    var event = new Event();
+    event.request = function(options, callback) {
+      assert.equal(options.method, 'SUBSCRIBE');
+      assert.equal(options.headers.Foo, 'Bar');
+    };
+    event.subscribeInternal({'Foo': 'Bar'});
+  });
+
+  it('has an error', function() {
+    var event = new Event();
+    event.request = function(options, callback) {
+      callback(new Error('Expected'), null);
+    };
+    event.subscribeInternal({}, function(error, data) {
+      assert.equal(error.message, 'Expected');
+      assert.equal(data, null);
+    });
+  });
+
+  it('has sid and timeout, no renew', function() {
+    var event = new Event({'autoRenew': false});
+    event.request = function(options, callback) {
+      callback(null, {'headers': {
+        'sid': '123',
+        'timeout': 'Second-1'
+      }});
+    };
+    Event.setTimeout = function(callback, timeout) {
+      throw new Error('setTimeout should not be called');
+    };
+    event.subscribeInternal({}, function(error, data) {
+      assert.equal(error, null);
+      assert.equal(data.sid, '123');
+      assert.equal(data.timeout, 1);
+    });
+  });
+
+  it('has sid and timeout, with renew', function() {
+    var event = new Event();
+    event.request = function(options, callback) {
+      callback(null, {'headers': {
+        'sid': '123',
+        'timeout': 'Second-1'
+      }});
+    };
+    event.renew = function() {
+      // TODO: Validate that renew is actually called.
+    };
+    Event.setTimeout = function(callback, timeout) {
+      assert.equal(timeout, 1000);
+      callback();
+    };
+    event.subscribeInternal({}, function(error, data) {
+      assert.equal(error, null);
+      assert.equal(data.sid, '123');
+      assert.equal(data.timeout, 1);
+    });
+  });
+
+  it('has sid and default timeout, with renew', function() {
+    var event = new Event();
+    event.request = function(options, callback) {
+      callback(null, {'headers': {
+        'sid': '123',
+        'timeout': 'INVALID'
+      }});
+    };
+    Event.setTimeout = function(callback, timeout) {
+      assert.equal(timeout, 43200000);
+    };
+    event.subscribeInternal({}, function(error, data) {
+      assert.equal(error, null);
+      assert.equal(data.sid, '123');
+      assert.equal(data.timeout, 43200);
     });
   });
 });
