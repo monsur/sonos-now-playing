@@ -1,4 +1,4 @@
-var Event = require('event');
+var Event = require('./event');
 var Logger = require('../utils/logger');
 var Options = require('../utils/options');
 
@@ -18,7 +18,7 @@ Events.prototype.subscribe = function(opts, callback) {
   var evt = new Event();
 
   var callbackWrapper = function(err, data) {
-    if (err) {
+    if (err && callback) {
       return callback(err, null);
     }
 
@@ -26,7 +26,9 @@ Events.prototype.subscribe = function(opts, callback) {
     var pos = that.events.length - 1;
     that.eventsBySid[evt.getSid()] = pos;
     that.eventsByPath[evt.getPath()] = pos;
-    callback(null, data);
+    if (callback) {
+      callback(null, data);
+    }
   };
 
   evt.subscribe(opts, callbackWrapper);
@@ -53,3 +55,4 @@ Events.prototype.handle = function(opts) {
   Logger.error('Could not find handler for: ' + JSON.stringify(opts));
 };
 
+module.exports = Events;
