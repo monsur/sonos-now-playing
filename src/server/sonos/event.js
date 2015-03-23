@@ -172,9 +172,11 @@ Event.prototype.subscribeInternal = function(headers, callback) {
       data.timeout = that.timeout = timeout;
       if (that.opts.autoRenew) {
         // Set a timeout to renew the subscription.
+        var timeoutMs = that.timeout * 1000;
+        Logger.info('Setting to renew in ' + timeoutMs + 'ms');
         that.timeoutId = Event.setTimeout(function() {
           that.renew();
-        }, that.timeout * 1000);
+        }, timeoutMs);
       }
     }
     callback(null, data);
