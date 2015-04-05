@@ -1,6 +1,6 @@
 var Events = require('./sonos/events');
 var express = require('express');
-var xml2js = require('xml2js');
+var RecursiveXml2Js = require('./recursive-xml2js');
 
 var getIpAddress = function() {
   var os = require('os');
@@ -36,14 +36,13 @@ events.subscribe({
   }
 });
 
-app.notify('/notify', function(req, res, next) {
-  console.log("RECEIVED NOTIFICATION");
+app.notify('/notify', function(req, res) {
   var body = '';
   req.on('data', function(chunk) {
     body += chunk.toString();
   });
   req.on('end', function() {
-    var parser = new Parser({explicitArray: false});
+    var parser = new RecursiveXml2Js();
     parser.parse(body, function(err, result) {
       if (err) {
         throw new Error(err);
@@ -52,48 +51,12 @@ app.notify('/notify', function(req, res, next) {
       opts.sid = req.headers.sid;
       opts.body = result;
       //events.handle(opts);
-      //console.log(JSON.stringify(result, null, 2));
-      console.log("PARSED XML");
-      next();
+      console.log(JSON.stringify(result, null, 2));
+      res.writeHead(200);
+      res.end();
     });
   });
 });
 
 var server = app.listen(opts2.port);
 
-var Parser = function(opts) {
-  this.opts = opts;
-};
-
-Parser.prototype.parse = function(xml, callback) {
-  var root = {};
-  this.parseHelper(xml, root, callback);
-};
-
-Parser.prototype.walkObject = function(root, result) {
-  for (key in result) {
-    var val = result[key];
-    if (typeof val === 'string' && val[0] === '<') {
-      root[key] = {};
-      this.parseHelper(val, root[key]);
-    } else if (typeof val === 'object') {
-      root[key] = {};
-      this.walkObject(root[key], val);
-    } else {
-      root[key] = val;
-    }
-  }
-};
-
-Parser.prototype.parseHelper = function(xml, root, callback) {
-  var that = this;
-  xml2js.parseString(xml, this.opts, function(err, result) {
-    if (err) {
-      throw err;
-    }
-    that.walkObject(root, result);
-    if (callback) {
-      callback(err, root);
-    }
-  });
-};
