@@ -2,7 +2,8 @@ var xml2js = require('xml2js');
 var Options = require('./utils/options');
 
 var defaultOptions = {
-  explicitArray: false
+  explicitArray: false,
+  mergeAttrs: true
 };
 
 var RecursiveXml2Js = function(opts) {
