@@ -56,4 +56,18 @@ describe('parse recursive xml', function() {
       assert.deepEqual(result, {'a': {'_': 123, 'attr': 'foo'}});
     });
   });
+
+  it('nested xml in attribute', function() {
+    parser.parse('<a attr="&lt;b&gt;123&lt;/b&gt;"></a>',
+      function(err, result) {
+        assert.deepEqual(result, {"a":{"attr":{"b":"123"}}});
+      });
+  });
+
+  it('nested xml in value', function() {
+    parser.parse('<a>&lt;b&gt;123&lt;/b&gt;</a>',
+      function(err, result) {
+        assert.deepEqual(result, {"a":{"b":"123"}});
+      });
+  });
 });
