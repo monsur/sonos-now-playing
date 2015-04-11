@@ -81,7 +81,7 @@ describe('Event request', function() {
         'speakerIp': '1.2.3.4',
         'port': 80,
         'path': '/foo/bar'});
-    Request.send = function(options, successCallback, errorCallback) {
+    Request.send = function(options, body, successCallback, errorCallback) {
       assert.equal(options.hostname, '1.2.3.4');
       assert.equal(options.port, 80);
       assert.equal(options.path, '/foo/bar');
@@ -94,7 +94,7 @@ describe('Event request', function() {
         'speakerIp': '1.2.3.4',
         'port': 80,
         'path': '/foo/bar'});
-    Request.send = function(options, successCallback, errorCallback) {
+    Request.send = function(options, body, successCallback, errorCallback) {
       successCallback({statusCode: 512});
     };
     event.request({}, function(error, res) {
@@ -108,7 +108,7 @@ describe('Event request', function() {
         'speakerIp': '1.2.3.4',
         'port': 80,
         'path': '/foo/bar'});
-    Request.send = function(options, successCallback, errorCallback) {
+    Request.send = function(options, body, successCallback, errorCallback) {
       successCallback({statusCode: 200});
     };
     event.request({}, function(error, res) {
@@ -122,7 +122,7 @@ describe('Event request', function() {
         'speakerIp': '1.2.3.4',
         'port': 80,
         'path': '/foo/bar'});
-    Request.send = function(options, successCallback, errorCallback) {
+    Request.send = function(options, body, successCallback, errorCallback) {
       errorCallback({});
     };
     event.request({}, function(error, res) {

@@ -1,5 +1,5 @@
 var Logger = require('./logger');
-var http = require('http');
+var Request = require('./request');
 
 var PLAY = 'Play',
     PAUSE = 'Pause',
@@ -58,9 +58,8 @@ ActionController.prototype.createRequest = function(action) {
 ActionController.prototype.send = function(data, callback) {
   var that = this;
   callback = callback || function() {};
-  Logger.info('Sending ' + data.action + ' to speaker ' +
-      data.request.hostname);
-  var req = http.request(data.request, function(res) {
+
+  var successCallback = function(res) {
     var body = '';
 
     res.on('data', function(chunk) {
@@ -73,12 +72,16 @@ ActionController.prototype.send = function(data, callback) {
       }
       callback(null, true);
     });
-  });
-  req.on('error', function(e) {
+  };
+
+  var errorCallback = function(e) {
     Logger.error(e.message);
-  });
-  req.write(data.body);
-  req.end();
+  };
+
+  Logger.info('Sending ' + data.action + ' to speaker ' +
+      data.request.hostname);
+
+  Request.send(data.request, data.body, successCallback, errorCallback);
 };
 
 ActionController.prototype.play = function(callback) {

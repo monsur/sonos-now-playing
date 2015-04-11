@@ -229,7 +229,7 @@ Event.prototype.request = function(options, callback) {
     callback(e, null);
   };
 
-  Request.send(options, successCallback, errorCallback);
+  Request.send(options, null, successCallback, errorCallback);
 };
 
 module.exports = Event;
