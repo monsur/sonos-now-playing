@@ -317,4 +317,40 @@ describe('subscribe', function() {
       'callbackUrl': 'http://1.2.3.4/callback'
     });
   });
+
+  it('subscribe with only callback', function() {
+    var event = new Event({
+      'callbackUrl': 'http://1.2.3.4/callback'
+    });
+    event.subscribeInternal = function(headers, callback) {
+      callback();
+    };
+    event.subscribe(function() {
+      // TODO: How to verify the function is called?
+    });
+  });
+
+  it('subscribe with opts and callback', function() {
+    var event = new Event();
+    event.subscribeInternal = function(headers, callback) {
+      callback();
+    };
+    event.subscribe({
+      'callbackUrl': 'http://1.2.3.4/callback'
+    }, function() {
+      // TODO: How to verify the function is called?
+    });
+  });
+
+  it('subscribe with too many arguments', function() {
+    var event = new Event();
+    assert.throws(function() {
+      event.subscribe(1, 2, 3);
+    }, function(e) {
+      if (e.message === 'Incorrect number of arguments. Expected 2.') {
+        return true;
+      }
+      return false;
+    });
+  });
 });
