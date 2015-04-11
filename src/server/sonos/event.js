@@ -115,7 +115,7 @@ Event.prototype.subscribe = function(opts, callback) {
   } else if (arguments.length === 2) {
     this.opts.set(opts);
   } else {
-    throw new Error('Incorrect number of arguments. Expected 2');
+    throw new Error('Incorrect number of arguments. Expected 2.');
   }
 
   // A subscription requires a callback url.
