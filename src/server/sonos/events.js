@@ -47,12 +47,24 @@ Events.prototype.getEvent = function(opts) {
   return null;
 };
 
-Events.prototype.handle = function(opts) {
+Events.prototype.handle = function(opts, resp) {
   var evt = this.getEvent(opts);
-  if (evt !== null) {
-    return evt.getHandler()(opts);
+  if (evt === null) {
+    Logger.error('Could not find handler for: ' + JSON.stringify(opts));
+    return;
   }
-  Logger.error('Could not find handler for: ' + JSON.stringify(opts));
+
+  return evt.getHandler()(resp);
+};
+
+Events.prototype.unsubscribe = function(opts, callback) {
+  var evt = this.getEvent(opts);
+  if (evt === null) {
+    Logger.error('Could not find event for: ' + JSON.stringify(opts));
+    return;
+  }
+
+  return evt.unsubscribe(callback);
 };
 
 module.exports = Events;
