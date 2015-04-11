@@ -66,8 +66,8 @@ Event.clearTimeout = function(id) {
   clearTimeout(id);
 };
 
-Event.prototype.handle = function(data) {
-  return this.opts.handler(data);
+Event.prototype.handle = function(err, data) {
+  return this.opts.handler(err, data);
 };
 
 /**

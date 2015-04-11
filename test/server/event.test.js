@@ -66,11 +66,11 @@ describe('creating an Event', function() {
 
   it('dispatches event to handler', function() {
     var event = new Event({
-      'handler': function(data) {
+      'handler': function(err, data) {
         assert.equal(data.a, 1);
       }
     });
-    event.handle({a: 1});
+    event.handle(null, {a: 1});
   });
 });
 
