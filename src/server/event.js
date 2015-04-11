@@ -1,6 +1,6 @@
-var http = require('http');
 var Logger = require('./logger');
 var Options = require('./options');
+var Request = require('./request');
 
 var timeoutPrefix = 'Second-';
 var defaultCallback = function() {};
@@ -26,12 +26,6 @@ var Event = function(opts) {
   this.sid = null;
   this.timeout = this.opts.timeout;
   this.timeoutId = null;
-};
-
-Event.request = function(options, successCallback, errorCallback) {
-  var req = http.request(options, successCallback);
-  req.on('error', errorCallback);
-  req.end();
 };
 
 Event.parseHttpError = function(res) {
@@ -235,7 +229,7 @@ Event.prototype.request = function(options, callback) {
     callback(e, null);
   };
 
-  Event.request(options, successCallback, errorCallback);
+  Request.send(options, successCallback, errorCallback);
 };
 
 module.exports = Event;
