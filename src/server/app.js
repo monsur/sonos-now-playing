@@ -25,7 +25,21 @@ var statusEvent = new SonosEvent({
   port: options.speakerPort,
   path: '/MediaRenderer/AVTransport/Event',
   callbackUrl: getCallbackUrl(options.ip, options.port, options.callbackPath),
-  handler: function(data) {
+  handler: function(err, result) {
+    if (err) {
+      throw new Error(err);
+    }
+
+    var source = result['e:propertyset']['e:property'].LastChange.Event.InstanceID;
+    var metadata = source.CurrentTrackMetaData.val['DIDL-Lite'].item;
+
+    var data = {};
+    data.transportState = source.TransportState.val;
+    data.title = metadata['dc:title'];
+    data.album = metadata['upnp:album'];
+    data.artist = metadata['dc:creator'];
+
+    console.log(data);
     io.sockets.emit('newTrack', data);
   }
 });
@@ -47,12 +61,7 @@ app.notify(options.callbackPath, function(req, res, next) {
 
     var parser = new RecursiveXml2Js();
     parser.parse(body, function(err, result) {
-      if (err) {
-        throw new Error(err);
-      }
-      var opts = {};
-      //events.handle(opts);
-      console.log(JSON.stringify(result, null, 2));
+      statusEvent.handle(err, result);
     });
   });
 
