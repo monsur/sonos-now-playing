@@ -103,8 +103,20 @@ Event.prototype.parseTimeout = function(val) {
  *     subscription is complete.
  */
 Event.prototype.subscribe = function(opts, callback) {
-  callback = callback || defaultCallback;
-  this.opts.set(opts);
+  if (arguments.length === 0) {
+    callback = defaultCallback;
+  } else if (arguments.length === 1) {
+    if (typeof opts === 'function') {
+      callback = opts;
+    } else {
+      this.opts.set(opts);
+      callback = defaultCallback;
+    }
+  } else if (arguments.length === 2) {
+    this.opts.set(opts);
+  } else {
+    throw new Error('Incorrect number of arguments. Expected 2');
+  }
 
   // A subscription requires a callback url.
   if (!this.opts.callbackUrl) {
