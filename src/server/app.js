@@ -3,8 +3,8 @@ var http = require('http'),
   logger = require('little-logger'),
   socketio = require('socket.io'),
   config = require('./config'),
-  NotificationHandler = require('./notification-handler'),
-  SonosController = require('./sonos-controller');
+  SonosController = require('./sonos-controller'),
+  SonosEvent = require('./event');
 
 // The number of connected clients.
 var connections = 0;
@@ -16,6 +16,9 @@ var logger = new logger.Logger(options.loglevel, {
 });
 
 var sonos = new SonosController(options, logger);
+
+var statusEvent = // TODO
+
 var notificationHandler = new NotificationHandler(logger, function(data) {
   io.sockets.emit('newTrack', data);
 });

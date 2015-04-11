@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Event = require('../../../src/server/sonos/event');
+var Event = require('../../src/server/event');
 
 describe('parse timeout header', function() {
   var event = new Event();

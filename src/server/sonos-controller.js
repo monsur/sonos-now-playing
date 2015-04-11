@@ -1,5 +1,4 @@
 var ActionController = require('./action-controller');
-var SonosEvent = require('./sonos/event.js');
 
 var port = 1400;
 

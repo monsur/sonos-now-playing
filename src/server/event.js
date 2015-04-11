@@ -1,6 +1,6 @@
 var http = require('http');
-var Logger = require('../utils/logger');
-var Options = require('../utils/options');
+var Logger = require('./logger');
+var Options = require('./options');
 
 var timeoutPrefix = 'Second-';
 var defaultCallback = function() {};

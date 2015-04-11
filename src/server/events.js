@@ -1,6 +1,6 @@
 var Event = require('./event');
-var Logger = require('../utils/logger');
-var Options = require('../utils/options');
+var Logger = require('./logger');
+var Options = require('./options');
 
 var Events = function(opts) {
   this.opts = new Options(opts);

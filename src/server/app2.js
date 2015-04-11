@@ -1,4 +1,4 @@
-var Events = require('./sonos/events');
+var Events = require('./events');
 var express = require('express');
 var RecursiveXml2Js = require('./recursive-xml2js');
 

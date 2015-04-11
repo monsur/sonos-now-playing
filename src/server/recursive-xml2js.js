@@ -1,5 +1,5 @@
 var xml2js = require('xml2js');
-var Options = require('./utils/options');
+var Options = require('./options');
 
 var defaultOptions = {
   explicitArray: false,

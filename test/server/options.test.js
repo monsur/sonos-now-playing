@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Options = require('../../../src/server/utils/options.js');
+var Options = require('../../src/server/options.js');
 
 describe('options', function() {
   it('has no options', function() {
