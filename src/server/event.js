@@ -66,16 +66,8 @@ Event.clearTimeout = function(id) {
   clearTimeout(id);
 };
 
-Event.prototype.getHandler = function() {
-  return this.opts.handler;
-};
-
-Event.prototype.getSid = function() {
-  return this.sid;
-};
-
-Event.prototype.getPath = function() {
-  return this.opts.path;
+Event.prototype.handle = function(data) {
+  return this.opts.handler(data);
 };
 
 /**

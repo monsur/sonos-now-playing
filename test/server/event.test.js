@@ -64,15 +64,13 @@ describe('creating an Event', function() {
     assert.equal(event.timeoutId, null);
   });
 
-  it('sets Event values', function() {
+  it('dispatches event to handler', function() {
     var event = new Event({
-      'handler': 'handlerValue',
-      'path': 'pathValue'
+      'handler': function(data) {
+        assert.equal(data.a, 1);
+      }
     });
-    event.sid = 'sidValue';
-    assert.equal(event.getHandler(), 'handlerValue');
-    assert.equal(event.getSid(), 'sidValue');
-    assert.equal(event.getPath(), 'pathValue');
+    event.handle({a: 1});
   });
 });
 
