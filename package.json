@@ -16,8 +16,6 @@
   },
   "dependencies": {
     "express": "^4.12.3",
-    "little-logger": "^0.1.4",
-    "sax": "^0.6.1",
     "socket.io": "^1.3.5",
     "xml2js": "^0.4.6",
     "winston": "^0.9.0"
