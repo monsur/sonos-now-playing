@@ -20,6 +20,15 @@ var logger = new logger.Logger(options.loglevel, {
     format: '   %l  - %a'
 });
 
+var getIsPlaying = function(state) {
+  if (state === 'STOPPED' || state === 'PAUSED_PLAYBACK') {
+    return false;
+  } else if (state === 'PLAYING') {
+    return true;
+  }
+  return null;
+};
+
 var statusEvent = new SonosEvent({
   speakerIp: options.speakerIp,
   port: options.speakerPort,
@@ -34,12 +43,18 @@ var statusEvent = new SonosEvent({
     var metadata = source.CurrentTrackMetaData.val['DIDL-Lite'].item;
 
     var data = {};
-    data.transportState = source.TransportState.val;
+    var state = source.TransportState.val;
+    data.transportState = state;
     data.title = metadata['dc:title'];
     data.album = metadata['upnp:album'];
     data.artist = metadata['dc:creator'];
 
-    console.log(data);
+    if (state === 'STOPPED' || state === 'PAUSED_PLAYBACK') {
+      data.isPlaying = false;
+    } else if (state === 'PLAYING') {
+      data.isPlaying = true;
+    }
+
     io.sockets.emit('newTrack', data);
   }
 });
@@ -87,7 +102,6 @@ io.sockets.on('connection', function(socket) {
   }
 
   socket.on('play', function(data) {
-    console.log(data);
     if (data.state) {
       actions.play();
     } else {
