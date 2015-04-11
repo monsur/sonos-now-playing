@@ -1,4 +1,4 @@
-var Logger = require('little-logger').Logger;
+var Logger = require('./logger');
 var http = require('http');
 
 var PLAY = 'Play',
@@ -22,7 +22,7 @@ var createResponse = function(action) {
 };
 
 
-var ActionController = function(speakerIp, port, logger) {
+var ActionController = function(speakerIp, port) {
   this.speakerIp = speakerIp;
   this.port = port;
 
@@ -31,8 +31,6 @@ var ActionController = function(speakerIp, port, logger) {
   requests[PAUSE] = this.createRequest(PAUSE);
   requests[NEXT] = this.createRequest(NEXT);
   this.requests = requests;
-
-  this.logger = logger || new Logger(null, {enabled: false});
 };
 
 ActionController.prototype.createRequest = function(action) {
@@ -60,7 +58,7 @@ ActionController.prototype.createRequest = function(action) {
 ActionController.prototype.send = function(data, callback) {
   var that = this;
   callback = callback || function() {};
-  this.logger.info('Sending ' + data.action + ' to speaker ' +
+  Logger.info('Sending ' + data.action + ' to speaker ' +
       data.request.hostname);
   var req = http.request(data.request, function(res) {
     var body = '';
@@ -77,7 +75,7 @@ ActionController.prototype.send = function(data, callback) {
     });
   });
   req.on('error', function(e) {
-    that.logger.error(e.message);
+    Logger.error(e.message);
   });
   req.write(data.body);
   req.end();

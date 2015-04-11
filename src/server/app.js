@@ -1,11 +1,10 @@
-var http = require('http'),
-  express = require('express'),
-  logger = require('little-logger'),
-  socketio = require('socket.io'),
-  config = require('./config'),
-  ActionController = require('./action-controller'),
-  SonosEvent = require('./event'),
-  RecursiveXml2Js = require('./recursive-xml2js');
+var ActionController = require('./action-controller');
+var config = require('./config');
+var express = require('express');
+var http = require('http');
+var RecursiveXml2Js = require('./recursive-xml2js');
+var socketio = require('socket.io');
+var SonosEvent = require('./event');
 
 var getCallbackUrl = function(ip, port, callbackPath) {
   return 'http://' + ip + ':' + port + callbackPath;
@@ -15,10 +14,6 @@ var getCallbackUrl = function(ip, port, callbackPath) {
 var connections = 0;
 
 var options = config.getOptions();
-
-var logger = new logger.Logger(options.loglevel, {
-    format: '   %l  - %a'
-});
 
 var getIsPlaying = function(state) {
   if (state === 'STOPPED' || state === 'PAUSED_PLAYBACK') {
@@ -59,7 +54,7 @@ var statusEvent = new SonosEvent({
   }
 });
 
-var actions = new ActionController(options.speakerIp, options.speakerPort, logger);
+var actions = new ActionController(options.speakerIp, options.speakerPort);
 
 var app = express();
 app.use(express.static(__dirname + '/static'));
