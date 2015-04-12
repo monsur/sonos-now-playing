@@ -214,7 +214,7 @@ Event.prototype.unsubscribe = function(callback) {
 Event.prototype.request = function(options, callback) {
   options = options || {};
   options.hostname = this.opts.speakerIp;
-  options.port = this.opts.port;
+  options.port = this.opts.speakerPort;
   options.path = this.opts.path;
 
   var successCallback = function(res) {

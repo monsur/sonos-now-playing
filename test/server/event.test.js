@@ -79,7 +79,7 @@ describe('Event request', function() {
   it('checks the speaker options', function() {
     var event = new Event({
         'speakerIp': '1.2.3.4',
-        'port': 80,
+        'speakerPort': 80,
         'path': '/foo/bar'});
     Request.send = function(options, body, successCallback, errorCallback) {
       assert.equal(options.hostname, '1.2.3.4');
@@ -92,7 +92,7 @@ describe('Event request', function() {
   it('recieves an error response', function() {
     var event = new Event({
         'speakerIp': '1.2.3.4',
-        'port': 80,
+        'speakerPort': 80,
         'path': '/foo/bar'});
     Request.send = function(options, body, successCallback, errorCallback) {
       successCallback({statusCode: 512});
@@ -106,7 +106,7 @@ describe('Event request', function() {
   it('recieves a successful response', function() {
     var event = new Event({
         'speakerIp': '1.2.3.4',
-        'port': 80,
+        'speakerPort': 80,
         'path': '/foo/bar'});
     Request.send = function(options, body, successCallback, errorCallback) {
       successCallback({statusCode: 200});
@@ -120,7 +120,7 @@ describe('Event request', function() {
   it('recieves an error', function() {
     var event = new Event({
         'speakerIp': '1.2.3.4',
-        'port': 80,
+        'speakerPort': 80,
         'path': '/foo/bar'});
     Request.send = function(options, body, successCallback, errorCallback) {
       errorCallback({});

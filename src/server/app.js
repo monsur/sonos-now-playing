@@ -26,7 +26,7 @@ var getIsPlaying = function(state) {
 
 var statusEvent = new SonosEvent({
   speakerIp: options.speakerIp,
-  port: options.speakerPort,
+  speakerPort: options.speakerPort,
   path: '/MediaRenderer/AVTransport/Event',
   callbackUrl: getCallbackUrl(options.ip, options.port, options.callbackPath),
   handler: function(err, result) {
