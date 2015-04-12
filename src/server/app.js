@@ -6,10 +6,6 @@ var RecursiveXml2Js = require('./recursive-xml2js');
 var socketio = require('socket.io');
 var SonosEvent = require('./event');
 
-var getCallbackUrl = function(ip, port, callbackPath) {
-  return 'http://' + ip + ':' + port + callbackPath;
-};
-
 // The number of connected clients.
 var connections = 0;
 
@@ -28,7 +24,7 @@ var statusEvent = new SonosEvent({
   speakerIp: options.speakerIp,
   speakerPort: options.speakerPort,
   path: '/MediaRenderer/AVTransport/Event',
-  callbackUrl: getCallbackUrl(options.ip, options.port, options.callbackPath),
+  callbackUrl: options.callbackUrl,
   handler: function(err, result) {
     if (err) {
       throw new Error(err);

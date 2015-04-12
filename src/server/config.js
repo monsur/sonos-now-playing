@@ -1,4 +1,5 @@
 var fs = require('fs');
+var Options = require('./options');
 
 var getIpAddress = function() {
   var os = require('os');
@@ -14,24 +15,29 @@ var getIpAddress = function() {
   return null;
 };
 
-var CONFIG_FILENAME = __dirname + '/config.json';
-var CONFIG_OPTIONS = {
+var getCallbackUrl = function(ip, port, callbackPath) {
+  return 'http://' + ip + ':' + port + callbackPath;
+};
+
+var configFilename = __dirname + '/config.json';
+
+var defaultOptions = {
   port: 8080,
   speakerPort: 1400,
   ip: getIpAddress(),
   callbackPath: '/notify'
 };
+defaultOptions.callbackUrl = getCallbackUrl(defaultOptions.ip,
+    defaultOptions.port, defaultOptions.callbackPath);
 
-var getOptions = function(filename, options) {
-  filename = filename || CONFIG_FILENAME;
-  options = options || CONFIG_OPTIONS;
+var getOptions = function(filename, opts) {
+  filename = filename || configFilename;
+  opts = new Options(opts, defaultOptions);
   if (fs.existsSync(filename)) {
     var optionsFromFile = JSON.parse(fs.readFileSync(filename, 'utf8'));
-    for (var key in optionsFromFile) {
-      options[key] = optionsFromFile[key];
-    }
+    opts.set(optionsFromFile);
   }
-  return options;
+  return opts;
 };
 
 var getHandler = function(options) {
