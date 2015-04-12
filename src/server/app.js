@@ -54,7 +54,9 @@ var statusEvent = new SonosEvent({
   }
 });
 
-var actions = new Actions(options.speakerIp, options.speakerPort);
+var actions = new Actions({
+  speakerIp: options.speakerIp,
+  speakerPort: options.speakerPort});
 
 var app = express();
 app.use(express.static(__dirname + '/static'));

@@ -22,36 +22,33 @@ var createResponse = function(action) {
 };
 
 
-var Actions = function(speakerIp, port) {
-  this.speakerIp = speakerIp;
-  this.port = port;
-
+var Actions = function(opts) {
   var requests = {};
-  requests[PLAY] = this.createRequest(PLAY);
-  requests[PAUSE] = this.createRequest(PAUSE);
-  requests[NEXT] = this.createRequest(NEXT);
+  requests[PLAY] = this.createRequest(opts, PLAY);
+  requests[PAUSE] = this.createRequest(opts, PAUSE);
+  requests[NEXT] = this.createRequest(opts, NEXT);
   this.requests = requests;
 };
 
-Actions.prototype.createRequest = function(action) {
-  this.body = createBody(action);
-  this.response = createResponse(action);
+Actions.prototype.createRequest = function(opts, action) {
+  var body = createBody(action);
+  var response = createResponse(action);
   var request = {
     method: 'POST',
-    hostname: this.speakerIp,
-    port: this.port,
+    hostname: opts.speakerIp,
+    port: opts.speakerPort,
     path: '/MediaRenderer/AVTransport/Control',
     headers: {
       'Content-Type': 'text/xml; charset="utf-8"',
-      'Content-Length': this.body.length,
+      'Content-Length': body.length,
       'SOAPACTION': '"urn:schemas-upnp-org:service:AVTransport:1#' + action + '"'
     }
   };
   return {
     action: action,
     request: request,
-    body: this.body,
-    response: this.response
+    body: body,
+    response: response
   };
 };
 
