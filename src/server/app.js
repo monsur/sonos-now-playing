@@ -1,4 +1,4 @@
-var ActionController = require('./action-controller');
+var Actions = require('./actions');
 var config = require('./config');
 var express = require('express');
 var http = require('http');
@@ -54,7 +54,7 @@ var statusEvent = new SonosEvent({
   }
 });
 
-var actions = new ActionController(options.speakerIp, options.speakerPort);
+var actions = new Actions(options.speakerIp, options.speakerPort);
 
 var app = express();
 app.use(express.static(__dirname + '/static'));

@@ -22,7 +22,7 @@ var createResponse = function(action) {
 };
 
 
-var ActionController = function(speakerIp, port) {
+var Actions = function(speakerIp, port) {
   this.speakerIp = speakerIp;
   this.port = port;
 
@@ -33,7 +33,7 @@ var ActionController = function(speakerIp, port) {
   this.requests = requests;
 };
 
-ActionController.prototype.createRequest = function(action) {
+Actions.prototype.createRequest = function(action) {
   this.body = createBody(action);
   this.response = createResponse(action);
   var request = {
@@ -55,7 +55,7 @@ ActionController.prototype.createRequest = function(action) {
   };
 };
 
-ActionController.prototype.send = function(data, callback) {
+Actions.prototype.send = function(data, callback) {
   var that = this;
   callback = callback || function() {};
 
@@ -84,17 +84,17 @@ ActionController.prototype.send = function(data, callback) {
   Request.send(data.request, data.body, successCallback, errorCallback);
 };
 
-ActionController.prototype.play = function(callback) {
+Actions.prototype.play = function(callback) {
   this.send(this.requests[PLAY], callback);
 };
 
-ActionController.prototype.pause = function(callback) {
+Actions.prototype.pause = function(callback) {
   this.send(this.requests[PAUSE], callback);
 };
 
-ActionController.prototype.next = function(callback) {
+Actions.prototype.next = function(callback) {
   this.send(this.requests[NEXT], callback);
 };
 
-module.exports = ActionController;
+module.exports = Actions;
 
