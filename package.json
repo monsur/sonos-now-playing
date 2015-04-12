@@ -15,18 +15,18 @@
     "url": "https://github.com/monsur/sonos-now-playing.git"
   },
   "dependencies": {
-    "express": "4.10.6",
-    "little-logger": "0.1.4",
-    "sax": "0.6.1",
-    "socket.io": "1.2.1"
+    "express": "^4.12.3",
+    "socket.io": "^1.3.5",
+    "xml2js": "^0.4.6",
+    "winston": "^0.9.0"
   },
   "devDependencies": {
     "blanket": "^1.1.6",
-    "grunt": "^0.4.5",
-    "grunt-contrib-concat": "^0.5.0",
-    "grunt-contrib-copy": "^0.7.0",
-    "grunt-contrib-jshint": "^0.10.0",
+    "grunt": "^0.4.5 ",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "^0.11.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-mocha-test": "^0.12.4"
+    "grunt-mocha-test": "^0.12.7"
   }
 }

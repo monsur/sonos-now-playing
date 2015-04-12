@@ -17,6 +17,7 @@ var getIpAddress = function() {
 var CONFIG_FILENAME = __dirname + '/config.json';
 var CONFIG_OPTIONS = {
   port: 8080,
+  speakerPort: 1400,
   ip: getIpAddress(),
   callbackPath: '/notify'
 };

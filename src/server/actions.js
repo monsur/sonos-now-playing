@@ -1,5 +1,5 @@
-var Logger = require('little-logger').Logger;
-var http = require('http');
+var Logger = require('./logger');
+var Request = require('./request');
 
 var PLAY = 'Play',
     PAUSE = 'Pause',
@@ -22,47 +22,41 @@ var createResponse = function(action) {
 };
 
 
-var ActionController = function(speakerIp, port, logger) {
-  this.speakerIp = speakerIp;
-  this.port = port;
-
+var Actions = function(opts) {
   var requests = {};
-  requests[PLAY] = this.createRequest(PLAY);
-  requests[PAUSE] = this.createRequest(PAUSE);
-  requests[NEXT] = this.createRequest(NEXT);
+  requests[PLAY] = this.createRequest(opts, PLAY);
+  requests[PAUSE] = this.createRequest(opts, PAUSE);
+  requests[NEXT] = this.createRequest(opts, NEXT);
   this.requests = requests;
-
-  this.logger = logger || new Logger(null, {enabled: false});
 };
 
-ActionController.prototype.createRequest = function(action) {
-  this.body = createBody(action);
-  this.response = createResponse(action);
+Actions.prototype.createRequest = function(opts, action) {
+  var body = createBody(action);
+  var response = createResponse(action);
   var request = {
     method: 'POST',
-    hostname: this.speakerIp,
-    port: this.port,
+    hostname: opts.speakerIp,
+    port: opts.speakerPort,
     path: '/MediaRenderer/AVTransport/Control',
     headers: {
       'Content-Type': 'text/xml; charset="utf-8"',
-      'Content-Length': this.body.length,
+      'Content-Length': body.length,
       'SOAPACTION': '"urn:schemas-upnp-org:service:AVTransport:1#' + action + '"'
     }
   };
   return {
     action: action,
     request: request,
-    body: this.body,
-    response: this.response
+    body: body,
+    response: response
   };
 };
 
-ActionController.prototype.send = function(data, callback) {
+Actions.prototype.send = function(data, callback) {
   var that = this;
   callback = callback || function() {};
-  this.logger.info('Sending ' + data.action + ' to speaker ' +
-      data.request.hostname);
-  var req = http.request(data.request, function(res) {
+
+  var successCallback = function(res) {
     var body = '';
 
     res.on('data', function(chunk) {
@@ -75,25 +69,29 @@ ActionController.prototype.send = function(data, callback) {
       }
       callback(null, true);
     });
-  });
-  req.on('error', function(e) {
-    that.logger.error(e.message);
-  });
-  req.write(data.body);
-  req.end();
+  };
+
+  var errorCallback = function(e) {
+    Logger.error(e.message);
+  };
+
+  Logger.info('Sending ' + data.action + ' to speaker ' +
+      data.request.hostname);
+
+  Request.send(data.request, data.body, successCallback, errorCallback);
 };
 
-ActionController.prototype.play = function(callback) {
+Actions.prototype.play = function(callback) {
   this.send(this.requests[PLAY], callback);
 };
 
-ActionController.prototype.pause = function(callback) {
+Actions.prototype.pause = function(callback) {
   this.send(this.requests[PAUSE], callback);
 };
 
-ActionController.prototype.next = function(callback) {
+Actions.prototype.next = function(callback) {
   this.send(this.requests[NEXT], callback);
 };
 
-module.exports = ActionController;
+module.exports = Actions;
 
