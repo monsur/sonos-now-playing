@@ -11,7 +11,9 @@ Screensaver.prototype.check = function() {
   if (this.isSleeping) {
     this.isSleeping = false;
     Logger.info("Stopping screensaver");
-    this.wakeCallback();
+    if (this.opts.wakeCallback) {
+      this.opts.wakeCallback();
+    }
   }
   if (this.id) {
     clearTimeout(this.id);
@@ -21,7 +23,9 @@ Screensaver.prototype.check = function() {
   this.id = setTimeout(function() {
     that.isSleeping = true;
     Logger.info("Starting screensaver");
-    that.opts.sleepCallback();
+    if (that.opts.sleepCallback) {
+      that.opts.sleepCallback();
+    }
   }, this.opts.timeout);
 };
 

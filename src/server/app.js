@@ -3,6 +3,7 @@ var config = require('./config');
 var express = require('express');
 var http = require('http');
 var RecursiveXml2Js = require('./recursive-xml2js');
+var Screensaver = require('./screensaver');
 var socketio = require('socket.io');
 var SonosEvent = require('./event');
 
@@ -19,6 +20,12 @@ var getIsPlaying = function(state) {
   }
   return null;
 };
+
+var screensaver = new Screensaver({
+  timeout: 10000,
+  sleepCallback: function() { console.log("Sleeping"); },
+  wakeCallback: function() { console.log("Waking"); }
+});
 
 var statusEvent = new SonosEvent({
   speakerIp: options.speakerIp,
@@ -69,6 +76,7 @@ app.notify(options.callbackPath, function(req, res, next) {
 
     var parser = new RecursiveXml2Js();
     parser.parse(body, function(err, result) {
+      screensaver.check();
       statusEvent.handle(err, result);
     });
   });
