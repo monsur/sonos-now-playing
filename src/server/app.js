@@ -23,9 +23,8 @@ var getIsPlaying = function(state) {
 
 var screensaver = new Screensaver({
   timeout: 10000,
-  sleepCallback: function() { console.log("Sleeping"); },
-  wakeCallback: function() { console.log("Waking"); }
 });
+screensaver.check();
 
 var statusEvent = new SonosEvent({
   speakerIp: options.speakerIp,
