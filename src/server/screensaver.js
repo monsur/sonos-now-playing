@@ -10,10 +10,7 @@ var Screensaver = function(opts) {
 Screensaver.prototype.check = function() {
   if (this.isSleeping) {
     this.isSleeping = false;
-    Logger.info("Stopping screensaver");
-    if (this.opts.wakeCallback) {
-      this.opts.wakeCallback();
-    }
+    this.wak();
   }
   if (this.id) {
     clearTimeout(this.id);
@@ -22,11 +19,16 @@ Screensaver.prototype.check = function() {
   var that = this;
   this.id = setTimeout(function() {
     that.isSleeping = true;
-    Logger.info("Starting screensaver");
-    if (that.opts.sleepCallback) {
-      that.opts.sleepCallback();
-    }
+    that.sleep();
   }, this.opts.timeout);
+};
+
+Screensaver.prototype.sleep = function() {
+  Logger.info("Starting screensaver");
+};
+
+Screensaver.prototype.wake = function() {
+  Logger.info("Stopping screensaver");
 };
 
 module.exports = Screensaver;
