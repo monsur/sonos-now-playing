@@ -25,4 +25,6 @@ Screensaver.prototype.check = function() {
   }, this.opts.timeout);
 };
 
+module.exports = Screensaver;
+
 
