@@ -2,7 +2,6 @@ var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
 var currentTrack = null;
 var previousTracks = [];
 var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options.lastFmApiKey));
-var screensaver = new Screensaver(options.sleepTimeout, UIController.sleep);
 var socket = io.connect();
 var isPlaying = false;
 
@@ -38,7 +37,6 @@ socket.on('newTrack', function(data) {
       UIController.updateTrack(data);
       previousTracks.unshift(currentTrack);
       currentTrack = data;
-      screensaver.start();
     });
   }
 
