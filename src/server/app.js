@@ -22,7 +22,7 @@ var getIsPlaying = function(state) {
 };
 
 var screensaver = new Screensaver({
-  timeout: 10000,
+  timeout: 10,
 });
 screensaver.check();
 

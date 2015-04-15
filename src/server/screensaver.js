@@ -19,7 +19,7 @@ Screensaver.prototype.check = function() {
   var that = this;
   this.id = setTimeout(function() {
     that.sleep();
-  }, this.opts.timeout);
+  }, this.opts.timeout * 1000);
 };
 
 Screensaver.prototype.sleep = function() {
