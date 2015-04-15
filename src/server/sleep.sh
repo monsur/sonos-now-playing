@@ -1,1 +1,1 @@
-echo "Sleeping..."
+tvservice -o
