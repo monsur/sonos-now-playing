@@ -25,7 +25,7 @@ Screensaver.prototype.check = function() {
 Screensaver.prototype.sleep = function() {
   this.isSleeping = true;
   Logger.info("Starting screensaver");
-  exec('./sleep.sh', function (error, stdout, stderr) {
+  exec('/home/pi/Documents/sonos-now-playing/dest/sleep.sh', function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (error !== null) {
@@ -37,7 +37,7 @@ Screensaver.prototype.sleep = function() {
 Screensaver.prototype.wake = function() {
   this.isSleeping = false;
   Logger.info("Stopping screensaver");
-  exec('./wake.sh', function (error, stdout, stderr) {
+  exec('/home/pi/Documents/sonos-now-playing/dest/wake.sh', function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (error !== null) {
