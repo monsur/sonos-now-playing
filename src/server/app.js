@@ -53,6 +53,7 @@ var statusEvent = new SonosEvent({
       data.isPlaying = true;
     }
 
+    Logger.info('New track', data);
     io.sockets.emit('newTrack', data);
   }
 });
