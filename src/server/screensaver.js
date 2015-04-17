@@ -8,6 +8,14 @@ var Screensaver = function(opts) {
   this.isSleeping = false;
 };
 
+Screensaver.execHandler = function (error, stdout, stderr) {
+  Logger.info(stdout);
+  Logger.info(stderr);
+  if (error !== null) {
+    Logger.error(error);
+  }
+};
+
 Screensaver.prototype.check = function() {
   if (this.isSleeping) {
     this.wake();
@@ -25,25 +33,13 @@ Screensaver.prototype.check = function() {
 Screensaver.prototype.sleep = function() {
   this.isSleeping = true;
   Logger.info("Starting screensaver");
-  exec('/home/pi/Documents/sonos-now-playing/dest/sleep.sh', function (error, stdout, stderr) {
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-      Logger.error('exec error: ' + error);
-    }
-  });
+  exec('/home/pi/Documents/sonos-now-playing/dest/sleep.sh', Screensaver.execHandler);
 };
 
 Screensaver.prototype.wake = function() {
   this.isSleeping = false;
   Logger.info("Stopping screensaver");
-  exec('/home/pi/Documents/sonos-now-playing/dest/wake.sh', function (error, stdout, stderr) {
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-      Logger.error('exec error: ' + error);
-    }
-  });
+  exec('/home/pi/Documents/sonos-now-playing/dest/wake.sh', Screensaver.execHandler);
 };
 
 module.exports = Screensaver;
