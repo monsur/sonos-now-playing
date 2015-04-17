@@ -6,6 +6,7 @@ var RecursiveXml2Js = require('./recursive-xml2js');
 var Screensaver = require('./screensaver');
 var socketio = require('socket.io');
 var SonosEvent = require('./event');
+var Logger = require('./logger');
 
 // The number of connected clients.
 var connections = 0;

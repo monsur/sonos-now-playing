@@ -1,22 +1,38 @@
 var winston = require('winston');
 
+var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)({
+        handleExceptions: true,
+        timestamp: true
+      }),
+      new (winston.transports.File)({
+        filename: 'sonos-now-playing.log',
+        maxsize: 1000000,
+        maxFiles: 1,
+        handleExceptions: true,
+        timestamp: true
+      })
+    ]
+});
+
 var Logger = {
 };
 
 Logger.debug = function() {
-  winston.debug.apply(this, arguments);
+  logger.debug.apply(this, arguments);
 };
 
 Logger.info = function() {
-  winston.info.apply(this, arguments);
+  logger.info.apply(this, arguments);
 };
 
 Logger.warn = function() {
-  winston.warn.apply(this, arguments);
+  logger.warn.apply(this, arguments);
 };
 
 Logger.error = function() {
-  winston.error.apply(this, arguments);
+  logger.error.apply(this, arguments);
 };
 
 module.exports = Logger;
