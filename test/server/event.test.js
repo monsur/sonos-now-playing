@@ -232,20 +232,20 @@ describe('subscribe internal', function() {
     event.request = function(options, callback) {
       callback(null, {'headers': {
         'sid': '123',
-        'timeout': 'Second-1'
+        'timeout': 'Second-12'
       }});
     };
     event.renew = function() {
       // TODO: Validate that renew is actually called.
     };
     Event.setTimeout = function(callback, timeout) {
-      assert.equal(timeout, 1000);
+      assert.equal(timeout, 9000);
       callback();
     };
     event.subscribeInternal({}, function(error, data) {
       assert.equal(error, null);
       assert.equal(data.sid, '123');
-      assert.equal(data.timeout, 1);
+      assert.equal(data.timeout, 12);
     });
   });
 
@@ -258,7 +258,7 @@ describe('subscribe internal', function() {
       }});
     };
     Event.setTimeout = function(callback, timeout) {
-      assert.equal(timeout, 43200000);
+      assert.equal(timeout, 32400000);
     };
     event.subscribeInternal({}, function(error, data) {
       assert.equal(error, null);
