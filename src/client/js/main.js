@@ -15,6 +15,10 @@ var trackEquals = function(track1, track2) {
       track1.album === track2.album;
 };
 
+var hasAlbumInfo = function(data) {
+  return data.title && data.artist && data.album;
+};
+
 socket.on('refresh', function(data) {
   location.reload(true);
 });
@@ -26,7 +30,7 @@ socket.on('newTrack', function(data) {
     return;
   }
 
-  if (!trackEquals(currentTrack, data)) {
+  if (hasAlbumInfo(data) && !trackEquals(currentTrack, data)) {
     albumArtCache.get(data.artist, data.album, function(err, resp) {
       if (err) {
         // TODO: Log error server-side.

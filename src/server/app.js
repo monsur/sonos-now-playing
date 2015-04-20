@@ -37,20 +37,24 @@ var statusEvent = new SonosEvent({
       throw new Error(err);
     }
 
-    var source = result['e:propertyset']['e:property'].LastChange.Event.InstanceID;
-    var metadata = source.CurrentTrackMetaData.val['DIDL-Lite'].item;
-
     var data = {};
+
+    var source = result['e:propertyset']['e:property'].LastChange.Event.InstanceID;
     var state = source.TransportState.val;
     data.transportState = state;
-    data.title = metadata['dc:title'];
-    data.album = metadata['upnp:album'];
-    data.artist = metadata['dc:creator'];
 
     if (state === 'STOPPED' || state === 'PAUSED_PLAYBACK') {
       data.isPlaying = false;
     } else if (state === 'PLAYING') {
       data.isPlaying = true;
+    }
+
+    var currentTrackMetaData = source.CurrentTrackMetaData.val;
+    if (currentTrackMetaData) {
+      var metadata = source.CurrentTrackMetaData.val['DIDL-Lite'].item;
+      data.title = metadata['dc:title'];
+      data.album = metadata['upnp:album'];
+      data.artist = metadata['dc:creator'];
     }
 
     Logger.info('New track', data);
