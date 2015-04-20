@@ -49,8 +49,7 @@ module.exports = function(grunt) {
       server: {
         files: [
           {expand: true, cwd: 'src/', src: ['config.json'], dest: 'dest/', flatten: true},
-          {expand: true, cwd: 'src/server/', src: ['*.js'], dest: 'dest/', flatten: true},
-          {expand: true, cwd: 'src/server/', src: ['*.sh'], dest: 'dest/', flatten: true}
+          {expand: true, cwd: 'src/server/', src: ['*.js'], dest: 'dest/', flatten: true}
         ]
       },
       client: {

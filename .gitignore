@@ -2,4 +2,5 @@
 coverage.html
 dest
 node_modules
+sonos-now-playing.log
 .DS_Store

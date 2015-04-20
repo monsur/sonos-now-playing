@@ -33,13 +33,13 @@ Screensaver.prototype.check = function() {
 Screensaver.prototype.sleep = function() {
   this.isSleeping = true;
   Logger.info("Starting screensaver");
-  exec('/home/pi/Documents/sonos-now-playing/dest/sleep.sh', Screensaver.execHandler);
+  exec('../bin/sleep.sh', Screensaver.execHandler);
 };
 
 Screensaver.prototype.wake = function() {
   this.isSleeping = false;
   Logger.info("Stopping screensaver");
-  exec('/home/pi/Documents/sonos-now-playing/dest/wake.sh', Screensaver.execHandler);
+  exec('../bin/wake.sh', Screensaver.execHandler);
 };
 
 module.exports = Screensaver;
