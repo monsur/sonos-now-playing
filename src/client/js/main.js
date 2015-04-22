@@ -50,6 +50,14 @@ socket.on('newTrack', function(data) {
   }
 });
 
+socket.on('disconnect', function() {
+  console.log('disconnect');
+});
+
+socket.on('reconnect', function() {
+  console.log('reconnect');
+});
+
 document.getElementById('play').addEventListener('click', function(evt) {
   socket.emit('play', {state: !isPlaying});
 });
