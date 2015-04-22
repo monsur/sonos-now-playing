@@ -1,4 +1,15 @@
+var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
+
 var UIController = function() {
+};
+
+UIController.clearTrack = function() {
+  UIController.updateTrack({
+    albumArt: 'images/1x1.png',
+    title: '',
+    artist: '',
+    album: ''
+  });
 };
 
 UIController.updateTrack = function(data) {

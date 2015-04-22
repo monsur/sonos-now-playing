@@ -1,4 +1,3 @@
-var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
 var currentTrack = null;
 var previousTracks = [];
 var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options.lastFmApiKey));
@@ -31,6 +30,7 @@ socket.on('newTrack', function(data) {
   }
 
   if (hasAlbumInfo(data) && !trackEquals(currentTrack, data)) {
+    UIController.clearTrack();
     albumArtCache.get(data.artist, data.album, function(err, resp) {
       if (err) {
         // TODO: Log error server-side.
