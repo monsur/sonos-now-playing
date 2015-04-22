@@ -51,11 +51,11 @@ socket.on('newTrack', function(data) {
 });
 
 socket.on('disconnect', function() {
-  console.log('disconnect');
+  UIController.showDisconnectIcon();
 });
 
 socket.on('reconnect', function() {
-  console.log('reconnect');
+  UIController.hideDisconnectIcon();
 });
 
 document.getElementById('play').addEventListener('click', function(evt) {

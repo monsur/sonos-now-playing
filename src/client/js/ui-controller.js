@@ -18,3 +18,12 @@ UIController.updateState = function(isPlaying) {
     document.getElementById('playbutton').style.display = 'block';
   }
 };
+
+UIController.showDisconnectIcon = function() {
+  document.getElementById('disconnect').style.display = 'block';
+};
+
+UIController.hideDisconnectIcon = function() {
+  document.getElementById('disconnect').style.display = 'none';
+};
+
