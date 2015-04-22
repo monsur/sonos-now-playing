@@ -32,16 +32,18 @@ socket.on('newTrack', function(data) {
   if (hasAlbumInfo(data) && !trackEquals(currentTrack, data)) {
     UIController.clearAlbumArt();
     UIController.showTrackData(data);
+    previousTracks.unshift(currentTrack);
+    currentTrack = data;
+
     albumArtCache.get(data.artist, data.album, function(err, resp) {
+      var albumArt;
       if (err) {
         // TODO: Log error server-side.
         console.log(err);
       } else {
-        data.albumArt = resp.albumArt;
-        UIController.updateAlbumArt(data.albumArt);
+        albumArt = data.albumArt = resp.albumArt;
       }
-      previousTracks.unshift(currentTrack);
-      currentTrack = data;
+      UIController.updateAlbumArt(albumArt);
     });
   }
 
