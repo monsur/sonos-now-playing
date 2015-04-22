@@ -67,7 +67,4 @@ body {
 #disconnect {
   display: none;
   float: left;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
 }
