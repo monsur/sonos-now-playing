@@ -3,19 +3,17 @@ var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
 var UIController = function() {
 };
 
-UIController.clearTrack = function() {
-  UIController.updateTrack({
-    albumArt: 'images/1x1.png',
-    title: '',
-    artist: '',
-    album: ''
-  });
+UIController.clearAlbumArt = function() {
+  UIController.updateAlbumArt('images/1x1.png');
 };
 
-UIController.updateTrack = function(data) {
-  var albumArt = data.albumArt || DEFAULT_ALBUM_ART;
+UIController.updateAlbumArt = function(albumArt) {
+  albumArt = albumArt || DEFAULT_ALBUM_ART;
   document.body.style.backgroundImage = 'url(' + albumArt + ')';
   document.getElementById('albumArt').src = albumArt;
+};
+
+UIController.showTrackData = function(data) {
   document.getElementById('title').innerHTML = data.title;
   document.getElementById('artist').innerHTML = data.artist;
   document.getElementById('album').innerHTML = data.album;
