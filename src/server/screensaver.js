@@ -9,9 +9,13 @@ var Screensaver = function(opts) {
 };
 
 Screensaver.execHandler = function (error, stdout, stderr) {
-  Logger.info(stdout);
-  Logger.info(stderr);
-  if (error !== null) {
+  if (stdout) {
+    Logger.info(stdout);
+  }
+  if (stderr) {
+    Logger.info(stderr);
+  }
+  if (error) {
     Logger.error(error);
   }
 };
