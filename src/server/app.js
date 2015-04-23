@@ -67,7 +67,9 @@ var actions = new Actions({
   speakerPort: options.speakerPort});
 
 var app = express();
+
 app.use(express.static(__dirname + '/static'));
+
 app.notify(options.callbackPath, function(req, res, next) {
 
   var body = '';
@@ -87,16 +89,32 @@ app.notify(options.callbackPath, function(req, res, next) {
   });
 
 });
+
 app.get('/js/config.js', config.getHandler(options));
+
 app.get('/refresh', function(req, res, next) {
   io.sockets.emit('refresh', {});
   res.writeHead(200);
   res.end();
 });
+
 app.get('/health', function(req, res, next) {
   res.writeHead(200);
   res.end('OK');
 });
+
+app.post('/error', function(req, res, next) {
+  var body = '';
+  req.on('data', function(chunk) {
+    body += chunk.toString();
+  });
+  req.on('end', function() {
+    res.writeHead(200);
+    res.end();
+    Logger.error('Client error', JSON.parse(body));
+  });
+});
+
 var server = app.listen(options.port);
 
 var io = socketio.listen(server);

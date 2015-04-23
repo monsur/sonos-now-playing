@@ -12,7 +12,10 @@ window.onerror = function(message, url, line, column, error) {
   data.line = line;
   data.column = column;
   data.stack = error.stack;
-  console.log(JSON.stringify(data));
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/error');
+  xhr.send(JSON.stringify(data));
 };
 
 // Compares two track objects.
