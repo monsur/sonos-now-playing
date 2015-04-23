@@ -4,6 +4,17 @@ var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options.lastFmApiKey));
 var socket = io.connect();
 var isPlaying = false;
 
+// Log unhandled exceptions.
+window.onerror = function(message, url, line, column, error) {
+  var data = {};
+  data.message = message;
+  data.url = url;
+  data.line = line;
+  data.column = column;
+  data.stack = error.stack;
+  console.log(JSON.stringify(data));
+};
+
 // Compares two track objects.
 var trackEquals = function(track1, track2) {
   if (!track1 || !track2) {
