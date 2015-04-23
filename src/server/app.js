@@ -10,6 +10,7 @@ var Logger = require('./logger');
 
 // The number of connected clients.
 var connections = 0;
+var currentTrack = null;
 
 var options = config.getOptions();
 
@@ -57,6 +58,7 @@ var statusEvent = new SonosEvent({
       data.artist = metadata['dc:creator'];
     }
 
+    currentTrack = data;
     Logger.info('New track', data);
     io.sockets.emit('newTrack', data);
   }
@@ -123,6 +125,10 @@ io.sockets.on('connection', function(socket) {
   connections++;
   if (connections === 1) {
     statusEvent.subscribe();
+  } else {
+    // If this is not the first client, we are already subscribed to the
+    // speaker, so just send back the track dadta.
+    socket.emit('newTrack', currentTrack);
   }
 
   socket.on('play', function(data) {
