@@ -4,7 +4,7 @@ var UIController = function() {
 };
 
 UIController.clearAlbumArt = function() {
-  UIController.updateAlbumArt('images/1x1.png');
+  UIController.updateAlbumArt('data:image/gif;base64,R0lGODlhAQABAAAAACw=');
 };
 
 UIController.updateAlbumArt = function(albumArt) {
