@@ -56,6 +56,11 @@ var statusEvent = new SonosEvent({
       data.title = metadata['dc:title'];
       data.album = metadata['upnp:album'];
       data.artist = metadata['dc:creator'];
+
+      if ('upnp:albumArtURI' in metadata) {
+        data.albumArt = 'http://' + options.speakerIp + ':' + options.speakerPort +
+            metadata['upnp:albumArtURI'];
+      }
     }
 
     currentTrack = data;
