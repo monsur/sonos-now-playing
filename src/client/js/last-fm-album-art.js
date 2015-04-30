@@ -1,5 +1,6 @@
-var LastFmAlbumArt = function(apiKey) {
+var LastFmAlbumArt = function(apiKey, proxyCache) {
   this.apiKey = apiKey;
+  this.proxyCache = proxyCache;
 };
 
 LastFmAlbumArt.prototype.createUrl = function(artist, album) {
@@ -10,7 +11,7 @@ LastFmAlbumArt.prototype.createUrl = function(artist, album) {
   return url;
 };
 
-LastFmAlbumArt.getData = function(resp) {
+LastFmAlbumArt.prototype.getImage = function(resp) {
   if (resp && resp.album && resp.album.image) {
     var images = resp.album.image;
     var image = null;
@@ -21,14 +22,12 @@ LastFmAlbumArt.getData = function(resp) {
       }
       image = images[i]['#text'];
     }
-    var data = {};
-    data.albumArt = image;
-    return data;
+    return image;
   }
   return null;
 };
 
-LastFmAlbumArt.processResponse = function(responseText, callback) {
+LastFmAlbumArt.prototype.processResponse = function(responseText, data, callback) {
   var resp = null;
 
   try {
@@ -37,16 +36,21 @@ LastFmAlbumArt.processResponse = function(responseText, callback) {
     return callback(e, null);
   }
 
-  var data = LastFmAlbumArt.getData(resp);
-  if (data) {
-    return callback(null, data);
+  var image = this.getImage(resp);
+  if (image) {
+    return callback(null, image);
+  }
+
+  if (this.proxyCache) {
+    this.proxyCache.get(data, callback);
   } else {
-    return callback(resp, null);
+    callback();
   }
 };
 
-LastFmAlbumArt.prototype.get = function(artist, album, callback) {
-  var url = this.createUrl(artist, album);
+LastFmAlbumArt.prototype.get = function(data, callback) {
+  callback = callback || function() {};
+  var url = this.createUrl(data.artist, data.album);
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
   xhr.timeout = 5000;
@@ -58,8 +62,9 @@ LastFmAlbumArt.prototype.get = function(artist, album, callback) {
         'statusText': xhr.statusText}, null);
   };
 
+  var that = this;
   xhr.onload = function() {
-    LastFmAlbumArt.processResponse(xhr.responseText, callback);
+    that.processResponse(xhr.responseText, data, callback);
   };
 
   xhr.send();

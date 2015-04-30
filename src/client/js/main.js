@@ -1,6 +1,6 @@
 var currentTrack = null;
 var previousTracks = [];
-var albumArtCache = new AlbumArtCache(new LastFmAlbumArt(options.lastFmApiKey));
+var albumArtCache = new MemoryCache(new LastFmAlbumArt(options.lastFmApiKey));
 var socket = io.connect();
 var isPlaying = false;
 
@@ -49,13 +49,10 @@ socket.on('newTrack', function(data) {
     previousTracks.unshift(currentTrack);
     currentTrack = data;
 
-    albumArtCache.get(data.artist, data.album, function(err, resp) {
-      var albumArt;
+    albumArtCache.get(data, function(err, albumArt) {
       if (err) {
         // TODO: Log error server-side.
         console.log(err);
-      } else {
-        albumArt = data.albumArt = resp.albumArt;
       }
       UIController.updateAlbumArt(albumArt);
     });
