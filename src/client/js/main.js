@@ -1,6 +1,8 @@
 var currentTrack = null;
 var previousTracks = [];
-var albumArtCache = new MemoryCache(new LastFmAlbumArt(options.lastFmApiKey));
+var albumArtCache = new MemoryCache(
+    new LastFmAlbumArt(options.lastFmApiKey,
+      new SonosAlbumArt()));
 var socket = io.connect();
 var isPlaying = false;
 
