@@ -1,6 +1,6 @@
 #!/bin/sh
 cd /home/pi/Documents/sonos-now-playing/dest
-/opt/node/bin/node ./app.js &
+/opt/node/bin/node ./app.js `/opt/node/bin/node ./findCoordinator.js --name "Dining Room"` &
 response=0
 while [ $response -ne 200 ]
 do
