@@ -1,4 +1,9 @@
 var fs = require('fs');
+
+var argv = require('minimist')(process.argv.slice(2));
+// Remove this additional param added by minimist.
+delete argv._;
+
 var Options = require('./options');
 
 var getIpAddress = function() {
@@ -31,12 +36,16 @@ defaultOptions.callbackUrl = getCallbackUrl(defaultOptions.ip,
     defaultOptions.port, defaultOptions.callbackPath);
 
 var getOptions = function(filename, opts) {
-  filename = filename || configFilename;
+  // Precedence: command-line values, file values, default values
   opts = new Options(opts, defaultOptions);
+
+  filename = filename || configFilename;
   if (fs.existsSync(filename)) {
     var optionsFromFile = JSON.parse(fs.readFileSync(filename, 'utf8'));
     opts.set(optionsFromFile);
   }
+
+  opts.set(argv);
   return opts;
 };
 
