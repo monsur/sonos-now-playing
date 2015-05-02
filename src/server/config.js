@@ -1,6 +1,7 @@
-var fs = require('fs');
+var fs = require('fs'),
+    minimist = require('minimist');
 
-var argv = require('minimist')(process.argv.slice(2));
+var argv = minimist(process.argv.slice(2));
 // Remove this additional param added by minimist.
 delete argv._;
 
