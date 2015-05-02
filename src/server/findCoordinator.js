@@ -1,7 +1,10 @@
-var http = require('http'),
+var config = require('./config'),
+    http = require('http'),
     ssdp = require('node-ssdp').Client,
     url = require('url');
     xml2js = require('xml2js');
+
+var options = config.getOptions();
 
 // Options for xml2js parsing.
 var xml2jsOptions = {
@@ -10,11 +13,9 @@ var xml2jsOptions = {
 };
 
 // Retrieve the name of the speaker we wish to find.
-var argv = require('minimist')(process.argv.slice(2));
-var currentSpeakerName = argv.name;
-if (!currentSpeakerName) {
+if (!options.speakerName) {
   // Speaker name must be specified.
-  console.error('No --name specified!');
+  console.error('No speaker name specified!');
   return;
 }
 
@@ -98,7 +99,7 @@ var processZonePlayers = function(data) {
 
     // Oh and if we found a matching speaker name, save this uuid for future
     // reference.
-    if (name === currentSpeakerName) {
+    if (name === options.speakerName) {
       currentUuid = uuid;
     }
   }
@@ -112,7 +113,7 @@ var processZonePlayers = function(data) {
 
   // Throw an error if no coordinator is found.
   console.error('Could not find coordinator for speaker named "%s".',
-      currentSpeakerName);
+      options.speakerName);
 };
 
 // Finds the coordinator for the given uuid.
