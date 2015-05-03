@@ -53,10 +53,15 @@ var statusEvent = new SonosEvent({
     var currentTrackMetaData = source.CurrentTrackMetaData.val;
     if (currentTrackMetaData) {
       var metadata = source.CurrentTrackMetaData.val['DIDL-Lite'].item;
-      data.title = metadata['dc:title'];
-      data.album = metadata['upnp:album'];
-      data.artist = metadata['dc:creator'];
-
+      if ('dc:title' in metadata) {
+        data.title = metadata['dc:title'];
+      }
+      if ('upnp:album' in metadata) {
+        data.album = metadata['upnp:album'];
+      }
+      if ('dc:creator' in metadata) {
+        data.artist = metadata['dc:creator'];
+      }
       if ('upnp:albumArtURI' in metadata) {
         data.albumArt = 'http://' + options.speakerIp + ':' + options.speakerPort +
             metadata['upnp:albumArtURI'];

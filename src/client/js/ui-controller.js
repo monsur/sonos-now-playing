@@ -14,9 +14,12 @@ UIController.updateAlbumArt = function(albumArt) {
 };
 
 UIController.showTrackData = function(data) {
-  document.getElementById('title').innerHTML = data.title;
-  document.getElementById('artist').innerHTML = data.artist;
-  document.getElementById('album').innerHTML = data.album;
+  var title = data.title || '';
+  var artist = data.artist || '';
+  var album = data.album || '';
+  document.getElementById('title').innerHTML = title;
+  document.getElementById('artist').innerHTML = artist;
+  document.getElementById('album').innerHTML = album;
   document.getElementById('content').style.display = 'block';
 };
 

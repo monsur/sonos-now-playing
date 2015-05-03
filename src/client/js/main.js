@@ -31,7 +31,7 @@ var trackEquals = function(track1, track2) {
 };
 
 var hasAlbumInfo = function(data) {
-  return data.title && data.artist && data.album;
+  return data.title || data.artist || data.album;
 };
 
 socket.on('refresh', function(data) {
