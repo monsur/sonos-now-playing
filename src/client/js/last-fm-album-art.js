@@ -50,6 +50,19 @@ LastFmAlbumArt.prototype.processResponse = function(responseText, data, callback
 
 LastFmAlbumArt.prototype.get = function(data, callback) {
   callback = callback || function() {};
+
+  if (!data.artist || !data.album) {
+    // If there is no artist or album info (like from a radio track),
+    // skip loading data from last.fm.
+    // TODO: Move this proxy cache stuff into its own function.
+    if (this.proxyCache) {
+      this.proxyCache.get(data, callback);
+    } else {
+      callback();
+    }
+    return;
+  }
+
   var url = this.createUrl(data.artist, data.album);
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
