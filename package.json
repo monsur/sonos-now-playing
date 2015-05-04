@@ -15,6 +15,7 @@
     "url": "https://github.com/monsur/sonos-now-playing.git"
   },
   "dependencies": {
+    "deep-equal": "^1.0.0",
     "express": "^4.12.3",
     "minimist": "^1.1.1",
     "node-ssdp": "^2.2.0",
