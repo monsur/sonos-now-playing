@@ -1,10 +1,11 @@
 var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
+var TRANSPARENT_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=';
 
 var UIController = function() {
 };
 
 UIController.clearAlbumArt = function() {
-  UIController.updateAlbumArt('data:image/gif;base64,R0lGODlhAQABAAAAACw=');
+  UIController.updateAlbumArt(TRANSPARENT_PNG);
 };
 
 UIController.updateAlbumArt = function(albumArt) {
@@ -14,13 +15,9 @@ UIController.updateAlbumArt = function(albumArt) {
 };
 
 UIController.showTrackData = function(data) {
-  var title = data.title || '';
-  var artist = data.artist || '';
-  var album = data.album || '';
-  document.getElementById('title').innerHTML = title;
-  document.getElementById('artist').innerHTML = artist;
-  document.getElementById('album').innerHTML = album;
-  document.getElementById('content').style.display = 'block';
+  document.getElementById('title').innerHTML = data.title || '';
+  document.getElementById('artist').innerHTML = data.artist || '';
+  document.getElementById('album').innerHTML = data.album || '';
 };
 
 UIController.updateState = function(isPlaying) {

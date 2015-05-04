@@ -1,5 +1,6 @@
 var Actions = require('./actions');
 var config = require('./config');
+var deepEqual = require('deep-equal');
 var express = require('express');
 var http = require('http');
 var RecursiveXml2Js = require('./recursive-xml2js');
@@ -66,6 +67,11 @@ var statusEvent = new SonosEvent({
         data.albumArt = 'http://' + options.speakerIp + ':' + options.speakerPort +
             metadata['upnp:albumArtURI'];
       }
+    }
+
+    if (deepEqual(currentTrack, data)) {
+      // If new track equals the previous track, don't send an event to the user.
+      return;
     }
 
     currentTrack = data;
@@ -157,6 +163,7 @@ io.sockets.on('connection', function(socket) {
     connections--;
     if (connections === 0) {
       statusEvent.unsubscribe();
+      currentTrack = null;
     }
   });
 });

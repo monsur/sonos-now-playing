@@ -6,18 +6,31 @@ var albumArtCache = new MemoryCache(
 var socket = io.connect();
 var isPlaying = false;
 
-// Log unhandled exceptions.
-window.onerror = function(message, url, line, column, error) {
-  var data = {};
-  data.message = message;
-  data.url = url;
-  data.line = line;
-  data.column = column;
-  data.stack = error.stack;
-
+var logErrorOnServer = function(data) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', '/error');
   xhr.send(JSON.stringify(data));
+};
+
+// Log unhandled exceptions.
+window.onerror = function(message, url, line, column, error) {
+  var data = {};
+  if (message) {
+    data.message = message;
+  }
+  if (url) {
+    data.url = url;
+  }
+  if (line) {
+    data.line = line;
+  }
+  if (column) {
+    data.column = column;
+  }
+  if (stack) {
+    data.stack = error.stack;
+  }
+  logErrorOnServer(data);
 };
 
 // Compares two track objects.
@@ -30,22 +43,17 @@ var trackEquals = function(track1, track2) {
       track1.album === track2.album;
 };
 
-var hasAlbumInfo = function(data) {
-  return data.title || data.artist || data.album;
-};
-
 socket.on('refresh', function(data) {
   location.reload(true);
 });
 
 socket.on('newTrack', function(data) {
   if (!data) {
-    // TODO: Log this server side
-    console.log('ERROR: Recieved empty data from server');
+    logErrorOnServer('ERROR: Recieved empty data from server');
     return;
   }
 
-  if (hasAlbumInfo(data) && !trackEquals(currentTrack, data)) {
+  if (!trackEquals(currentTrack, data)) {
     UIController.clearAlbumArt();
     UIController.showTrackData(data);
     previousTracks.unshift(currentTrack);
@@ -53,8 +61,8 @@ socket.on('newTrack', function(data) {
 
     albumArtCache.get(data, function(err, albumArt) {
       if (err) {
-        // TODO: Log error server-side.
-        console.log(err);
+        longErrorOnServer(err);
+        return;
       }
       UIController.updateAlbumArt(albumArt);
     });
