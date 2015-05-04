@@ -69,6 +69,7 @@ var statusEvent = new SonosEvent({
     }
 
     currentTrack = data;
+    screensaver.check();
     Logger.info('New track', data);
     io.sockets.emit('newTrack', data);
   }
@@ -95,7 +96,6 @@ app.notify(options.callbackPath, function(req, res, next) {
 
     var parser = new RecursiveXml2Js();
     parser.parse(body, function(err, result) {
-      screensaver.check();
       statusEvent.handle(err, result);
     });
   });
