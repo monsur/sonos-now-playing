@@ -107,7 +107,7 @@ app.notify(options.callbackPath, function(req, res, next) {
     res.writeHead(200);
     res.end();
 
-    logger.debug(body);
+    Logger.debug(body);
 
     var parser = new RecursiveXml2Js();
     parser.parse(body, function(err, result) {
