@@ -8,9 +8,10 @@ var logger = new (winston.Logger)({
       }),
       new (winston.transports.File)({
         filename: 'sonos-now-playing.log',
-        maxsize: 1000000,
-        maxFiles: 1,
         handleExceptions: true,
+        leve: 'debug',
+        maxFiles: 1,
+        maxsize: 1000000,
         timestamp: true
       })
     ]
