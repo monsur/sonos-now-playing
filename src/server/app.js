@@ -43,10 +43,10 @@ var statusEvent = new SonosEvent({
 
     var source = result['e:propertyset']['e:property'].LastChange.Event.InstanceID;
 
-    if (!source || !('TransportState' in source)) {
-      // In some cases, transport state is not present.
-      // Log the response in these cases to help figure out what is going on.
-      throw new Error('Could not load transport state: ' + JSON.stringify(result));
+    // Check for Sonos error
+    if (('TransportStatus' in source) && source.TransportStatus.val !== 'OK') {
+      Logger.error(JSON.stringify(source));
+      return;
     }
 
     var state = source.TransportState.val;
