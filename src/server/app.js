@@ -43,7 +43,8 @@ var statusEvent = new SonosEvent({
 
     var source = result['e:propertyset']['e:property'].LastChange.Event.InstanceID;
 
-    // Check for Sonos error
+    // Check for Sonos error. Note that if there is an error, the display may not match the
+    // currently playing track (at least until the next update). How should we handle this?
     if (('TransportStatus' in source) && source.TransportStatus.val !== 'OK') {
       Logger.error(JSON.stringify(source));
       return;
