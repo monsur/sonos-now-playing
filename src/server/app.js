@@ -15,6 +15,11 @@ var currentTrack = null;
 
 var options = config.getOptions();
 
+if (!('speakerIp' in options)) {
+  Logger.error('Speaker IP not specified.');
+  process.exit(1);
+}
+
 var getIsPlaying = function(state) {
   if (state === 'STOPPED' || state === 'PAUSED_PLAYBACK') {
     return false;
