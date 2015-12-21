@@ -89,7 +89,7 @@ var processZonePlayers = function(data) {
     var coordinator = (zp.coordinator === 'true');
     var ip = parseIp(zp.location);
     var uuid = zp.uuid;
-    uuids[uuid] = {
+    var item = {
       'name': name,
       'group': group,
       'coordinator': coordinator,
@@ -97,10 +97,14 @@ var processZonePlayers = function(data) {
       'uuid': uuid
     };
 
+    if (coordinator) {
+      uuids[group] = item;
+    }
+
     // Oh and if we found a matching speaker name, save this uuid for future
     // reference.
     if (name === options.speakerName) {
-      currentUuid = uuid;
+      currentUuid = item;
     }
   }
 
@@ -122,15 +126,7 @@ var findCoordinator = function(currentUuid, uuids) {
     // No current uuid, return null;
     return null;
   }
-
-  data = uuids[currentUuid];
-  if (data.coordinator) {
-    // Current speaker is the coordinator, we're done, return the ip.
-    return data.ip;
-  }
-
-  // Return the ip of this speaker's group coordinator.
-  return uuids[data.group].ip;
+  return uuids[currentUuid.group].ip;
 };
 
 // Let's go!
