@@ -1,7 +1,7 @@
 var config = require('./config'),
     http = require('http'),
     ssdp = require('node-ssdp').Client,
-    url = require('url');
+    url = require('url'),
     xml2js = require('xml2js');
 
 var options = config.getOptions();
