@@ -17,7 +17,8 @@ LastFmAlbumArt.prototype.getImage = function(resp) {
     var image = null;
     for (var i = 0; i < images.length; i++) {
       var imageSize = images[i].size;
-      if (imageSize === '') {
+      if (imageSize === 'mega' || imageSize === '') {
+        // Skip the mega image, since its way to big (multiple MB in size).
         // Skip the empty size since its a thumbnail.
         continue;
       }
