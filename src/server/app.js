@@ -1,5 +1,6 @@
 var Actions = require('./actions');
 var config = require('./config');
+var Coordinator = require('./coordinator');
 var deepEqual = require('deep-equal');
 var express = require('express');
 var http = require('http');
@@ -209,4 +210,27 @@ io.sockets.on('connection', function(socket) {
 });
 
 var handleCoordinatorChange = function(result) {
+  var coordinator = new Coordinator({
+    'speakerName': options.speakerName
+  });
+  coordinator.fromSpeakerIp(options.speakerIp, function(err, result) {
+    if (err) {
+      throw new Error(err);
+    }
+
+    if (result.ip === options.speakerIp) {
+      // Coordinator did not change, do nothing.
+      return;
+    }
+
+    // Coordinator did change, all hail our new Sonos overlords.
+    topologyEvent.unsubscribe();
+    if (connections > 0) {
+      statusEvent.unsubscribe();
+      currentTrack = null;
+    }
+    options.speakerIp = result.ip;
+    topologyEvent.subscribe(options);
+    statusEvent.subscribe(options);
+  });
 };
