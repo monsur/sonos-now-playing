@@ -261,3 +261,4 @@ var beforeExit = function() {
 
 process.stdin.resume();
 process.on('SIGINT', beforeExit);
+process.on('SIGTERM', beforeExit);
