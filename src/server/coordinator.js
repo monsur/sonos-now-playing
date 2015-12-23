@@ -2,14 +2,17 @@ var http = require('http');
 var url = require('url');
 var xml2js = require('xml2js');
 
-var Coordinator = {};
-
-Coordinator.fromSpeakerIp = function(ip, speakerName, callback) {
-  var url = 'http://' + ip + ':1400/status/topology';
-  Coordinator.fromUrl(url, speakerName, callback);
+var Coordinator = function(opts) {
+  this.options = opts || {};
 };
 
-Coordinator.fromUrl = function(url, speakerName, callback) {
+Coordinator.prototype.fromSpeakerIp = function(ip, callback) {
+  var url = 'http://' + ip + ':1400/status/topology';
+  this.fromUrl(url, callback);
+};
+
+Coordinator.prototype.fromUrl = function(url, callback) {
+  var that = this;
   http.get(url, function(response) {
     var body = '';
 
@@ -27,27 +30,28 @@ Coordinator.fromUrl = function(url, speakerName, callback) {
         return;
       }
 
-      Coordinator.fromXmlString(body, speakerName, callback);
+      that.fromXmlString(body, callback);
     });
   });
 };
 
-Coordinator.fromXmlString = function(data, speakerName, callback) {
+Coordinator.prototype.fromXmlString = function(data, callback) {
   // Options for xml2js parsing.
   var xml2jsOptions = {
     explicitArray: false,
     mergeAttrs: true
   };
+  var that = this;
   xml2js.parseString(data, xml2jsOptions, function(err, xmlAsJson) {
     if (err) {
       return callback(err);
     }
-    var coordinator = Coordinator.fromJson(xmlAsJson, speakerName);
+    var coordinator = that.fromJson(xmlAsJson);
     callback(null, coordinator);
   });
 };
 
-Coordinator.fromJson = function(data, speakerName) {
+Coordinator.prototype.fromJson = function(data) {
   var uuids = {};
   var currentUuid = null;
   var zonePlayers = data.ZPSupportInfo.ZonePlayers.ZonePlayer;
@@ -74,7 +78,7 @@ Coordinator.fromJson = function(data, speakerName) {
 
     // Oh and if we found a matching speaker name, save this uuid for future
     // reference.
-    if (name === speakerName) {
+    if (name === this.options.speakerName) {
       currentUuid = item;
     }
   }
