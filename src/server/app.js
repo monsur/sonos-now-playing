@@ -94,6 +94,22 @@ var statusEvent = new SonosEvent({
   }
 });
 
+var topologyEvent = new SonosEvent({
+  speakerIp: options.speakerIp,
+  speakerPort: options.speakerPort,
+  path: '/ZoneGroupTopology/Event',
+  callbackUrl: options.callbackUrl,
+  handler: function(err, result) {
+    if (err) {
+      throw new Error(err);
+    }
+    setTimeout(function() {
+      handleCoordinatorChange(result);
+    }, 1000);
+  }
+});
+topologyEvent.subscribe();
+
 var actions = new Actions({
   speakerIp: options.speakerIp,
   speakerPort: options.speakerPort});
@@ -123,7 +139,9 @@ app.notify(options.callbackPath, function(req, res, next) {
       if ('LastChange' in result['e:propertyset']['e:property']) {
         statusEvent.handle(err, result);
       } else {
-        // If this is not a track change event, assume it is a topology change.
+        // If this is not a track change event, assume it is a topology
+        // change.
+        topologyEvent.handle(err, result);
       }
     });
   });
@@ -189,3 +207,6 @@ io.sockets.on('connection', function(socket) {
     }
   });
 });
+
+var handleCoordinatorChange = function(result) {
+};
