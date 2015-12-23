@@ -2,12 +2,14 @@ var http = require('http');
 var url = require('url');
 var xml2js = require('xml2js');
 
-var getCoordinatorFromSpeakerIp = function(ip, callback) {
+var Coordinator = {};
+
+Coordinator.fromSpeakerIp = function(ip, callback) {
   var url = 'http://' + ip + ':1400/status/topology';
   getCoordinatorFromUrl(url, callback);
 };
 
-var getCoordinatorFromUrl = function(url, callback) {
+Coordinator.fromUrl = function(url, callback) {
   http.get(url, function(response) {
     var body = '';
 
@@ -30,7 +32,7 @@ var getCoordinatorFromUrl = function(url, callback) {
   });
 };
 
-var getCoordinatorFromXmlString = function(data, callback) {
+Coordinator.fromXmlString = function(data, callback) {
   // Options for xml2js parsing.
   var xml2jsOptions = {
     explicitArray: false,
@@ -45,7 +47,7 @@ var getCoordinatorFromXmlString = function(data, callback) {
   });
 };
 
-var getCoordinatorFromJson = function(data) {
+Coordinator.fromJson = function(data) {
   var uuids = {};
   var currentUuid = null;
   var zonePlayers = data.ZPSupportInfo.ZonePlayers.ZonePlayer;
@@ -85,3 +87,5 @@ var getCoordinatorFromJson = function(data) {
 
   return uuids[currentUuid.group];
 };
+
+module.exports = Coordinator;
