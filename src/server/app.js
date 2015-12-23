@@ -240,7 +240,7 @@ var handleCoordinatorChange = function(result) {
 
     unsubscribeAll(function() {
       if (options.reboot) {
-        spawn('/sbin/shutdown', ['-r', 'now']);
+        spawn('sudo', ['/sbin/reboot']);
       }
     });
   });
