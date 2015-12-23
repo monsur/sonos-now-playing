@@ -96,6 +96,7 @@ var statusEvent = new SonosEvent({
 });
 
 // Listens for any topology events.
+var topologyInProgress = false;
 var topologyEvent = new SonosEvent({
   speakerIp: options.speakerIp,
   speakerPort: options.speakerPort,
@@ -105,7 +106,10 @@ var topologyEvent = new SonosEvent({
     if (err) {
       throw new Error(err);
     }
-    setTimeout(function() {
+    if (topologyInProgress) {
+      return;
+    }
+    topologyInProgress = setTimeout(function() {
       handleCoordinatorChange(result);
     }, 5000 // Waits 5 seconds to let multiple events flush through.
     );
@@ -213,6 +217,7 @@ io.sockets.on('connection', function(socket) {
 
 // Runs in response to a "topology change" event.
 var handleCoordinatorChange = function(result) {
+  topologyInProgress = false;
   // Trying to parse the "topology change" response was too annoying and
   // complicted, so this just parses the updated topology file and grabs the
   // latest coordinator.
