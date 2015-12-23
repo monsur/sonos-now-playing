@@ -109,8 +109,9 @@ Event.prototype.subscribe = function(opts, callback) {
     throw new Error('Must specify a callback URL.');
   }
 
-  Logger.info('Subscribing to speaker ' + this.opts.speakerIp + ' with ' +
-      'callback URL ' + this.opts.callbackUrl);
+  Logger.info('Subscribing to event ' + this.opts.path + ' on speaker ' +
+      this.opts.speakerIp + ' with ' + 'callback URL ' +
+      this.opts.callbackUrl);
 
   this.subscribeInternal({
     'CALLBACK': '<' + this.opts.callbackUrl + '>',
@@ -130,8 +131,9 @@ Event.prototype.renew = function(callback) {
     throw new Error('Must specify a SID.');
   }
 
-  Logger.info('Renewing speaker ' + this.opts.speakerIp + ' with SID ' +
-      this.sid + ' and timeout ' + this.timeout);
+  Logger.info('Renewing event ' + this.opts.path + ' on speaker ' +
+      this.opts.speakerIp + ' with SID ' + this.sid + ' and timeout ' +
+      this.timeout);
 
   this.subscribeInternal({
     'SID': this.sid,
@@ -189,8 +191,8 @@ Event.prototype.unsubscribe = function(callback) {
     throw new Error('Must specify a SID.');
   }
 
-  Logger.info('Unsubscribing speaker ' + this.opts.speakerIp + ' with SID ' +
-      this.sid);
+  Logger.info('Unsubscribing to event ' + this.opts.path + ' on speaker ' +
+      this.opts.speakerIp + ' with SID ' + this.sid);
 
   var that = this;
   this.request({
