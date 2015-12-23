@@ -106,7 +106,7 @@ var topologyEvent = new SonosEvent({
     }
     setTimeout(function() {
       handleCoordinatorChange(result);
-    }, 1000);
+    }, 5000);
   }
 });
 topologyEvent.subscribe();
@@ -223,14 +223,7 @@ var handleCoordinatorChange = function(result) {
       return;
     }
 
-    // Coordinator did change, all hail our new Sonos overlords.
-    topologyEvent.unsubscribe();
-    if (connections > 0) {
-      statusEvent.unsubscribe();
-      currentTrack = null;
-    }
-    options.speakerIp = result.ip;
-    topologyEvent.subscribe(options);
-    statusEvent.subscribe(options);
+    Logger.info('Speaker IP changing from ' + options.speakerIp + ' to ' +
+      result.ip);
   });
 };
