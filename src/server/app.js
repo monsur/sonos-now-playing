@@ -8,6 +8,7 @@ var RecursiveXml2Js = require('./recursive-xml2js');
 var Screensaver = require('./screensaver');
 var socketio = require('socket.io');
 var SonosEvent = require('./event');
+var spawn = require('child_process').spawn;
 var Logger = require('./logger');
 
 // The number of connected clients.
@@ -236,6 +237,12 @@ var handleCoordinatorChange = function(result) {
 
     Logger.info('Speaker IP changing from ' + options.speakerIp + ' to ' +
       result.ip);
+
+    unsubscribeAll(function() {
+      if (options.reboot) {
+        spawn('/sbin/shutdown', ['-r', 'now']);
+      }
+    });
   });
 };
 
