@@ -241,12 +241,7 @@ var handleCoordinatorChange = function(result) {
 
 // Unsubscribe from existing subscriptions before existing.
 
-var cleanedUp = false;
 var beforeExit = function() {
-  if (cleanedUp) {
-    return;
-  }
-  cleanedUp = true;
   topologyEvent.unsubscribe(function() {
     if (connections > 0) {
       statusEvent.unsubscribe(function() {
@@ -260,4 +255,3 @@ var beforeExit = function() {
 
 process.stdin.resume();
 process.on('SIGINT', beforeExit);
-process.on('exit', beforeExit);
