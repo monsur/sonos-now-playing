@@ -227,3 +227,26 @@ var handleCoordinatorChange = function(result) {
       result.ip);
   });
 };
+
+// Unsubscribe from existing subscriptions before existing.
+
+var cleanedUp = false;
+var beforeExit = function() {
+  if (cleanedUp) {
+    return;
+  }
+  cleanedUp = true;
+  topologyEvent.unsubscribe(function() {
+    if (connections > 0) {
+      statusEvent.unsubscribe(function() {
+        process.exit();
+      });
+    } else {
+      process.exit();
+    }
+  });
+};
+
+process.stdin.resume();
+process.on('SIGINT', beforeExit);
+process.on('exit', beforeExit);
