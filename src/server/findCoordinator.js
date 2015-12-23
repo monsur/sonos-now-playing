@@ -28,7 +28,7 @@ client.on('response', function(headers, code, rinfo) {
       console.log(err);
       return;
     }
-    console.log(c.ip);
+    process.stdout.write(c.ip);
   });
 });
 
