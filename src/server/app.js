@@ -117,7 +117,14 @@ app.notify(options.callbackPath, function(req, res, next) {
 
     var parser = new RecursiveXml2Js();
     parser.parse(body, function(err, result) {
-      statusEvent.handle(err, result);
+      if (err) {
+        throw new Error(err);
+      }
+      if ('LastChange' in result['e:propertyset']['e:property']) {
+        statusEvent.handle(err, result);
+      } else {
+        // If this is not a track change event, assume it is a topology change.
+      }
     });
   });
 
