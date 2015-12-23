@@ -239,17 +239,23 @@ var handleCoordinatorChange = function(result) {
   });
 };
 
-// Unsubscribe from existing subscriptions before existing.
-
-var beforeExit = function() {
+var unsubscribeAll = function(callback) {
   topologyEvent.unsubscribe(function() {
     if (connections > 0) {
       statusEvent.unsubscribe(function() {
-        process.exit();
+        callback();
       });
     } else {
-      process.exit();
+      callback();
     }
+  });
+};
+
+// Unsubscribe from existing subscriptions before existing.
+
+var beforeExit = function() {
+  unsubscribeAll(function() {
+    process.exit();
   });
 };
 
