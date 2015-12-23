@@ -11,6 +11,8 @@ if (!options.speakerName) {
   return;
 }
 
+var coordinator = new Coordinator(options);
+
 // Use ssdp to find a single Sonos server. Any Sonos server will do. The rest
 // of the Sonos data will be retrieved from the Sonos speaker itself.
 var client = new ssdp();
@@ -21,14 +23,13 @@ client.on('response', function(headers, code, rinfo) {
   client._stop();
 
   // Retrieve the Sonos topology from the one speaker.
-  Coordinator.fromSpeakerIp(rinfo.address, options.speakerName,
-    function(err, c) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(c.ip);
-    });
+  coordinator.fromSpeakerIp(rinfo.address, function(err, c) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(c.ip);
+  });
 });
 
   // Search for Sonos speakers only.
