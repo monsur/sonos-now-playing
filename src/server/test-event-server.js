@@ -43,6 +43,7 @@ app.notify(options.callbackPath, function(req, res, next) {
     res.writeHead(200);
     res.end();
 
+    Logger.info('\n' + JSON.stringify(req.headers, null, 2));
     var parser = new RecursiveXml2Js();
     parser.parse(body, function(err, result) {
       statusEvent.handle(err, result);
