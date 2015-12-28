@@ -12,21 +12,23 @@ LastFmAlbumArt.prototype.createUrl = function(artist, album) {
 };
 
 LastFmAlbumArt.prototype.getImage = function(resp) {
+  var imagesList = [];
   if (resp && resp.album && resp.album.image) {
     var images = resp.album.image;
-    var image = null;
     for (var i = 0; i < images.length; i++) {
       var imageSize = images[i].size;
-      if (imageSize === 'mega' || imageSize === '') {
+      if (imageSize === '') {
         // Skip the mega image, since its way to big (multiple MB in size).
         // Skip the empty size since its a thumbnail.
         continue;
       }
-      image = images[i]['#text'];
+      var image = images[i]['#text'];
+      if (image) {
+        imagesList.push(images[i]['#text']);
+      }
     }
-    return image;
   }
-  return null;
+  return imagesList;
 };
 
 LastFmAlbumArt.prototype.processResponse = function(responseText, data, callback) {

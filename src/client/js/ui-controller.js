@@ -14,6 +14,40 @@ UIController.updateAlbumArt = function(albumArt) {
   document.getElementById('albumArt').src = albumArt;
 };
 
+// The last.fm API returns many different image sizes. The smaller images 
+// are lower resolution but load faster, while the higher resolution images
+// take longer to load, but look better. Progressively loading the album
+// art shows an image quickly, and then improve that image as the larger
+// sizes are loaded.
+//
+// The albumArtList input parameter is expected to be a list of image urls,
+// ordered from smallest to largest.
+UIController.progressiveAlbumArt = function(albumArtList) {
+  if (!albumArtList || albumArtList.length === 0) {
+    // There is no album art, show the default album art.
+    UIController.updateAlbumArt();
+    return;
+  }
+  if (albumArtList.length === 1) {
+    // There is only one image, no need to progressively display images.
+    UIController.updateAlbumArt(albumArtList[0]);
+    return;
+  }
+  // There are multiple images, show each image, and then load the next
+  // image once the previous one is done loading.
+  var albumArt = albumArtList.shift();
+  UIController.updateAlbumArt(albumArt);
+  var img = new Image();
+  img.src = albumArt;
+  img.addEventListener("load", function() {
+    UIController.updateAlbumArt(albumArt);
+    if (albumArtList.length > 0) {
+      albumArt = albumArtList.shift();
+      img.src = albumArt;
+    }
+  });
+};
+
 UIController.showTrackData = function(data) {
   document.getElementById('title').innerHTML = data.title || '';
   document.getElementById('artist').innerHTML = data.artist || '';

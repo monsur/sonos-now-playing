@@ -64,7 +64,7 @@ socket.on('newTrack', function(data) {
         longErrorOnServer(err);
         return;
       }
-      UIController.updateAlbumArt(albumArt);
+      UIController.progressiveAlbumArt(albumArt);
     });
   }
 
