@@ -36,3 +36,9 @@ Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http:
 <img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building6.jpg" hspace="10" vspace="10" align="top" width="180">
 <img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building7.jpg" hspace="10" vspace="10" align="top" width="180">
 <img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/building9.jpg" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/final1.JPG" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/final2.JPG" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/final3.JPG" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/final4.JPG" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/final5.JPG" hspace="10" vspace="10" align="top" width="180">
+<img src="https://raw.githubusercontent.com/monsur/sonos-now-playing/master/docs/images/final6.JPG" hspace="10" vspace="10" align="top" width="180">
