@@ -27,7 +27,7 @@ window.onerror = function(message, url, line, column, error) {
   if (column) {
     data.column = column;
   }
-  if (stack) {
+  if (error && error.stack) {
     data.stack = error.stack;
   }
   logErrorOnServer(data);
