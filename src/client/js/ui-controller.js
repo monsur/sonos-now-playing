@@ -33,6 +33,7 @@ UIController.progressiveAlbumArt = function(albumArtList) {
     UIController.updateAlbumArt(albumArtList[0]);
     return;
   }
+  albumArtList = albumArtList.slice(0);
   // There are multiple images, show each image, and then load the next
   // image once the previous one is done loading.
   var albumArt = albumArtList.shift();
