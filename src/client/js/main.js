@@ -33,14 +33,21 @@ window.onerror = function(message, url, line, column, error) {
   logErrorOnServer(data);
 };
 
+var albumEquals = function(track1, track2) {
+  if (!track1 || !track2) {
+    return false;
+  }
+  return track1.artist === track2.artist &&
+      track1.album === track2.album;
+};
+
 // Compares two track objects.
 var trackEquals = function(track1, track2) {
   if (!track1 || !track2) {
     return false;
   }
   return track1.title === track2.title &&
-      track1.artist === track2.artist &&
-      track1.album === track2.album;
+      albumEquals(track1, track2);
 };
 
 socket.on('refresh', function(data) {
