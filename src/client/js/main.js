@@ -60,12 +60,8 @@ socket.on('newTrack', function(data) {
     return;
   }
 
-  if (!trackEquals(currentTrack, data)) {
+  if (!albumEquals(currentTrack, data)) {
     UIController.clearAlbumArt();
-    UIController.showTrackData(data);
-    previousTracks.unshift(currentTrack);
-    currentTrack = data;
-
     albumArtCache.get(data, function(err, albumArt) {
       if (err) {
         longErrorOnServer(err);
@@ -73,6 +69,11 @@ socket.on('newTrack', function(data) {
       }
       UIController.progressiveAlbumArt(albumArt);
     });
+  }
+  if (!trackEquals(currentTrack, data)) {
+    UIController.showTrackData(data);
+    previousTracks.unshift(currentTrack);
+    currentTrack = data;
   }
 
   if ('isPlaying' in data) {
