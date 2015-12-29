@@ -41,7 +41,7 @@ LastFmAlbumArt.prototype.processResponse = function(responseText, data, callback
   }
 
   var image = this.getImage(resp);
-  if (image) {
+  if (image.length > 0) {
     return callback(null, image);
   }
 
