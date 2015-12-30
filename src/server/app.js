@@ -36,6 +36,15 @@ var screensaver = new Screensaver({
 });
 screensaver.check();
 
+// Scrub the title/artist/album strings of superfluous information.
+var scrubString = function(str) {
+  var index = str.toLowerCase().indexOf(' (remastered)');
+  if (index > 0) {
+    str = str.substring(0, index);
+  }
+  return str;
+};
+
 var statusEvent = new SonosEvent({
   speakerIp: options.speakerIp,
   speakerPort: options.speakerPort,
@@ -70,13 +79,13 @@ var statusEvent = new SonosEvent({
     if (currentTrackMetaData) {
       var metadata = source.CurrentTrackMetaData.val['DIDL-Lite'].item;
       if ('dc:title' in metadata) {
-        data.title = metadata['dc:title'];
+        data.title = scrubString(metadata['dc:title']);
       }
       if ('upnp:album' in metadata) {
-        data.album = metadata['upnp:album'];
+        data.album = scrubString(metadata['upnp:album']);
       }
       if ('dc:creator' in metadata) {
-        data.artist = metadata['dc:creator'];
+        data.artist = scrubString(metadata['dc:creator']);
       }
       if ('upnp:albumArtURI' in metadata) {
         data.albumArt = 'http://' + options.speakerIp + ':' + options.speakerPort +
