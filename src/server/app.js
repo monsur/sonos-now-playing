@@ -94,13 +94,27 @@ var statusEvent = new SonosEvent({
       }
     }
 
+    // Parse radio information.
+    // A human-readable title can be found here.
+    if ('r:EnqueuedTransportURIMetaData' in source) {
+      var radioData =
+          source['r:EnqueuedTransportURIMetaData'].val['DIDL-Lite'].item;
+      if (radioData) {
+        if ('dc:title' in radioData) {
+          delete data.title;
+          data.album = scrubString(radioData['dc:title']);
+        }
+      }
+    }
+
     if (deepEqual(currentTrack, data)) {
       // If new track equals the previous track, don't send an event to the user.
       return;
     }
 
     if (!currentTrack ||
-        currentTrack.title !== data.title) {
+        currentTrack.title !== data.title ||
+        currentTrack.album !== data.album) {
       previousTracks.unshift(data);
     }
 
