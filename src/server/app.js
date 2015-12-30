@@ -46,6 +46,29 @@ var scrubString = function(str) {
   return str;
 };
 
+// Parse radio information (if available). Sometimes the title of the radio
+// station is found in a different xml node. This method looks in that
+// alternate location, but only for tracks with titles that start with
+// 'x-sonosapi'.
+var setRadioData = function(source, data) {
+  if (!('title' in data)) {
+    return;
+  }
+  if (data.title.indexOf('x-sonosapi') !== 0) {
+    return;
+  }
+  if ('r:EnqueuedTransportURIMetaData' in source) {
+    var radioData =
+        source['r:EnqueuedTransportURIMetaData'].val['DIDL-Lite'].item;
+    if (radioData) {
+      if ('dc:title' in radioData) {
+        delete data.title;
+        data.album = scrubString(radioData['dc:title']);
+      }
+    }
+  }
+};
+
 var statusEvent = new SonosEvent({
   speakerIp: options.speakerIp,
   speakerPort: options.speakerPort,
@@ -94,18 +117,7 @@ var statusEvent = new SonosEvent({
       }
     }
 
-    // Parse radio information.
-    // A human-readable title can be found here.
-    if ('r:EnqueuedTransportURIMetaData' in source) {
-      var radioData =
-          source['r:EnqueuedTransportURIMetaData'].val['DIDL-Lite'].item;
-      if (radioData) {
-        if ('dc:title' in radioData) {
-          delete data.title;
-          data.album = scrubString(radioData['dc:title']);
-        }
-      }
-    }
+    setRadioData(source, data);
 
     if (deepEqual(currentTrack, data)) {
       // If new track equals the previous track, don't send an event to the user.
