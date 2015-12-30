@@ -14,15 +14,15 @@ ExecController.prototype.exec = function(cmd, handler) {
 };
 
 ExecController.prototype.reboot = function() {
-  this.exec('.../bin/reboot.sh');
+  this.exec('../bin/reboot.sh');
 };
 
 ExecController.prototype.sleep = function(handler) {
-  this.exec('.../bin/sleep.sh', handler);
+  this.exec('../bin/sleep.sh', handler);
 };
 
 ExecController.prototype.wake = function(handler) {
-  this.exec('.../bin/wake.sh', handler);
+  this.exec('../bin/wake.sh', handler);
 };
 
 module.exports = ExecController;
