@@ -2,13 +2,13 @@ var Actions = require('./actions');
 var config = require('./config');
 var Coordinator = require('./coordinator');
 var deepEqual = require('deep-equal');
+var ExecController = require('./exec-controller');
 var express = require('express');
 var http = require('http');
 var RecursiveXml2Js = require('./recursive-xml2js');
 var Screensaver = require('./screensaver');
 var socketio = require('socket.io');
 var SonosEvent = require('./event');
-var spawn = require('child_process').spawn;
 var Logger = require('./logger');
 
 // The number of connected clients.
@@ -32,9 +32,9 @@ var getIsPlaying = function(state) {
   return null;
 };
 
-var screensaver = new Screensaver({
-  timeout: 900,
-});
+var exec = new ExecController(options);
+
+var screensaver = new Screensaver(exec, options);
 screensaver.check();
 
 // Scrub the title/artist/album strings of superfluous information.
@@ -279,9 +279,7 @@ var handleCoordinatorChange = function(result) {
       result.ip);
 
     unsubscribeAll(function() {
-      if (options.reboot) {
-        spawn('sudo', ['/sbin/reboot']);
-      }
+      exec.reboot();
     });
   });
 };
