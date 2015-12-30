@@ -7,7 +7,7 @@ var logger = new (winston.Logger)({
         timestamp: true
       }),
       new (winston.transports.File)({
-        filename: 'sonos-now-playing.log',
+        filename: 'static/sonos-now-playing.log',
         handleExceptions: true,
         level: 'debug',
         maxFiles: 1,
