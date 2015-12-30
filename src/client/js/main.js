@@ -1,5 +1,4 @@
 var currentTrack = null;
-var previousTracks = [];
 var albumArtCache = new MemoryCache(
     new LastFmAlbumArt(options.lastFmApiKey,
       new SonosAlbumArt()));
@@ -72,7 +71,6 @@ socket.on('newTrack', function(data) {
   }
   if (!trackEquals(currentTrack, data)) {
     UIController.showTrackData(data);
-    previousTracks.unshift(currentTrack);
     currentTrack = data;
   }
 

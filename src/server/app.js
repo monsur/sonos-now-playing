@@ -14,6 +14,7 @@ var Logger = require('./logger');
 // The number of connected clients.
 var connections = 0;
 var currentTrack = null;
+var previousTracks = [];
 
 var options = config.getOptions();
 
@@ -98,6 +99,11 @@ var statusEvent = new SonosEvent({
       return;
     }
 
+    if (!currentTrack ||
+        currentTrack.title !== data.title) {
+      previousTracks.unshift(data);
+    }
+
     currentTrack = data;
     screensaver.check();
     Logger.info('New track', data);
@@ -176,6 +182,17 @@ app.get('/refresh', function(req, res, next) {
 app.get('/health', function(req, res, next) {
   res.writeHead(200);
   res.end('OK');
+});
+
+app.get('/history', function(req, res, next) {
+  res.writeHead(200, { 'Content-Type': 'text/plain'});
+  for (var i = 0; i < previousTracks.length; i++) {
+    var data = previousTracks[i];
+    if (('title' in data) && ('artist' in data)) {
+      res.write(data.title + ' - ' + data.artist + '\n');
+    }
+  }
+  res.end();
 });
 
 app.post('/error', function(req, res, next) {
