@@ -27,11 +27,12 @@ var getCallbackUrl = function(ip, port, callbackPath) {
 
 var configFilename = __dirname + '/config.json';
 
+// Suffix callback path with a random int in order to make it unique.
 var defaultOptions = {
   port: 8080,
   speakerPort: 1400,
   ip: getIpAddress(),
-  callbackPath: '/notify'
+  callbackPath: '/notify' + Math.floor(Math.random() * 1000)
 };
 defaultOptions.callbackUrl = getCallbackUrl(defaultOptions.ip,
     defaultOptions.port, defaultOptions.callbackPath);
