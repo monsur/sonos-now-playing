@@ -135,10 +135,14 @@ describe('Event request', function() {
 describe('Unsubscribe', function() {
   it('has no SID', function() {
     var event = new Event();
-    event.unsubscribe(function(err, data) {
-      assert.equal(err, null);
-      assert.equal(data, null);
-    });
+    assert.throws(
+      function() { event.unsubscribe(); },
+      function(e) {
+        if (e.message === 'Must specify a SID.') {
+          return true;
+        }
+        return false;
+      });
   });
 
   it('has valid http values', function() {

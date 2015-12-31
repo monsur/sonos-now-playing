@@ -188,8 +188,7 @@ Event.prototype.unsubscribe = function(callback) {
   callback = callback || defaultCallback;
 
   if (!this.sid) {
-    Logger.debug('Cannot unsubscribe, must specify a SID.');
-    return callback(null, null);
+    throw new Error('Must specify a SID.');
   }
 
   Logger.info('Unsubscribing to event ' + this.opts.path + ' on speaker ' +
