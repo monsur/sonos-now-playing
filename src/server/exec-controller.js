@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 
 // Module for executing OS commands.
 var ExecController = function(opts) {
@@ -14,7 +15,10 @@ ExecController.prototype.exec = function(cmd, handler) {
 };
 
 ExecController.prototype.reboot = function() {
-  this.exec('../bin/reboot.sh');
+  if (!this.enabled) {
+    return;
+  }
+  spawn('../bin/reboot.sh');
 };
 
 ExecController.prototype.sleep = function(handler) {
