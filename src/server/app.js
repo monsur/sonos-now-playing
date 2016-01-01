@@ -39,9 +39,12 @@ screensaver.check();
 
 // Scrub the title/artist/album strings of superfluous information.
 var scrubString = function(str) {
-  var index = str.toLowerCase().indexOf(' (remastered)');
-  if (index > 0) {
-    str = str.substring(0, index);
+  var index1 = str.toLowerCase().indexOf('remastered');
+  if (index1 > 0) {
+    var index2 = str.lastIndexOf('(', index1);
+    if (index2 > 0) {
+      str = str.substring(0, index2).trim();
+    }
   }
   return str;
 };
