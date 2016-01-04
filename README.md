@@ -8,9 +8,6 @@ shows what's currently playing on Sonos. This GitHub repo
 houses the software that powers the frame. The software is
 written in JavaScript and runs on Node.js.
 
-Status 2014-02-16: The software is more or less ready to go.
-I purchased an [10" HDMI 4 Pi display](https://www.adafruit.com/products/2109) from Adafruit, and the entire setup works (see pic below). Next step is to frame the display. I have a few ideas on how to do this, stay tuned!
-
 Special thanks to [Rahim Sonawalla](http://www.hirahim.com/), whose [SoCo](http://python-soco.com/) library was the inspiration for all this.
 
 ## Features
