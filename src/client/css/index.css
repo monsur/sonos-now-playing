@@ -5,7 +5,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   font-family: 'Roboto', sans-serif;
-  font-size: 16px;
+  font-size: 20px;
   margin: 0;
   padding: 0;
 }
@@ -13,10 +13,10 @@ body {
   background-color: #333;
   opacity: 0.9;
   float: right;
-  margin: 30% 0 0 0;
+  margin: 400px 0 0 0;
+  max-width: 900px;
 }
 #left {
-  position: relative;
   float: left;
   color: #ddd;
   padding-left: 20px;
@@ -25,18 +25,19 @@ body {
   padding-bottom: 10px;
   white-space: nowrap;
   overflow: hidden;
+  max-width: 730px;
 }
 #title {
   color: #fff;
-  font-size: 30px;
+  font-size: 40px;
 }
 #right {
-  position: relative;
   float: right;
   padding-left: 30px;
   padding-right: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
+  width: 100px;
 }
 #right img {
   height: 100px;
