@@ -17,9 +17,10 @@ var defaultOptions = {
 };
 
 var getRandomTimeout = function(timeout) {
-  var min = parseInt(timeout * 0.2);
-  var max = parseInt(timeout * 0.8);
-  return (Math.floor(Math.random() * max) + min) * 1000;
+  timeout = timeout * 1000;
+  var min = timeout * 0.2;
+  var max = timeout * 0.8;
+  return Math.floor(Math.random() * (max - min)) + min;
 };
 
 /**
