@@ -239,7 +239,8 @@ describe('subscribe internal', function() {
       // TODO: Validate that renew is actually called.
     };
     Event.setTimeout = function(callback, timeout) {
-      assert.equal(timeout, 9000);
+      assert(timeout < 7200);
+      assert(timeout > 1800);
       callback();
     };
     event.subscribeInternal({}, function(error, data) {
@@ -258,7 +259,8 @@ describe('subscribe internal', function() {
       }});
     };
     Event.setTimeout = function(callback, timeout) {
-      assert.equal(timeout, 32400000);
+      assert(timeout < 25920000);
+      assert(timeout > 6480000);
     };
     event.subscribeInternal({}, function(error, data) {
       assert.equal(error, null);

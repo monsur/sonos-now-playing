@@ -16,6 +16,12 @@ var defaultOptions = {
   'autoRenew': true
 };
 
+var getRandomTimeout = function(timeout) {
+  var min = parseInt(timeout * 0.2);
+  var max = parseInt(timeout * 0.8);
+  return (Math.floor(Math.random() * max) + min) * 1000;
+};
+
 /**
  * The Event class handles the details of a single subscription event.
  * @param {Object} opts - Various options for this instance.
@@ -173,7 +179,7 @@ Event.prototype.subscribeInternal = function(headers, callback) {
       if (that.opts.autoRenew) {
         // Set a timeout to renew the subscription.
         // Renew a little earlier than the full timeout time, just to be safe.
-        var timeoutMs = parseInt(timeout * 3 / 4) * 1000;
+        var timeoutMs = getRandomTimeout(timeout);
         Logger.info('Setting to renew in ' + timeoutMs + 'ms');
         that.timeoutId = Event.setTimeout(function() {
           that.renew();
