@@ -6,7 +6,6 @@ var ExecController = require('./exec-controller');
 var express = require('express');
 var http = require('http');
 var RecursiveXml2Js = require('./recursive-xml2js');
-var Screensaver = require('./screensaver');
 var socketio = require('socket.io');
 var SonosEvent = require('./event');
 var Logger = require('./logger');
@@ -33,9 +32,6 @@ var getIsPlaying = function(state) {
 };
 
 var exec = new ExecController(options);
-
-var screensaver = new Screensaver(exec, options);
-screensaver.check();
 
 // Scrub the title/artist/album strings of superfluous information.
 var scrubString = function(str) {
@@ -134,7 +130,6 @@ var statusEvent = new SonosEvent({
     }
 
     currentTrack = data;
-    screensaver.check();
     Logger.info('New track', data);
     io.sockets.emit('newTrack', data);
   }
