@@ -5,6 +5,7 @@ var deepEqual = require('deep-equal');
 var ExecController = require('./exec-controller');
 var express = require('express');
 var http = require('http');
+var Photos = require('./photos');
 var RecursiveXml2Js = require('./recursive-xml2js');
 var socketio = require('socket.io');
 var SonosEvent = require('./event');
@@ -32,6 +33,8 @@ var getIsPlaying = function(state) {
 };
 
 var exec = new ExecController(options);
+var photos = new Photos(options);
+photos.init();
 
 // Scrub the title/artist/album strings of superfluous information.
 var scrubString = function(str) {
