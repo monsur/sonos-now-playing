@@ -1,5 +1,6 @@
 var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
 var TRANSPARENT_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=';
+var photosTimeout = null;
 
 var UIController = function() {
 };
@@ -71,3 +72,21 @@ UIController.hideDisconnectIcon = function() {
   document.getElementById('disconnect').style.display = 'none';
 };
 
+UIController.showSonos = function() {
+  document.getElementById('content').style.display = 'block';
+  document.getElementById('photoContent').style.display = 'none';
+
+  UIController.clearAlbumArt();
+
+  if (photosTimeout) {
+    clearTimeout(photosTimeout);
+  }
+  photosTimeout = setTimeout(function() {
+    UIController.hideSonos();
+  }, 5000);
+};
+
+UIController.hideSonos = function() {
+  document.getElementById('content').style.display = 'none';
+  document.getElementById('photoContent').style.display = 'block';
+};

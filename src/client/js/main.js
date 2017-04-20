@@ -60,7 +60,7 @@ socket.on('newTrack', function(data) {
   }
 
   if (!albumEquals(currentTrack, data)) {
-    UIController.clearAlbumArt();
+    UIController.showSonos();
     albumArtCache.get(data, function(err, albumArt) {
       if (err) {
         longErrorOnServer(err);

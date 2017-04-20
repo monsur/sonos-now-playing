@@ -68,3 +68,6 @@ body {
   display: none;
   float: left;
 }
+#photoContent {
+  display: none;
+}
