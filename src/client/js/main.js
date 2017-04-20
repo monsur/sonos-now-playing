@@ -6,6 +6,7 @@ var socket = io.connect();
 var isPlaying = false;
 
 var logErrorOnServer = function(data) {
+  console.log(data);
   var xhr = new XMLHttpRequest();
   xhr.open('POST', '/error');
   xhr.send(JSON.stringify(data));
@@ -59,8 +60,10 @@ socket.on('newTrack', function(data) {
     return;
   }
 
-  if (!albumEquals(currentTrack, data)) {
+  if (!albumEquals(currentTrack, data) || !UIController.isSonosMode) {
+    UIController.checkpoint();
     UIController.showSonos();
+    UIController.clearAlbumArt();
     albumArtCache.get(data, function(err, albumArt) {
       if (err) {
         longErrorOnServer(err);
