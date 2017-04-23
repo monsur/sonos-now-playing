@@ -1,0 +1,10 @@
+{
+  "logLevel": "debug",
+  "speakerName": "",
+  "lastFmApiKey": "",
+  "flickrApiKey": "",
+  "flickrSecret": "",
+  "flickrUserId": "",
+  "flickrAccessToken": "",
+  "flickrAccessTokenSecret": ""
+}
