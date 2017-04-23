@@ -1,6 +1,7 @@
 var DEFAULT_ALBUM_ART = 'images/default-album-art.png';
 var TRANSPARENT_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=';
 var photosTimeout = null;
+var photosController = new PhotosController();
 
 var UIController = function() {
 };
@@ -79,6 +80,7 @@ UIController.showSonos = function() {
   document.getElementById('touch').style.display = 'block';
   document.getElementById('photoContent').style.display = 'none';
   UIController.isSonosMode = true;
+  photosController.stop();
 };
 
 UIController.checkpoint = function() {
@@ -96,4 +98,5 @@ UIController.hideSonos = function() {
   document.getElementById('touch').style.display = 'none';
   document.getElementById('photoContent').style.display = 'block';
   UIController.isSonosMode = false;
+  photosController.start();
 };

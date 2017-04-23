@@ -39,6 +39,7 @@ module.exports = function(grunt) {
           'src/client/js/last-fm-album-art.js',
           'src/client/js/sonos-album-art.js',
           'src/client/js/screensaver.js',
+          'src/client/js/photos-controller.js',
           'src/client/js/ui-controller.js',
           'src/client/js/main.js',
           'src/client/js/outro.js'
