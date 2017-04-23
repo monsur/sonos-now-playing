@@ -30,36 +30,47 @@ Photos.prototype.init = function() {
 
 Photos.prototype.reloadPhotos = function(callback) {
   var that = this;
-  that.getAllPhotos(function(photos) {
-    that.photos = photos;
-    if (callback) {
-      callback(photos);
-    }
+  this.getAllPhotosFromFlickr(function(photos) {
+    that.getPhotoUrls(photos, function(photos) {
+      shuffle(photos);
+      that.photos = photos;
+      console.log('reloaded all photos');
+      if (callback) {
+        callback(photos);
+      }
+    });
   });
 };
 
-Photos.prototype.getAllPhotos = function(callback) {
+Photos.prototype.getPhotoUrls = function(input, callback) {
+  var photos = [];
+  for (var i = 0; i < input.length; i++) {
+    photos.push(getPhotoUrl(input[i]));
+  }
+  callback(photos);
+};
+
+Photos.prototype.getAllPhotosFromFlickr = function(callback) {
   var photos = [];
   var that = this;
   var innerCallback = function(err, result) {
     if (err) return console.log(err);
     var page = result.photos.page;
     var pages = result.photos.pages;
-    for (var i = 0; i < result.photos.photo.length; i++) {
-      var photoUrl = getPhotoUrl(result.photos.photo[i]);
-      photos.push(photoUrl);
+    var len = result.photos.photo.length;
+    for (var i = 0; i < len; i++) {
+      photos.push(result.photos.photo[i]);
     }
     if (page < pages) {
-      that.getPhotos(page+1, innerCallback);
+      that.getPageOfPhotosFromFlickr(page+1, innerCallback);
     } else {
-      shuffle(photos);
       callback(photos);
     }
   };
-  that.getPhotos(1, innerCallback);
+  that.getPageOfPhotosFromFlickr(1, innerCallback);
 };
 
-Photos.prototype.getPhotos = function(page, callback) {
+Photos.prototype.getPageOfPhotosFromFlickr = function(page, callback) {
   this.flickr.people.getPhotos({
     api_key: this.options.api_key,
     user_id: this.options.user_id,
@@ -71,7 +82,12 @@ Photos.prototype.getPhotos = function(page, callback) {
 
 Photos.prototype.nextPhoto = function(res) {
   if (this.pos >= this.photos.length) {
-    // TODO: Reload photos.
+    var that = this;
+    this.reloadPhotos(function() {
+      that.pos = 0;
+      that.nextPhoto(res);
+    });
+    return;
   }
   var photo = this.photos[this.pos++];
   var filename = getPhotoFilename(photo);
