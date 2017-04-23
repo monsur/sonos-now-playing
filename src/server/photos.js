@@ -11,6 +11,7 @@ var Photos = function(opts) {
   };
   this.flickr = null;
   this.photos = [];
+  this.pos = 0;
 };
 
 Photos.prototype.init = function() {
@@ -64,6 +65,12 @@ Photos.prototype.getPhotos = function(page, callback) {
     page: page,
     per_page: 500
   }, callback);
+};
+
+Photos.prototype.nextPhoto = function(res) {
+  if (this.pos >= this.photos.length) {
+    // TODO: Reload photos.
+  }
 };
 
 var getPhotoUrl = function(photo) {
