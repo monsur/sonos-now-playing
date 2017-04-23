@@ -71,6 +71,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-mocha-test');
 
+  grunt.file.mkdir('dest/photocache');
+
   grunt.registerTask('default', [
     'mochaTest',
     'jshint:server',

@@ -1,3 +1,6 @@
+var https = require('https');
+var fs = require('fs');
+var url = require('url');
 var Flickr = require("flickrapi");
 
 var Photos = function(opts) {
@@ -29,7 +32,6 @@ Photos.prototype.reloadPhotos = function(callback) {
   var that = this;
   that.getAllPhotos(function(photos) {
     that.photos = photos;
-    console.log(photos);
     if (callback) {
       callback(photos);
     }
@@ -71,6 +73,30 @@ Photos.prototype.nextPhoto = function(res) {
   if (this.pos >= this.photos.length) {
     // TODO: Reload photos.
   }
+  var photo = this.photos[this.pos++];
+  var filename = getPhotoFilename(photo);
+  res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+  if (!fs.existsSync(filename)) {
+    https.get(photo, function (clientRes) {
+      var fileStream = fs.createWriteStream(filename);
+      clientRes.on('data', function(chunk) {
+        fileStream.write(chunk);
+        res.write(chunk);
+      });
+      clientRes.on('end', function() {
+        res.end();
+        console.log('writing image to ' + filename);
+      });
+    });
+  } else {
+    console.log('reading image from ' + filename);
+    fs.createReadStream(filename).pipe(res);
+  }
+};
+
+var getPhotoFilename = function(photo) {
+  var photoPath = url.parse(photo).pathname;
+  return 'photocache/' + photoPath.substring(photoPath.lastIndexOf('/') + 1);
 };
 
 var getPhotoUrl = function(photo) {

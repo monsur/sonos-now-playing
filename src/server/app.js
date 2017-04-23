@@ -222,6 +222,10 @@ app.get('/history', function(req, res, next) {
   res.end();
 });
 
+app.get('/photo', function(req, res, next) {
+  photos.nextPhoto(res);
+});
+
 app.post('/error', function(req, res, next) {
   var body = '';
   req.on('data', function(chunk) {
