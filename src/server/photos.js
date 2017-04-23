@@ -20,15 +20,22 @@ Photos.prototype.init = function() {
       return console.log(err);
     }
     that.flickr = flickr;
-
-    that.getAllPhotos(flickr, function(photos) {
-      that.photos = photos;
-      console.log(JSON.stringify(photos, null, 2));
-    });
+    that.reloadPhotos();
   });
 };
 
-Photos.prototype.getAllPhotos = function(flickr, callback) {
+Photos.prototype.reloadPhotos = function(callback) {
+  var that = this;
+  that.getAllPhotos(function(photos) {
+    that.photos = photos;
+    console.log(photos);
+    if (callback) {
+      callback(photos);
+    }
+  });
+};
+
+Photos.prototype.getAllPhotos = function(callback) {
   var photos = [];
   var that = this;
   var innerCallback = function(err, result) {
@@ -40,17 +47,17 @@ Photos.prototype.getAllPhotos = function(flickr, callback) {
       photos.push(photoUrl);
     }
     if (page < pages) {
-      that.getPhotos(flickr, page+1, innerCallback);
+      that.getPhotos(page+1, innerCallback);
     } else {
       shuffle(photos);
       callback(photos);
     }
   };
-  that.getPhotos(flickr, 1, innerCallback);
+  that.getPhotos(1, innerCallback);
 };
 
-Photos.prototype.getPhotos = function(flickr, page, callback) {
-  flickr.people.getPhotos({
+Photos.prototype.getPhotos = function(page, callback) {
+  this.flickr.people.getPhotos({
     api_key: this.options.api_key,
     user_id: this.options.user_id,
     authenticated: true,
