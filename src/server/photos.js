@@ -32,7 +32,6 @@ Photos.prototype.reloadPhotos = function(callback) {
   var that = this;
   this.getAllPhotosFromFlickr(function(photos) {
     that.getPhotoUrls(photos, function(photos) {
-      shuffle(photos);
       that.photos = photos;
       console.log('reloaded all photos');
       if (callback) {
@@ -64,6 +63,7 @@ Photos.prototype.getAllPhotosFromFlickr = function(callback) {
     if (page < pages) {
       that.getPageOfPhotosFromFlickr(page+1, innerCallback);
     } else {
+      shuffle(photos);
       callback(photos);
     }
   };
