@@ -71,3 +71,14 @@ body {
 #photoContent {
   display: none;
 }
+#imageContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  opacity: 1;
+  transition: opacity 1s;
+  transform: translate(-50%, -50%);
+}
+#imageContent.fadeOut {
+  opacity: 0;
+}

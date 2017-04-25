@@ -1,5 +1,6 @@
 var PhotosController = function() {
   this.timeoutId = null;
+  this.elem = document.getElementById('imageContent');
 };
 
 PhotosController.prototype.start = function() {
@@ -14,8 +15,13 @@ PhotosController.prototype.stop = function() {
 
 PhotosController.prototype.getPhoto = function() {
   var that = this;
-  document.getElementById('photoSrc').src = 'http://localhost:8080/photo?' + Math.floor(Math.random() * 1000000);
-  this.timeoutId = setTimeout(function() {
-    that.getPhoto();
-  }, 5000);
+  this.elem.className = 'fadeOut';
+  setTimeout(function() {
+    that.elem.src = '';
+    that.elem.src = 'http://localhost:8080/photo?' + Math.floor(Math.random() * 1000000);
+    that.elem.className = "";
+    that.timeoutId = setTimeout(function() {
+        that.getPhoto();
+      }, 5000);
+    }, 800);
 };
