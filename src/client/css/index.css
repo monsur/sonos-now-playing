@@ -70,9 +70,15 @@ body {
 }
 #photoContent {
   display: none;
+  position:fixed;
+  height: 100%;
+  width: 100%;
+  top:0;
+  left 0;
 }
 #imageContent {
   position: fixed;
+  height: 100%;
   top: 50%;
   left: 50%;
   opacity: 1;
