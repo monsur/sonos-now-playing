@@ -76,15 +76,18 @@ body {
   top:0;
   left 0;
 }
-#imageContent {
+#photoContent img {
   position: fixed;
   height: 100%;
   top: 50%;
   left: 50%;
-  opacity: 1;
-  transition: opacity 1s;
   transform: translate(-50%, -50%);
 }
-#imageContent.fadeOut {
+#photoContent img.off {
   opacity: 0;
+  transition: opacity 1s;
+}
+#photoContent img.on {
+  opacity: 1;
+  transition: opacity 1s;
 }

@@ -1,9 +1,9 @@
 var PhotosController = function() {
   this.timeoutId = null;
-  this.cache = [];
-  this.cachePos = 0;
-  this.showPos = 0;
-  this.elem = document.getElementById('imageContent');
+  this.pos = 0;
+  this.elem = [];
+  this.elem[0] = document.getElementById('imageContent0');
+  this.elem[1] = document.getElementById('imageContent1');
 };
 
 PhotosController.prototype.start = function() {
@@ -18,21 +18,22 @@ PhotosController.prototype.stop = function() {
 };
 
 PhotosController.prototype.showPhoto = function() {
+  if (this.elem[0].className == 'on') {
+    this.elem[0].className = 'off';
+    this.elem[1].className = 'on';
+  } else {
+    this.elem[0].className = 'on';
+    this.elem[1].className = 'off';
+  }
   var that = this;
-  this.elem.className = 'fadeOut';
   setTimeout(function() {
-    that.elem.src = '';
-    that.elem.src = that.cache[that.showPos++ % 2].src;
-    that.elem.className = "";
     that.getPhoto();
     that.timeoutId = setTimeout(function() {
-        that.showPhoto();
-      }, 5000);
-    }, 600);
+      that.showPhoto();
+    }, 6000);
+  }, 1000);
 };
 
 PhotosController.prototype.getPhoto = function() {
-  var img = new Image();
-  img.src = 'http://localhost:8080/photo?' + Math.floor(Math.random() * 1000000);
-  this.cache[this.cachePos++ % 2] = img;
+  this.elem[this.pos++ % 2].src = 'http://localhost:8080/photo?' + Math.floor(Math.random() * 1000000);
 };
