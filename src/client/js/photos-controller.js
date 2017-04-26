@@ -31,7 +31,7 @@ PhotosController.prototype.showPhoto = function() {
     that.timeoutId = setTimeout(function() {
       that.showPhoto();
     }, 6000);
-  }, 1000);
+  }, 1100);
 };
 
 PhotosController.prototype.getPhoto = function() {
