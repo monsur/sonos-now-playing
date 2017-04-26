@@ -89,7 +89,7 @@ UIController.checkpoint = function() {
   }
   photosTimeout = setTimeout(function() {
     UIController.hideSonos();
-  }, 5000);
+  }, 900000);
 };
 
 UIController.hideSonos = function() {
