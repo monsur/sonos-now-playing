@@ -2,8 +2,8 @@ var PhotosController = function() {
   this.timeoutId = null;
   this.pos = 0;
   this.elem = [];
-  this.elem[0] = document.getElementById('imageContent0');
-  this.elem[1] = document.getElementById('imageContent1');
+  this.elem[0] = document.getElementById('slideshow0');
+  this.elem[1] = document.getElementById('slideshow1');
 };
 
 PhotosController.prototype.start = function() {
