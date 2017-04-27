@@ -76,8 +76,7 @@ UIController.hideDisconnectIcon = function() {
 };
 
 UIController.showSonos = function() {
-  document.getElementById('content').style.display = 'block';
-  document.getElementById('touch').style.display = 'block';
+  document.getElementById('nowPlaying').style.display = 'block';
   document.getElementById('slideshow').style.display = 'none';
   UIController.isSonosMode = true;
   photosController.stop();
@@ -94,8 +93,7 @@ UIController.checkpoint = function() {
 
 UIController.hideSonos = function() {
   UIController.clearAlbumArt();
-  document.getElementById('content').style.display = 'none';
-  document.getElementById('touch').style.display = 'none';
+  document.getElementById('nowPlaying').style.display = 'none';
   document.getElementById('slideshow').style.display = 'block';
   UIController.isSonosMode = false;
   photosController.start();
