@@ -61,7 +61,6 @@ socket.on('newTrack', function(data) {
   }
 
   if (!albumEquals(currentTrack, data) || !UIController.isSonosMode) {
-    UIController.checkpoint();
     UIController.showSonos();
     UIController.clearAlbumArt();
     albumArtCache.get(data, function(err, albumArt) {
@@ -77,10 +76,13 @@ socket.on('newTrack', function(data) {
     currentTrack = data;
   }
 
+  var timeout = 30000;
   if ('isPlaying' in data) {
     isPlaying = data.isPlaying;
     UIController.updateState(data.isPlaying);
+    timeout = isPlaying ? 900000 : timeout;
   }
+  UIController.checkpoint(timeout);
 });
 
 socket.on('disconnect', function() {

@@ -82,13 +82,13 @@ UIController.showSonos = function() {
   photosController.stop();
 };
 
-UIController.checkpoint = function() {
+UIController.checkpoint = function(timeout) {
   if (photosTimeout) {
     clearTimeout(photosTimeout);
   }
   photosTimeout = setTimeout(function() {
     UIController.hideSonos();
-  }, 900000);
+  }, timeout);
 };
 
 UIController.hideSonos = function() {
