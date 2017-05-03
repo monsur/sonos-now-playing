@@ -41,5 +41,5 @@ PhotosController.prototype.transitionendHandler = function(event) {
 };
 
 var getPhotoUrl = function() {
-  return 'http://localhost:8080/photo?' + Math.floor(Math.random() * 1000000);
+  return '/photo?' + Math.floor(Math.random() * 1000000);
 };
