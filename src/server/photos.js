@@ -2,6 +2,7 @@ var https = require('https');
 var fs = require('fs');
 var url = require('url');
 var Flickr = require("flickrapi");
+var Logger = require('./logger');
 
 var Photos = function(opts) {
   this.options =  {
@@ -21,7 +22,7 @@ Photos.prototype.init = function() {
   var that = this;
   Flickr.authenticate(this.options, function(err, flickr) {
     if (err) {
-      return console.log(err);
+      return Logger.error(err);
     }
     that.flickr = flickr;
     that.reloadPhotos();
@@ -33,7 +34,7 @@ Photos.prototype.reloadPhotos = function(callback) {
   this.getAllPhotosFromFlickr(function(photos) {
     that.getPhotoUrls(photos, function(photos) {
       that.photos = photos;
-      console.log('reloaded all photos');
+      Logger.info('reloaded all photos');
       if (callback) {
         callback(photos);
       }
@@ -53,7 +54,7 @@ Photos.prototype.getAllPhotosFromFlickr = function(callback) {
   var photos = [];
   var that = this;
   var innerCallback = function(err, result) {
-    if (err) return console.log(err);
+    if (err) return Logger.error(err);
     var page = result.photos.page;
     var pages = result.photos.pages;
     var len = result.photos.photo.length;
@@ -101,11 +102,11 @@ Photos.prototype.nextPhoto = function(res) {
       });
       clientRes.on('end', function() {
         res.end();
-        console.log('writing image to ' + filename);
+        Logger.info('writing image to ' + filename);
       });
     });
   } else {
-    console.log('reading image from ' + filename);
+    Logger.info('reading image from ' + filename);
     fs.createReadStream(filename).pipe(res);
   }
 };
