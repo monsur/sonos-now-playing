@@ -21,14 +21,6 @@ module.exports = function(grunt) {
           require: 'coverage/blanket'
         },
         src: ['test/**/*.test.js']
-      },
-      coverage: {
-        options: {
-          reporter: 'html-cov',
-          quiet: true,
-          captureFile: 'coverage.html'
-        },
-        src: '<%= mochaTest.test.src %>'
       }
     },
     concat: {
