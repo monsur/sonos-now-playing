@@ -3,6 +3,6 @@
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
 @xset s off
-@xset -dpms
 @xset s noblank
+@xset -dpms
 @/home/pi/Documents/sonos-now-playing/bin/run.sh
