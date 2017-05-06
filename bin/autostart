@@ -1,5 +1,5 @@
 # Copy contents of this file to:
-# /etc/xdg/lxsession/LXDE-pi/autostart
+# /home/pi/.config/lxsession/LXDE-pi/autostart
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
 @xset s off
