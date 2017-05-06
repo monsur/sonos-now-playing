@@ -34,7 +34,7 @@ Photos.prototype.reloadPhotos = function(callback) {
   this.getAllPhotosFromFlickr(function(photos) {
     that.getPhotoUrls(photos, function(photos) {
       that.photos = photos;
-      Logger.info('reloaded all photos');
+      Logger.info('reloaded ' + photos.length + ' photos');
       if (callback) {
         callback(photos);
       }
