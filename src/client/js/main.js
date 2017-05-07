@@ -4,6 +4,8 @@ var albumArtCache = new MemoryCache(
       new SonosAlbumArt()));
 var socket = io.connect();
 var isPlaying = false;
+var fifteenMinutesMs = 900000;
+var thirtySecondsMs = 30000;
 
 var logErrorOnServer = function(data) {
   console.log(data);
@@ -76,11 +78,11 @@ socket.on('newTrack', function(data) {
     currentTrack = data;
   }
 
-  var timeout = 30000;
+  var timeout = fifteenMinutesMs;
   if ('isPlaying' in data) {
     isPlaying = data.isPlaying;
     UIController.updateState(data.isPlaying);
-    timeout = isPlaying ? 900000 : timeout;
+    timeout = isPlaying ? timeout : thirtySecondsMs;
   }
   UIController.checkpoint(timeout);
 });
