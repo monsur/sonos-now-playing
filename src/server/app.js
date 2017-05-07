@@ -23,15 +23,6 @@ if (!('speakerIp' in options)) {
   process.exit(1);
 }
 
-var getIsPlaying = function(state) {
-  if (state === 'STOPPED' || state === 'PAUSED_PLAYBACK') {
-    return false;
-  } else if (state === 'PLAYING') {
-    return true;
-  }
-  return null;
-};
-
 var exec = new ExecController(options);
 var photos = new Photos(options);
 photos.init();
