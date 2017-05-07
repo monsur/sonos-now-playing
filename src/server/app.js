@@ -158,6 +158,7 @@ var actions = new Actions({
 var app = express();
 
 app.use(express.static(__dirname + '/static'));
+app.use('/photocache', express.static(__dirname + '/photocache'));
 
 app.notify(options.callbackPath, function(req, res, next) {
 
